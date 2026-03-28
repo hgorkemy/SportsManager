@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!-- TODO (Egemen): Design team selection screen -->
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.sportsmanager.ui.controller.TeamSelectionController"
+      alignment="CENTER" spacing="20" prefWidth="800" prefHeight="600">
+
+    <Label text="Select Your Team" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    <ListView fx:id="teamListView" prefWidth="600" prefHeight="400"/>
+    <Button text="Select Team" onAction="#onSelectTeam"/>
+
+</VBox>

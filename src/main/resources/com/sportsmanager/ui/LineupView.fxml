@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!-- TODO (Görkem): Design lineup selection screen with formation layout -->
+<HBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.sportsmanager.ui.controller.LineupController"
+      prefWidth="1000" prefHeight="700">
+
+    <Label text="Select Lineup" style="-fx-font-size: 24px;"/>
+
+</HBox>

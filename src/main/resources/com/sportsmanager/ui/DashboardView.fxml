@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!-- TODO (Yavuz): Design dashboard screen -->
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.sportsmanager.ui.controller.DashboardController"
+      alignment="CENTER" spacing="20" prefWidth="900" prefHeight="600">
+
+    <Label text="Dashboard" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+
+</VBox>

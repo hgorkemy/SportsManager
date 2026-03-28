@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.sportsmanager.ui.controller.SportSelectionController"
+      alignment="CENTER" spacing="30" prefWidth="600" prefHeight="400"
+      styleClass="root-pane">
+
+    <padding><Insets top="60" right="60" bottom="60" left="60"/></padding>
+
+    <Label fx:id="titleLabel" text="Sports Manager" styleClass="title-label"/>
+
+    <Label text="Select a Sport:" styleClass="subtitle-label"/>
+
+    <ComboBox fx:id="sportComboBox" prefWidth="250"/>
+
+    <Button fx:id="startButton" text="Start New Game"
+            onAction="#onStartGame" styleClass="primary-button" prefWidth="200"/>
+
+</VBox>

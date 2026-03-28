@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!-- TODO (Yavuz): Design league table screen -->
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.sportsmanager.ui.controller.LeagueTableController"
+      alignment="CENTER" spacing="20" prefWidth="900" prefHeight="600">
+
+    <Label text="League Table" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    <TableView fx:id="standingsTable" prefWidth="850" prefHeight="500"/>
+
+</VBox>

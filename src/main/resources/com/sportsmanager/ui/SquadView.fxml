@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!-- TODO (Görkem): Design squad management screen -->
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.sportsmanager.ui.controller.SquadController"
+      alignment="CENTER" spacing="20" prefWidth="900" prefHeight="600">
+
+    <Label text="Squad Management" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    <TableView fx:id="squadTable" prefWidth="850" prefHeight="400"/>
+
+</VBox>

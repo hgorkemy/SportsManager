@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!-- TODO (Berke): Design match simulation screen -->
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.sportsmanager.ui.controller.MatchController"
+      alignment="CENTER" spacing="20" prefWidth="900" prefHeight="700">
+
+    <Label text="Match" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    <Label fx:id="scoreLabel" text="0 - 0" style="-fx-font-size: 48px;"/>
+    <Label fx:id="periodLabel" text="Half 1 of 2"/>
+    <Button fx:id="simulateButton" text="Simulate Period"/>
+    <ListView fx:id="eventLog" prefWidth="600" prefHeight="300"/>
+
+</VBox>
