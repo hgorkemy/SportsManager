@@ -3,11 +3,10 @@ package com.sportsmanager.core.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Holds the final result of a played match.
- *
- * TODO (Egemen): Implement this class fully.
  */
 public class MatchResult {
 
@@ -20,8 +19,17 @@ public class MatchResult {
     private final int week;
 
     public MatchResult(Team homeTeam, Team awayTeam, int season, int week) {
-        this.homeTeam = homeTeam;
-        this.awayTeam = awayTeam;
+        this.homeTeam = Objects.requireNonNull(homeTeam, "homeTeam cannot be null");
+        this.awayTeam = Objects.requireNonNull(awayTeam, "awayTeam cannot be null");
+        if (homeTeam.equals(awayTeam)) {
+            throw new IllegalArgumentException("A match requires two different teams");
+        }
+        if (season < 1) {
+            throw new IllegalArgumentException("season must be at least 1");
+        }
+        if (week < 1) {
+            throw new IllegalArgumentException("week must be at least 1");
+        }
         this.homeScore = 0;
         this.awayScore = 0;
         this.events = new ArrayList<>();
@@ -31,7 +39,7 @@ public class MatchResult {
 
     public void addHomeGoal()             { homeScore++; }
     public void addAwayGoal()             { awayScore++; }
-    public void addEvent(MatchEvent e)    { events.add(e); }
+    public void addEvent(MatchEvent e)    { events.add(Objects.requireNonNull(e, "event cannot be null")); }
 
     public boolean isHomeWin()  { return homeScore > awayScore; }
     public boolean isAwayWin()  { return awayScore > homeScore; }

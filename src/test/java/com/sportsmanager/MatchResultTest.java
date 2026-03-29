@@ -2,12 +2,14 @@ package com.sportsmanager;
 
 import com.sportsmanager.core.model.MatchEvent;
 import com.sportsmanager.core.model.MatchResult;
+import com.sportsmanager.core.engine.SegmentResult;
 import com.sportsmanager.football.FootballSport;
 import com.sportsmanager.football.FootballTactic;
 import com.sportsmanager.football.FootballTeam;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for Egemen's shared interfaces and match model classes.
@@ -55,5 +57,22 @@ class MatchResultTest {
 
         assertEquals(1.2, tactic.getAttackMultiplier());
         assertEquals(0.9, tactic.getDefenseMultiplier());
+    }
+
+    @Test
+    void matchResultReturnsCorrectResultForEachTeam() {
+        FootballTeam home = new FootballTeam("Galatasaray", null);
+        FootballTeam away = new FootballTeam("Fenerbahce", null);
+        MatchResult result = new MatchResult(home, away, 1, 1);
+
+        result.addHomeGoal();
+
+        assertEquals("WIN", result.getResultFor(home));
+        assertEquals("LOSS", result.getResultFor(away));
+    }
+
+    @Test
+    void segmentResultRejectsNegativeScores() {
+        assertThrows(IllegalArgumentException.class, () -> new SegmentResult(1, -1, 0));
     }
 }

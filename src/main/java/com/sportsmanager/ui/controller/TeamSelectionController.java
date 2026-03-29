@@ -16,7 +16,6 @@ import javafx.scene.control.ListView;
 import java.util.List;
 
 /**
- * TODO (Egemen): Implement team selection screen.
  * Shows all teams, lets user pick one, then navigates to Dashboard.
  */
 public class TeamSelectionController {
@@ -41,6 +40,7 @@ public class TeamSelectionController {
         availableTeams = sportFactory.generateTeams(20);
 
         teamListView.getItems().setAll(availableTeams);
+        teamListView.setPlaceholder(new javafx.scene.control.Label("No teams available"));
         teamListView.setCellFactory(list -> new ListCell<>() {
             @Override
             protected void updateItem(Team team, boolean empty) {
