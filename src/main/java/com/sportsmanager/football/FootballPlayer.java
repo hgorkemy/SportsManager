@@ -47,8 +47,15 @@ public class FootballPlayer extends Player {
 
     @Override
     public int getOverallRating() {
-        // TODO (Görkem): Implement position-based weighted average
-        return (speed + shooting + passing + ballControl + defending + physicality) / 6;
+        if (getPosition() == FootballPosition.GOALKEEPER) {
+            return (int) Math.round(defending * 0.50 + physicality * 0.20 + speed * 0.15 + passing * 0.10 + ballControl * 0.05);
+        } else if (getPosition() == FootballPosition.DEFENDER) {
+            return (int) Math.round(defending * 0.40 + physicality * 0.20 + speed * 0.20 + passing * 0.10 + ballControl * 0.10);
+        } else if (getPosition() == FootballPosition.MIDFIELDER) {
+            return (int) Math.round(passing * 0.30 + ballControl * 0.25 + speed * 0.20 + physicality * 0.15 + shooting * 0.10);
+        } else { // FORWARD
+            return (int) Math.round(shooting * 0.40 + speed * 0.25 + passing * 0.15 + ballControl * 0.15 + physicality * 0.05);
+        }
     }
 
     public int getSpeed()       { return speed; }
