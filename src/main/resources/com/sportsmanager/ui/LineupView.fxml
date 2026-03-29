@@ -1,12 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<!-- TODO (Görkem): Design lineup selection screen with formation layout -->
-<HBox xmlns:fx="http://javafx.com/fxml"
+<VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.sportsmanager.ui.controller.LineupController"
-      prefWidth="1000" prefHeight="700">
+      spacing="12" prefWidth="960" prefHeight="680"
+      styleClass="root-pane">
+    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
 
-    <Label text="Select Lineup" style="-fx-font-size: 24px;"/>
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Button text="← Back" onAction="#onBack" styleClass="primary-button"/>
+        <Label text="Select Starting Lineup" styleClass="title-label" style="-fx-font-size: 26px;"/>
+        <Label fx:id="lblCount" text="(0 / 11)"
+               style="-fx-font-size: 15px; -fx-text-fill: #94a3b8;"/>
+    </HBox>
 
-</HBox>
+    <!-- Three columns: squad | arrows | lineup -->
+    <HBox spacing="14">
+
+        <!-- Left: available squad -->
+        <VBox spacing="6" prefWidth="360">
+            <Label text="Squad" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #cbd5e1;"/>
+            <ListView fx:id="squadList" prefHeight="490" prefWidth="350" styleClass="list-view team-list"/>
+        </VBox>
+
+        <!-- Centre: action buttons -->
+        <VBox spacing="14" alignment="CENTER" prefWidth="100">
+            <Button text="Add  →" onAction="#onAddToLineup"    prefWidth="90" styleClass="primary-button"/>
+            <Button text="← Remove" onAction="#onRemoveFromLineup" prefWidth="90"/>
+            <Button text="Clear"    onAction="#onClearLineup"      prefWidth="90"/>
+        </VBox>
+
+        <!-- Right: current lineup -->
+        <VBox spacing="6" prefWidth="360">
+            <Label text="Starting Lineup" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #cbd5e1;"/>
+            <ListView fx:id="lineupList" prefHeight="490" prefWidth="350" styleClass="list-view team-list"/>
+        </VBox>
+
+    </HBox>
+
+    <!-- Bottom: confirm + status -->
+    <HBox spacing="16" alignment="CENTER_LEFT">
+        <Button fx:id="btnConfirm" text="Confirm Lineup"
+                onAction="#onConfirmLineup"
+                styleClass="primary-button"
+                style="-fx-font-size: 14px;"/>
+        <Label fx:id="lblStatus" text=""
+               style="-fx-font-size: 13px; -fx-font-weight: bold;"/>
+    </HBox>
+</VBox>
