@@ -1,28 +1,61 @@
-/* TODO (Egemen): Implement full application styling */
-
 .root-pane {
-    -fx-background-color: #1a1a2e;
+    -fx-background-color: linear-gradient(to bottom, #0f172a, #16213e);
 }
 
 .title-label {
     -fx-font-size: 36px;
     -fx-font-weight: bold;
-    -fx-text-fill: #e0e0e0;
+    -fx-text-fill: #f8fafc;
 }
 
 .subtitle-label {
     -fx-font-size: 16px;
-    -fx-text-fill: #a0a0a0;
+    -fx-text-fill: #cbd5e1;
 }
 
 .primary-button {
-    -fx-background-color: #0f3460;
+    -fx-background-color: #16a34a;
     -fx-text-fill: white;
     -fx-font-size: 14px;
+    -fx-font-weight: bold;
     -fx-padding: 12 24;
     -fx-cursor: hand;
+    -fx-background-radius: 10;
 }
 
 .primary-button:hover {
-    -fx-background-color: #16213e;
+    -fx-background-color: #15803d;
+}
+
+.primary-button:disabled {
+    -fx-background-color: #475569;
+    -fx-opacity: 0.9;
+}
+
+.combo-box,
+.list-view {
+    -fx-background-color: #e2e8f0;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: transparent;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 15px;
+    -fx-padding: 10 14;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: #bfdbfe;
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #22c55e;
+    -fx-text-fill: white;
+}
+
+.team-list {
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.35), 18, 0.15, 0, 8);
 }

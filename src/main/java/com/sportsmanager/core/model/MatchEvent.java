@@ -1,10 +1,10 @@
 package com.sportsmanager.core.model;
 
+import java.util.Objects;
+
 /**
  * Represents a single event during a match.
  * Uses Builder pattern for clean construction.
- *
- * TODO (Egemen): Implement fully.
  */
 public class MatchEvent {
 
@@ -35,13 +35,16 @@ public class MatchEvent {
         private String description = "";
 
         public Builder(EventType type, int minute) {
-            this.type = type;
+            this.type = Objects.requireNonNull(type, "type cannot be null");
+            if (minute < 0) {
+                throw new IllegalArgumentException("minute cannot be negative");
+            }
             this.minute = minute;
         }
 
         public Builder team(Team t)          { this.team = t; return this; }
         public Builder player(Player p)      { this.player = p; return this; }
-        public Builder description(String d) { this.description = d; return this; }
+        public Builder description(String d) { this.description = d == null ? "" : d; return this; }
         public MatchEvent build()            { return new MatchEvent(this); }
     }
 

@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
 
-<!-- TODO (Egemen): Design team selection screen -->
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.sportsmanager.ui.controller.TeamSelectionController"
-      alignment="CENTER" spacing="20" prefWidth="800" prefHeight="600">
+      alignment="CENTER" spacing="18" prefWidth="800" prefHeight="600"
+      styleClass="root-pane">
 
-    <Label text="Select Your Team" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-    <ListView fx:id="teamListView" prefWidth="600" prefHeight="400"/>
-    <Button text="Select Team" onAction="#onSelectTeam"/>
+    <padding><Insets top="40" right="50" bottom="40" left="50"/></padding>
+
+    <Label text="Choose Your Club" styleClass="title-label"/>
+    <Label text="Select the team you want to manage for the season." styleClass="subtitle-label"/>
+    <ListView fx:id="teamListView" prefWidth="520" prefHeight="340" styleClass="team-list"/>
+    <Button fx:id="selectTeamButton" text="Select Team" onAction="#onSelectTeam"
+            styleClass="primary-button" prefWidth="220"/>
 
 </VBox>
