@@ -1,6 +1,8 @@
 package com.sportsmanager.ui.controller;
 
 import com.sportsmanager.SportsManagerApp;
+import com.sportsmanager.core.factory.SportRegistry;
+import com.sportsmanager.core.model.GameSession;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -20,15 +22,18 @@ public class SportSelectionController {
 
     @FXML
     public void initialize() {
-        sportComboBox.getItems().addAll("Football", "Headball (Coming Soon)");
-        sportComboBox.setValue("Football");
+        sportComboBox.getItems().setAll(SportRegistry.getRegisteredSports());
+        if (!sportComboBox.getItems().isEmpty()) {
+            sportComboBox.setValue(sportComboBox.getItems().getFirst());
+        }
         titleLabel.setText("Sports Manager");
     }
 
     @FXML
     private void onStartGame() {
         String selected = sportComboBox.getValue();
-        if ("Football".equals(selected)) {
+        if (selected != null && SportRegistry.getFactory(selected) != null) {
+            GameSession.getInstance().setSelectedSportName(selected);
             SportsManagerApp.navigateTo("TeamSelectionView");
         }
     }

@@ -1,5 +1,7 @@
 package com.sportsmanager;
 
+import com.sportsmanager.core.factory.SportRegistry;
+import com.sportsmanager.football.FootballFactory;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -47,6 +49,7 @@ public class SportsManagerApp extends Application {
     public static Stage getPrimaryStage() { return primaryStage; }
 
     public static void main(String[] args) {
+        SportRegistry.register("Football", new FootballFactory());
         launch(args);
     }
 }

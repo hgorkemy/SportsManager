@@ -18,6 +18,7 @@ public class GameSession {
     private MatchEngine matchEngine;
     private int currentSeason;
     private String saveName;
+    private String selectedSportName;
 
     private GameSession() {}
 
@@ -55,6 +56,7 @@ public class GameSession {
         matchEngine = null;
         currentSeason = 0;
         saveName = null;
+        selectedSportName = null;
     }
 
     public Sport getSport()           { return sport; }
@@ -63,5 +65,7 @@ public class GameSession {
     public MatchEngine getMatchEngine(){ return matchEngine; }
     public int getCurrentSeason()     { return currentSeason; }
     public String getSaveName()       { return saveName; }
+    public String getSelectedSportName() { return selectedSportName; }
     public void setSaveName(String n) { this.saveName = n; }
+    public void setSelectedSportName(String selectedSportName) { this.selectedSportName = selectedSportName; }
 }
