@@ -1,12 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<!-- TODO (Yavuz): Design dashboard screen -->
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.sportsmanager.ui.controller.DashboardController"
-      alignment="CENTER" spacing="20" prefWidth="900" prefHeight="600">
+      spacing="24" prefWidth="900" prefHeight="600"
+      styleClass="root-pane">
+    <padding><Insets top="40" right="50" bottom="40" left="50"/></padding>
 
-    <Label text="Dashboard" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+    <!-- Title row -->
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <Label text="Sports Manager" styleClass="title-label"/>
+        <Label fx:id="lblSeason" text="Season 1"
+               style="-fx-font-size: 16px; -fx-text-fill: #94a3b8;"/>
+    </HBox>
+
+    <!-- Info cards row -->
+    <HBox spacing="20">
+
+        <!-- Team card -->
+        <VBox spacing="6" prefWidth="260"
+              style="-fx-padding: 18; -fx-background-color: #1e293b; -fx-background-radius: 10; -fx-border-color: #334155; -fx-border-radius: 10;">
+            <Label text="YOUR CLUB" style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            <Label fx:id="lblTeamName" text="—"
+                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;"/>
+            <Label fx:id="lblPosition" text="Position: —"
+                   style="-fx-text-fill: #22c55e; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+        </VBox>
+
+        <!-- Week card -->
+        <VBox spacing="6" prefWidth="180"
+              style="-fx-padding: 18; -fx-background-color: #1e293b; -fx-background-radius: 10; -fx-border-color: #334155; -fx-border-radius: 10;">
+            <Label text="CURRENT WEEK" style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            <Label fx:id="lblWeek" text="—"
+                   style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;"/>
+        </VBox>
+
+        <!-- Next match card -->
+        <VBox spacing="6" prefWidth="360"
+              style="-fx-padding: 18; -fx-background-color: #1e293b; -fx-background-radius: 10; -fx-border-color: #334155; -fx-border-radius: 10;">
+            <Label text="NEXT MATCH" style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            <Label fx:id="lblNextMatch" text="—"
+                   style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;"/>
+            <Label fx:id="lblMatchDetail" text=""
+                   style="-fx-text-fill: #94a3b8; -fx-font-size: 13px;"/>
+        </VBox>
+
+    </HBox>
+
+    <!-- Navigation buttons -->
+    <HBox spacing="16" alignment="CENTER_LEFT">
+        <Button text="My Squad"     onAction="#onSquad"       styleClass="primary-button"/>
+        <Button text="League Table" onAction="#onLeagueTable" styleClass="primary-button"/>
+        <Button text="Schedule"     onAction="#onSchedule"    styleClass="primary-button"/>
+        <Button text="Play Match"   onAction="#onPlayMatch"   styleClass="primary-button"/>
+    </HBox>
+
+    <!-- Season stats row -->
+    <HBox spacing="32" alignment="CENTER_LEFT"
+          style="-fx-padding: 16 20; -fx-background-color: #1e293b; -fx-background-radius: 10; -fx-border-color: #334155; -fx-border-radius: 10;">
+        <Label text="SEASON STATS" style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+        <Label fx:id="lblPlayed" text="P: 0"   style="-fx-text-fill: #cbd5e1; -fx-font-size: 14px;"/>
+        <Label fx:id="lblWins"   text="W: 0"   style="-fx-text-fill: #22c55e; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+        <Label fx:id="lblDraws"  text="D: 0"   style="-fx-text-fill: #fbbf24; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+        <Label fx:id="lblLosses" text="L: 0"   style="-fx-text-fill: #f87171; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+        <Label fx:id="lblPoints" text="Pts: 0" style="-fx-text-fill: #f8fafc; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+    </HBox>
 
 </VBox>

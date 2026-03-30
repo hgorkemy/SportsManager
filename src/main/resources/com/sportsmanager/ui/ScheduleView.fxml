@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<!-- TODO (Yavuz): Design schedule/fixtures screen -->
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.sportsmanager.ui.controller.ScheduleController"
-      alignment="CENTER" spacing="20" prefWidth="900" prefHeight="600">
+      spacing="12" prefWidth="960" prefHeight="660"
+      styleClass="root-pane">
+    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
 
-    <Label text="Schedule" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-    <ListView fx:id="fixtureList" prefWidth="850" prefHeight="500"/>
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Button text="← Dashboard" onAction="#onBackToDashboard" styleClass="primary-button"/>
+        <Label text="Fixtures &amp; Results" styleClass="title-label" style="-fx-font-size: 26px;"/>
+    </HBox>
+
+    <!-- Filter controls -->
+    <HBox spacing="16" alignment="CENTER_LEFT">
+        <Label text="Week:" style="-fx-text-fill: #cbd5e1; -fx-font-size: 13px;"/>
+        <ComboBox fx:id="weekSelector" prefWidth="130" styleClass="combo-box"
+                  onAction="#onWeekSelected"/>
+        <CheckBox fx:id="chkMyTeamOnly" text="My team only"
+                  onAction="#onFilterChanged"
+                  style="-fx-text-fill: #cbd5e1; -fx-font-size: 13px;"/>
+    </HBox>
+
+    <!-- Fixtures list -->
+    <ListView fx:id="fixtureList" prefHeight="520" styleClass="list-view"/>
 
 </VBox>

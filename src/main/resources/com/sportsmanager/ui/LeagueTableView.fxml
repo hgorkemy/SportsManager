@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<!-- TODO (Yavuz): Design league table screen -->
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.sportsmanager.ui.controller.LeagueTableController"
-      alignment="CENTER" spacing="20" prefWidth="900" prefHeight="600">
+      spacing="12" prefWidth="960" prefHeight="660"
+      styleClass="root-pane">
+    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
 
-    <Label text="League Table" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-    <TableView fx:id="standingsTable" prefWidth="850" prefHeight="500"/>
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Button text="← Dashboard" onAction="#onBackToDashboard" styleClass="primary-button"/>
+        <Label text="League Table" styleClass="title-label" style="-fx-font-size: 26px;"/>
+    </HBox>
+
+    <!-- Standings TableView -->
+    <TableView fx:id="standingsTable" prefHeight="560" styleClass="list-view">
+        <columns>
+            <TableColumn fx:id="colPos"    text="#"    prefWidth="40"/>
+            <TableColumn fx:id="colTeam"   text="Team" prefWidth="220"/>
+            <TableColumn fx:id="colPlayed" text="P"    prefWidth="50"/>
+            <TableColumn fx:id="colWins"   text="W"    prefWidth="50"/>
+            <TableColumn fx:id="colDraws"  text="D"    prefWidth="50"/>
+            <TableColumn fx:id="colLosses" text="L"    prefWidth="50"/>
+            <TableColumn fx:id="colGF"     text="GF"   prefWidth="55"/>
+            <TableColumn fx:id="colGA"     text="GA"   prefWidth="55"/>
+            <TableColumn fx:id="colGD"     text="GD"   prefWidth="65"/>
+            <TableColumn fx:id="colPts"    text="Pts"  prefWidth="65"/>
+        </columns>
+    </TableView>
 
 </VBox>
