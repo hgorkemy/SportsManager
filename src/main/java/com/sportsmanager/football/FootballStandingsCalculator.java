@@ -15,11 +15,10 @@ public class FootballStandingsCalculator implements StandingsCalculator {
 
     @Override
     public List<StandingRow> sortStandings(List<StandingRow> rows) {
-        // TODO (Yavuz): Add full tiebreaker logic
-        rows.sort(Comparator
-                .comparingInt(StandingRow::getPoints).reversed()
-                .thenComparingInt(StandingRow::getGoalDifference).reversed()
-                .thenComparingInt(StandingRow::getGoalsFor).reversed());
+        // Points desc → goal difference desc → goals for desc
+        rows.sort(Comparator.comparingInt(StandingRow::getPoints).reversed()
+                .thenComparing(Comparator.comparingInt(StandingRow::getGoalDifference).reversed())
+                .thenComparing(Comparator.comparingInt(StandingRow::getGoalsFor).reversed()));
         return rows;
     }
 }
