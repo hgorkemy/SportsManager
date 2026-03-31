@@ -49,11 +49,13 @@
 
 .list-cell:filled:hover {
     -fx-background-color: #bfdbfe;
+    -fx-background-radius: 8;
 }
 
 .list-cell:filled:selected {
     -fx-background-color: #22c55e;
     -fx-text-fill: white;
+    -fx-background-radius: 8;
 }
 
 .team-list {

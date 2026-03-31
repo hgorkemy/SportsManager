@@ -54,6 +54,7 @@
         <Button text="My Squad"     onAction="#onSquad"       styleClass="primary-button"/>
         <Button text="League Table" onAction="#onLeagueTable" styleClass="primary-button"/>
         <Button text="Schedule"     onAction="#onSchedule"    styleClass="primary-button"/>
+        <Button text="Tactics"      onAction="#onTactics"     styleClass="primary-button"/>
         <Button text="Play Match"   onAction="#onPlayMatch"   styleClass="primary-button"/>
     </HBox>
 

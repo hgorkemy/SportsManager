@@ -1,14 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<!-- TODO (Berke): Design tactics selection screen -->
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.sportsmanager.ui.controller.TacticsController"
-      alignment="CENTER" spacing="20" prefWidth="700" prefHeight="500">
+      spacing="24" prefWidth="900" prefHeight="600"
+      styleClass="root-pane">
+    <padding><Insets top="40" right="50" bottom="40" left="50"/></padding>
 
-    <Label text="Select Tactic" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-    <ComboBox fx:id="tacticComboBox" prefWidth="250"/>
-    <Button text="Apply Tactic"/>
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="24">
+        <Label text="Tactics" styleClass="title-label"/>
+        <Label fx:id="currentTacticLabel" text="Current: —"
+               style="-fx-font-size: 16px; -fx-text-fill: #94a3b8;"/>
+    </HBox>
+
+    <!-- Formation selector card -->
+    <VBox spacing="16"
+          style="-fx-padding: 24; 
+              -fx-background-color: #1e293b; 
+              -fx-background-radius: 10; 
+              -fx-border-color: #334155; 
+              -fx-border-radius: 10;">
+        <Label text="SELECT FORMATION"
+               style="-fx-text-fill: 
+              #64748b; 
+              -fx-font-size: 11px; 
+              -fx-font-weight: bold;"/>
+
+        <ComboBox fx:id="tacticComboBox" prefWidth="400"
+                  style="-fx-font-size: 14px;"/>
+
+        <!-- Multiplier info row -->
+        <HBox spacing="32" alignment="CENTER_LEFT">
+            <VBox spacing="4">
+                <Label text="ATTACK"
+                       style="-fx-text-fill:#64748b; 
+                     -fx-font-size: 11px; 
+                     -fx-font-weight: bold;"/>
+                <Label fx:id="attackLabel" text="—"
+                       style="-fx-font-size: 22px;
+                     -fx-font-weight: bold; 
+                     -fx-text-fill: #f87171;"/>
+            </VBox>
+
+            <VBox spacing="4">
+                <Label text="DEFENSE"
+                       style="-fx-text-fill: #64748b; 
+                     -fx-font-size: 11px;
+                     -fx-font-weight: bold;"/>
+                <Label fx:id="defenseLabel" text="—"
+                       style="-fx-font-size: 22px; 
+                     -fx-font-weight: bold; 
+                     -fx-text-fill: #60a5fa;"/>
+            </VBox>
+
+            <VBox spacing="4">
+                <Label text="STYLE"
+                       style="-fx-text-fill: #64748b;
+                     -fx-font-size: 11px;
+                     -fx-font-weight: bold;"/>
+                <Label fx:id="descLabel" text="—"
+                       style="-fx-font-size: 16px;
+                     -fx-text-fill: #f8fafc;"/>
+            </VBox>
+        </HBox>
+    </VBox>
+
+    <!-- Action buttons -->
+    <HBox spacing="16" alignment="CENTER_LEFT">
+        <Button text="Apply Tactic" onAction="#onApplyTactic" styleClass="primary-button"/>
+        <Button text="Back" onAction="#onBack" styleClass="primary-button"/>
+    </HBox>
 
 </VBox>

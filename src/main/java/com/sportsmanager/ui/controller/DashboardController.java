@@ -92,5 +92,6 @@ public class DashboardController {
     @FXML private void onSquad()       { SportsManagerApp.navigateTo("SquadView"); }
     @FXML private void onLeagueTable() { SportsManagerApp.navigateTo("LeagueTableView"); }
     @FXML private void onSchedule()    { SportsManagerApp.navigateTo("ScheduleView"); }
+    @FXML private void onTactics()     { SportsManagerApp.navigateTo("TacticsView"); }
     @FXML private void onPlayMatch()   { SportsManagerApp.navigateTo("LineupView"); }
 }
