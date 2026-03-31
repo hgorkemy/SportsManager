@@ -90,6 +90,11 @@ public class FootballMatchEngine implements MatchEngine {
         }
 
         // match events
+        maybeAddInjury(home, startMin);
+        maybeAddInjury(away, startMin);
+
+        maybeAddYellowCard(home, startMin);
+        maybeAddYellowCard(away, startMin);
 
         return new SegmentResult(currentPeriod, homeGoalsThisHalf, awayGoalsThisHalf);
     }
@@ -109,6 +114,42 @@ public class FootballMatchEngine implements MatchEngine {
             }
         }
         return goals;
+    }
+
+    // 8% chance of injury per half for a random player
+    private void maybeAddInjury(Team team, int startMin) {
+        if (random.nextDouble() < INJURY_CHANCE) {
+            Player victim = getRandomPlayer(team);
+            if (victim != null) {
+                int games = 1 + random.nextInt(4); // 1-4 game injury
+                victim.injure(games);
+                int minute = startMin + random.nextInt(45);
+                MatchEvent injury = new MatchEvent.Builder(MatchEvent.EventType.INJURY, minute)
+                        .team(team)
+                        .player(victim)
+                        .description(victim.getFullName() + " is injured (" + games + " games)")
+                        .build();
+                lastPeriodEvents.add(injury);
+                allEvents.add(injury);
+            }
+        }
+    }
+
+    // 15% chance of yellow card per half
+    private void maybeAddYellowCard(Team team, int startMin) {
+        if (random.nextDouble() < YELLOW_CARD_CHANCE) {
+            Player carded = getRandomPlayer(team);
+            if (carded != null) {
+                int minute = startMin + random.nextInt(45);
+                MatchEvent card = new MatchEvent.Builder(MatchEvent.EventType.YELLOW_CARD, minute)
+                        .team(team)
+                        .player(carded)
+                        .description(carded.getFullName() + " gets a yellow card")
+                        .build();
+                lastPeriodEvents.add(card);
+                allEvents.add(card);
+            }
+        }
     }
 
     // pick random player
