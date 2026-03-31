@@ -83,8 +83,9 @@ public class LineupController {
     private void onConfirmLineup() {
         try {
             userTeam.setLineup(new ArrayList<>(lineupItems));
+            GameSession.getInstance().getMatchEngine().resetMatch();
             showSuccess("Lineup confirmed!");
-            SportsManagerApp.navigateTo("DashboardView");
+            SportsManagerApp.navigateTo("MatchView");
         } catch (IllegalArgumentException e) {
             showError(e.getMessage());
         }

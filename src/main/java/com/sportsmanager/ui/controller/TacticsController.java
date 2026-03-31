@@ -88,6 +88,11 @@ public class TacticsController {
 
     @FXML
     private void onBack() {
-        SportsManagerApp.navigateTo("DashboardView");
+        com.sportsmanager.core.engine.MatchEngine engine = GameSession.getInstance().getMatchEngine();
+        if (engine != null && engine.getFinalResult() != null && engine.hasNextPeriod()) {
+            SportsManagerApp.navigateTo("MatchView");
+        } else {
+            SportsManagerApp.navigateTo("DashboardView");
+        }
     }
 }
