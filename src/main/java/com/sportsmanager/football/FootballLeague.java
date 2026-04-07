@@ -165,7 +165,16 @@ public class FootballLeague extends League {
 
     @Override
     public void advanceWeek() {
-        if (currentWeekIndex < schedule.size()) currentWeekIndex++;
+        if (currentWeekIndex < schedule.size()) {
+            // Apply weekly training and injury recovery for all players
+            for (Team t : getTeams()) {
+                t.conductWeeklyTraining();
+                for (com.sportsmanager.core.model.Player p : t.getSquad()) {
+                    p.recoverOneGame();
+                }
+            }
+            currentWeekIndex++;
+        }
     }
 
     @Override

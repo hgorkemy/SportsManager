@@ -34,8 +34,12 @@ public class LineupController {
     public void initialize() {
         userTeam = GameSession.getInstance().getUserTeam();
 
-        // Pre-fill from existing lineup (so re-entering the screen keeps selections)
-        lineupItems = FXCollections.observableArrayList(userTeam.getLineup());
+        // Pre-fill from existing lineup, but automatically drop injured players
+        java.util.List<Player> healthyLineup = userTeam.getLineup().stream()
+                .filter(p -> !p.isInjured())
+                .collect(java.util.stream.Collectors.toList());
+
+        lineupItems = FXCollections.observableArrayList(healthyLineup);
         squadItems  = FXCollections.observableArrayList(userTeam.getSquad());
         squadItems.removeAll(lineupItems);
 
@@ -51,6 +55,10 @@ public class LineupController {
     private void onAddToLineup() {
         Player p = squadList.getSelectionModel().getSelectedItem();
         if (p == null) return;
+        if (p.isInjured()) {
+            showError("Cannot add injured player to lineup.");
+            return;
+        }
         if (lineupItems.size() >= 11) {
             showError("Lineup is already full (11 players).");
             return;
