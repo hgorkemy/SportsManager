@@ -39,6 +39,13 @@
             <version>${javafx.version}</version>
         </dependency>
 
+        <!-- Gson — JSON parsing for TeamDataLoader -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
         <!-- JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
