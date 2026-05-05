@@ -8,6 +8,7 @@ import com.sportsmanager.core.model.Player;
 import com.sportsmanager.core.model.Team;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -71,7 +72,6 @@ public class FootballMatchEngine implements MatchEngine {
                             : home.getName() + " scores")
                     .build();
             lastPeriodEvents.add(goal);
-            allEvents.add(goal);
             currentMatchResult.addHomeGoal();
         }
 
@@ -85,7 +85,6 @@ public class FootballMatchEngine implements MatchEngine {
                             : away.getName() + " scores")
                     .build();
             lastPeriodEvents.add(goal);
-            allEvents.add(goal);
             currentMatchResult.addAwayGoal();
         }
 
@@ -95,6 +94,9 @@ public class FootballMatchEngine implements MatchEngine {
 
         maybeAddYellowCard(home, startMin);
         maybeAddYellowCard(away, startMin);
+
+        lastPeriodEvents.sort(Comparator.comparingInt(MatchEvent::getMinute));
+        allEvents.addAll(lastPeriodEvents);
 
         return new SegmentResult(currentPeriod, homeGoalsThisHalf, awayGoalsThisHalf);
     }
@@ -130,7 +132,6 @@ public class FootballMatchEngine implements MatchEngine {
                         .description(victim.getFullName() + " is injured (" + games + " games)")
                         .build();
                 lastPeriodEvents.add(injury);
-                allEvents.add(injury);
             }
         }
     }
@@ -147,7 +148,6 @@ public class FootballMatchEngine implements MatchEngine {
                         .description(carded.getFullName() + " gets a yellow card")
                         .build();
                 lastPeriodEvents.add(card);
-                allEvents.add(card);
             }
         }
     }

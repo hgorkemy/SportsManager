@@ -18,7 +18,7 @@
     </HBox>
 
     <!-- Three columns: squad | arrows | lineup -->
-    <HBox spacing="14">
+    <HBox spacing="14" alignment="CENTER">
 
         <!-- Left: available squad -->
         <VBox spacing="6" prefWidth="360">

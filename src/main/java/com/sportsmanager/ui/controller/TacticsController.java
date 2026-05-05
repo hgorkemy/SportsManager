@@ -54,6 +54,7 @@ public class TacticsController {
             for (int i = 0; i < tactics.length; i++) {
                 if (tactics[i].getName().equals(currentName)) {
                     tacticComboBox.getSelectionModel().select(i);
+                    updateLabels();
                     break;
                 }
             }
@@ -69,7 +70,7 @@ public class TacticsController {
         FootballTactic selected = tactics[index];
         attackLabel.setText(String.valueOf(selected.getAttackMultiplier()));
         defenseLabel.setText(String.valueOf(selected.getDefenseMultiplier()));
-        descLabel.setText("Style: " + selected.getDescription());
+        descLabel.setText(String.valueOf(selected.getDescription()));
     }
 
     @FXML

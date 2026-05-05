@@ -21,7 +21,8 @@ public class SportsManagerApp extends Application {
     public void start(Stage stage) throws Exception {
         primaryStage = stage;
         stage.setTitle("Sports Manager");
-        stage.setResizable(false);
+        stage.setResizable(true);
+        stage.setMaximized(true);
         navigateTo("SportSelectionView");
         stage.show();
     }
@@ -35,11 +36,16 @@ public class SportsManagerApp extends Application {
             FXMLLoader loader = new FXMLLoader(
                 SportsManagerApp.class.getResource("/com/sportsmanager/ui/" + viewName + ".fxml")
             );
-            Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(
-                SportsManagerApp.class.getResource("/com/sportsmanager/ui/styles.css").toExternalForm()
-            );
-            primaryStage.setScene(scene);
+            javafx.scene.Parent root = loader.load();
+            if (primaryStage.getScene() == null) {
+                Scene scene = new Scene(root);
+                scene.getStylesheets().add(
+                    SportsManagerApp.class.getResource("/com/sportsmanager/ui/styles.css").toExternalForm()
+                );
+                primaryStage.setScene(scene);
+            } else {
+                primaryStage.getScene().setRoot(root);
+            }
         } catch (Exception e) {
             System.err.println("Could not load view: " + viewName);
             e.printStackTrace();

@@ -13,10 +13,16 @@ import com.sportsmanager.league.MatchDay;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
@@ -48,6 +54,16 @@ public class MatchController {
     private League league;
     private Fixture currentFixture;
     private ObservableList<MatchEvent> events;
+
+    private static final double ICON_SIZE = 18;
+    private static final Image GOAL_ICON       = loadIcon("ball.png");
+    private static final Image YELLOW_ICON     = loadIcon("yellow-card.png");
+    private static final Image INJURY_ICON     = loadIcon("band-aid.png");
+
+    private static Image loadIcon(String name) {
+        var url = MatchController.class.getResource("/com/sportsmanager/ui/icons/" + name);
+        return url == null ? null : new Image(url.toExternalForm());
+    }
 
     @FXML
     public void initialize() {
@@ -112,15 +128,53 @@ public class MatchController {
             eventLog.scrollTo(events.size() - 1);
         }
 
+        final Team userTeamRef = userTeam;
         eventLog.setCellFactory(lv -> new ListCell<MatchEvent>() {
             @Override
             protected void updateItem(MatchEvent item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText(null);
-                } else {
-                    setText(item.getMinute() + "' - " + item.getDescription());
+                    setGraphic(null);
+                    setStyle("");
+                    return;
                 }
+                setText(null);
+
+                Label minuteLabel = new Label(item.getMinute() + "'");
+                minuteLabel.setMinWidth(60);
+                minuteLabel.setAlignment(Pos.CENTER);
+                minuteLabel.setStyle("-fx-text-fill: #94a3b8;");
+
+                HBox left  = new HBox(8);
+                HBox right = new HBox(8);
+                left.setAlignment(Pos.CENTER_RIGHT);
+                right.setAlignment(Pos.CENTER_LEFT);
+                left.setPrefWidth(0);
+                right.setPrefWidth(0);
+                left.setMinWidth(0);
+                right.setMinWidth(0);
+                HBox.setHgrow(left, Priority.ALWAYS);
+                HBox.setHgrow(right, Priority.ALWAYS);
+
+                Team t = item.getTeam();
+                Image icon = iconFor(item);
+                Label desc = new Label(item.getDescription());
+                desc.setWrapText(true);
+
+                if (t != null && t == userTeamRef) {
+                    left.getChildren().add(desc);
+                    if (icon != null) left.getChildren().add(makeIconView(icon));
+                } else if (t != null) {
+                    if (icon != null) right.getChildren().add(makeIconView(icon));
+                    right.getChildren().add(desc);
+                }
+
+                HBox row = new HBox(left, minuteLabel, right);
+                row.setAlignment(Pos.CENTER);
+                row.prefWidthProperty().bind(widthProperty().subtract(20));
+                setGraphic(row);
+                setStyle("");
             }
         });
 
@@ -189,6 +243,24 @@ public class MatchController {
             autoSetLineup(f.getAway());
             f.setResult(engine.simulateFullMatch(f.getHome(), f.getAway()));
             league.recordResult(f.getResult());
+        }
+    }
+
+    private ImageView makeIconView(Image img) {
+        ImageView iv = new ImageView(img);
+        iv.setFitWidth(ICON_SIZE);
+        iv.setFitHeight(ICON_SIZE);
+        iv.setPreserveRatio(true);
+        iv.setSmooth(true);
+        return iv;
+    }
+
+    private Image iconFor(MatchEvent e) {
+        switch (e.getType()) {
+            case GOAL:        return GOAL_ICON;
+            case YELLOW_CARD: return YELLOW_ICON;
+            case INJURY:      return INJURY_ICON;
+            default:          return null;
         }
     }
 
