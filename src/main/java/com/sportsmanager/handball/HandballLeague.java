@@ -1,7 +1,8 @@
-package com.sportsmanager.football;
+package com.sportsmanager.handball;
 
 import com.sportsmanager.core.model.League;
 import com.sportsmanager.core.model.MatchResult;
+import com.sportsmanager.core.model.Player;
 import com.sportsmanager.core.model.Team;
 import com.sportsmanager.league.Fixture;
 import com.sportsmanager.league.MatchDay;
@@ -14,21 +15,28 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Football league — double round-robin, WIN=3 DRAW=1 LOSS=0.
+ * Handball league — double round-robin, WIN=2 DRAW=1 LOSS=0.
+ *
+ * Tiebreaker order (when points are equal):
+ *   1. Head-to-head points
+ *   2. Head-to-head goal difference
+ *   3. Head-to-head goals scored
+ *   4. Overall goal difference
+ *   5. Overall goals scored
  *
  * Implemented by: Yavuz Mete Afsar
  */
-public class FootballLeague extends League {
+public class HandballLeague extends League {
 
     private final List<MatchDay> schedule = new ArrayList<>();
     private final Map<Team, StandingRow> standingsMap = new HashMap<>();
 
-    /** Stores every recorded MatchResult keyed by each participating team (for h2h). */
+    /** Stores every recorded MatchResult keyed by each participating team. */
     private final Map<Team, List<MatchResult>> matchHistory = new HashMap<>();
 
     private int currentWeekIndex = 0;
 
-    public FootballLeague(String name, List<Team> teams) {
+    public HandballLeague(String name, List<Team> teams) {
         super(name, teams);
     }
 
@@ -40,7 +48,7 @@ public class FootballLeague extends League {
         int cmp = Integer.compare(b.getPoints(), a.getPoints());
         if (cmp != 0) return cmp;
 
-        // 2–4. Head-to-head (points → GD → goals scored)
+        // 2–4. Head-to-head
         cmp = compareHeadToHead(a.getTeam(), b.getTeam());
         if (cmp != 0) return cmp;
 
@@ -53,8 +61,9 @@ public class FootballLeague extends League {
     }
 
     /**
-     * Returns negative when team a should rank above team b in direct encounters.
-     * Returns 0 if they have not yet played each other.
+     * Returns a negative value when team a should rank above team b based on
+     * their direct encounters (h2h points → h2h GD → h2h goals scored).
+     * Returns 0 when they have not yet played each other.
      */
     private int compareHeadToHead(Team a, Team b) {
         List<MatchResult> history = matchHistory.getOrDefault(a, Collections.emptyList());
@@ -79,38 +88,37 @@ public class FootballLeague extends League {
             }
         }
 
-        // h2h points descending
+        // h2h points — more is better (descending: compare b vs a)
         int cmp = Integer.compare(bH2HPoints, aH2HPoints);
         if (cmp != 0) return cmp;
 
-        // h2h goal difference descending
+        // h2h goal difference
         int aH2HGD = aH2HGF - aH2HGA;
         int bH2HGD = aH2HGA - aH2HGF;
         cmp = Integer.compare(bH2HGD, aH2HGD);
         if (cmp != 0) return cmp;
 
-        // h2h goals scored descending (b's GF = a's GA)
+        // h2h goals scored (b's GF = a's GA)
         return Integer.compare(aH2HGA, aH2HGF);
     }
 
     @Override
     public int getPointsForResult(String result) {
         return switch (result) {
-            case "WIN"  -> 3;
+            case "WIN"  -> 2;
             case "DRAW" -> 1;
             default     -> 0;
         };
     }
 
     @Override
-    public int getTrainingDaysPerWeek() { return 5; }
+    public int getTrainingDaysPerWeek() { return 4; }
 
     // ── Schedule generation ───────────────────────────────────────────────────
 
     /**
      * Generates a double round-robin schedule using the circle method.
-     * For n teams: (n-1) rounds first leg + (n-1) rounds second leg = 2*(n-1) total weeks.
-     * With 20 teams: 38 weeks, 10 fixtures per week.
+     * For n teams: (n-1) first-leg rounds + (n-1) second-leg rounds = 2*(n-1) total weeks.
      */
     @Override
     public void generateSchedule() {
@@ -122,7 +130,6 @@ public class FootballLeague extends League {
         matchHistory.clear();
         for (Team t : teams) standingsMap.put(t, new StandingRow(t));
 
-        // Circle method: fix teams.get(0) at slot 0, rotate the rest
         List<Team> circle = new ArrayList<>(teams);
 
         // First leg
@@ -131,7 +138,6 @@ public class FootballLeague extends League {
             for (int i = 0; i < n / 2; i++) {
                 Team home = circle.get(i);
                 Team away = circle.get(n - 1 - i);
-                // Alternate home advantage for the fixed team (index 0) each round
                 if (i == 0 && round % 2 != 0) {
                     md.addFixture(new Fixture(away, home, round + 1));
                 } else {
@@ -139,12 +145,11 @@ public class FootballLeague extends League {
                 }
             }
             schedule.add(md);
-            // Rotate: move last element to position 1 (keeping position 0 fixed)
             Team last = circle.remove(n - 1);
             circle.add(1, last);
         }
 
-        // Second leg: swap home/away from first leg
+        // Second leg: swap home/away
         for (int round = 0; round < n - 1; round++) {
             int weekNum = (n - 1) + round + 1;
             MatchDay md = new MatchDay(weekNum);
@@ -164,7 +169,7 @@ public class FootballLeague extends League {
         Team home = r.getHomeTeam();
         Team away = r.getAwayTeam();
 
-        // Find the unplayed fixture matching home/away in the correct week
+        // Mark fixture as played
         int week = r.getWeek();
         if (week >= 1 && week <= schedule.size()) {
             MatchDay md = schedule.get(week - 1);
@@ -225,10 +230,9 @@ public class FootballLeague extends League {
     @Override
     public void advanceWeek() {
         if (currentWeekIndex < schedule.size()) {
-            // Apply weekly training and injury recovery for all players
             for (Team t : getTeams()) {
                 t.conductWeeklyTraining();
-                for (com.sportsmanager.core.model.Player p : t.getSquad()) {
+                for (Player p : t.getSquad()) {
                     p.recoverOneGame();
                 }
             }
@@ -251,7 +255,7 @@ public class FootballLeague extends League {
 
     // ── Extra accessor ────────────────────────────────────────────────────────
 
-    /** Returns an unmodifiable view of all match days (used by ScheduleController). */
+    /** Returns an unmodifiable view of all match days (used by UI schedule view). */
     public List<MatchDay> getSchedule() {
         return Collections.unmodifiableList(schedule);
     }

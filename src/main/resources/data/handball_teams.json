@@ -1,0 +1,33 @@
+{
+  "teams": [
+    "THW Kiel", "Barcelona", "Paris SG", "Aalborg BK", "Veszprém HC",
+    "Montpellier HB", "SL Benfica", "Nantes HB", "Wisła Płock",
+    "Sporting CP", "Flensburg-H.", "Magdeburg", "Portimonense SC",
+    "Skjern HB", "GOG Gudme", "Frisch Auf Göppingen", "Rhein-Neckar Löwen",
+    "Chambéry SF", "Dinamo Bucharest", "RK Celje"
+  ],
+  "firstNames": [
+    "Mikkel", "Sander", "Nikola", "Dika", "Domagoj",
+    "Casper", "Lasse", "Patrick", "Ludovic", "Timothey",
+    "Jure", "Blaz", "Omar", "Aron", "Harald",
+    "Kevin", "Tobias", "Magnus", "Filip", "Petar",
+    "Rasmus", "Simon", "Andreas", "Mathias", "Jonas",
+    "Elias", "Felix", "Lukas", "Jan", "Erik"
+  ],
+  "lastNames": [
+    "Hansen", "Sagosen", "Karabatic", "Mem", "Duvnjak",
+    "Christophersen", "Svan", "Wiencek", "Fabregas", "N'Guessan",
+    "Dolenec", "Blagotinsek", "Magnusson", "Palmarsson", "Reinkind",
+    "Firnhaber", "Berggren", "Gullerud", "Nenadic", "Cindric",
+    "Lauge Schmidt", "Gidsel", "Landin", "Lindberg", "Toft Hansen",
+    "Jorgensen", "Weinhold", "Dissinger", "Golla", "Knorr"
+  ],
+  "coachFirstNames": [
+    "Alfred", "Carlos", "Xavier", "Dagur", "Talant",
+    "Filip", "Roberto", "Petr", "Marcus", "Ljubomir"
+  ],
+  "coachLastNames": [
+    "Gislason", "Ortega", "Pascual", "Sigurdsson", "Dujshebaev",
+    "Jicha", "Parrondo", "Stepan", "Baur", "Vranjes"
+  ]
+}

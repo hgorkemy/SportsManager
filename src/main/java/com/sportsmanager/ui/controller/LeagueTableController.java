@@ -68,14 +68,17 @@ public class LeagueTableController {
         // Highlight user team row in dark green
         standingsTable.setRowFactory(tv -> new TableRow<>() {
             @Override
-            protected void updateItem(StandingRow row, boolean empty) {
-                super.updateItem(row, empty);
-                if (!empty && row != null && row.getTeam().equals(userTeam)) {
-                    setStyle("-fx-background-color: #14532d;");
-                } else {
-                    setStyle("");
+                protected void updateItem(StandingRow row, boolean empty) {
+                        super.updateItem(row, empty);
+                        setStyle(""); // clear any direct inline style
+                        if (!empty && row != null && row.getTeam().equals(userTeam)) {
+                                if (!getStyleClass().contains("user-team-row")) {
+                                        getStyleClass().add("user-team-row");
+                                }
+                        } else {
+                                getStyleClass().remove("user-team-row");
+                        }
                 }
-            }
         });
     }
 

@@ -18,6 +18,11 @@ public class FootballTeam extends Team {
     public boolean validateLineup() {
         // TODO (Görkem): Check 11 players and at least 1 GK
         if (getLineup().size() != 11) return false;
+
+        // Check no injured players are in the lineup
+        if (getLineup().stream().anyMatch(Player::isInjured))
+            return false;
+
         return getLineup().stream()
                 .anyMatch(p -> p.getPosition() instanceof FootballPosition fp
                                && fp == FootballPosition.GOALKEEPER);

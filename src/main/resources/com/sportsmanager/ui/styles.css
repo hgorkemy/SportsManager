@@ -61,3 +61,11 @@
 .team-list {
     -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.35), 18, 0.15, 0, 8);
 }
+
+.table-row-cell.user-team-row {
+    -fx-background-color: #bbf7d0;
+}
+
+.table-row-cell.user-team-row:selected {
+    -fx-background-color: #15803d; 
+}
