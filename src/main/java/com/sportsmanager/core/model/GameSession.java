@@ -38,6 +38,12 @@ public class GameSession {
         this.currentSeason = 1;
         this.saveName = saveName;
         userTeam.setUserTeam(true);
+
+        for (Team t : league.getTeams()) {
+            for (Player p : t.getSquad()) {
+                p.snapshotInitialOverall();
+            }
+        }
     }
 
     public void advanceSeason() {

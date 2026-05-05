@@ -23,7 +23,9 @@ public class SquadController {
     @FXML private TableView<Player> squadTable;
     @FXML private TableColumn<Player, String>  colName;
     @FXML private TableColumn<Player, String>  colPos;
-    @FXML private TableColumn<Player, Integer> colOvr;
+    @FXML private TableColumn<Player, String>  colOvr;
+    @FXML private TableColumn<Player, Integer> colGoals;
+    @FXML private TableColumn<Player, Integer> colApps;
     @FXML private TableColumn<Player, String>  colStatus;
 
     @FXML private Label lblPlayerName;
@@ -35,6 +37,9 @@ public class SquadController {
     @FXML private Label lblBallControl;
     @FXML private Label lblDefending;
     @FXML private Label lblPhysicality;
+    @FXML private Label lblGoals;
+    @FXML private Label lblYellowCards;
+    @FXML private Label lblAppearances;
     @FXML private Label lblInjury;
 
     private ObservableList<Player> allPlayers;
@@ -49,8 +54,16 @@ public class SquadController {
         colPos.setCellValueFactory(d ->
                 new SimpleStringProperty(
                         d.getValue().getPosition() != null ? d.getValue().getPosition().getCode() : "?"));
-        colOvr.setCellValueFactory(d ->
-                new SimpleObjectProperty<>(d.getValue().getOverallRating()));
+        colOvr.setCellValueFactory(d -> {
+            Player p = d.getValue();
+            int delta = p.getOverallChange();
+            String suffix = delta == 0 ? "" : (delta > 0 ? " (+" + delta + ")" : " (" + delta + ")");
+            return new SimpleStringProperty(p.getOverallRating() + suffix);
+        });
+        colGoals.setCellValueFactory(d ->
+                new SimpleObjectProperty<>(d.getValue().getGoals()));
+        colApps.setCellValueFactory(d ->
+                new SimpleObjectProperty<>(d.getValue().getAppearances()));
         colStatus.setCellValueFactory(d -> {
             Player p = d.getValue();
             return new SimpleStringProperty(
@@ -94,11 +107,16 @@ public class SquadController {
             lblBallControl.setText("");
             lblDefending.setText("");
             lblPhysicality.setText("");
+            lblGoals.setText("");
+            lblYellowCards.setText("");
+            lblAppearances.setText("");
             lblInjury.setText("");
             return;
         }
 
-        lblPlayerName.setText(player.getFullName() + "   OVR: " + player.getOverallRating());
+        int delta = player.getOverallChange();
+        String deltaStr = delta == 0 ? "" : (delta > 0 ? "  (+" + delta + ")" : "  (" + delta + ")");
+        lblPlayerName.setText(player.getFullName() + "   OVR: " + player.getOverallRating() + deltaStr);
         lblPlayerPos.setText("Position:  " + (player.getPosition() != null ? player.getPosition().getDisplayName() : "?"));
         lblPlayerAge.setText("Age:       " + player.getAge());
 
@@ -110,6 +128,10 @@ public class SquadController {
             lblDefending.setText("Defending:    " + fp.getDefending());
             lblPhysicality.setText("Physicality:  " + fp.getPhysicality());
         }
+
+        lblGoals.setText("Goals:         " + player.getGoals());
+        lblYellowCards.setText("Yellow Cards:  " + player.getYellowCards());
+        lblAppearances.setText("Appearances:   " + player.getAppearances());
 
         lblInjury.setText(player.isInjured()
                 ? "INJURED — out for " + player.getInjuredGamesRemaining() + " game(s)"

@@ -65,6 +65,7 @@ public class FootballMatchEngine implements MatchEngine {
         for (int i = 0; i < homeGoalsThisHalf; i++) {
             int minute = startMin + random.nextInt(45);
             Player scorer = getRandomScorer(home);
+            if (scorer != null) scorer.recordGoal();
             MatchEvent goal = new MatchEvent.Builder(MatchEvent.EventType.GOAL, minute)
                     .team(home)
                     .player(scorer)
@@ -78,6 +79,7 @@ public class FootballMatchEngine implements MatchEngine {
         for (int i = 0; i < awayGoalsThisHalf; i++) {
             int minute = startMin + random.nextInt(45);
             Player scorer = getRandomScorer(away);
+            if (scorer != null) scorer.recordGoal();
             MatchEvent goal = new MatchEvent.Builder(MatchEvent.EventType.GOAL, minute)
                     .team(away)
                     .player(scorer)
@@ -97,6 +99,11 @@ public class FootballMatchEngine implements MatchEngine {
 
         lastPeriodEvents.sort(Comparator.comparingInt(MatchEvent::getMinute));
         allEvents.addAll(lastPeriodEvents);
+
+        if (currentPeriod == totalPeriods) { //record appearances of each player
+            for (Player p : home.getLineup()) p.recordAppearance();
+            for (Player p : away.getLineup()) p.recordAppearance();
+        }
 
         return new SegmentResult(currentPeriod, homeGoalsThisHalf, awayGoalsThisHalf);
     }
@@ -141,6 +148,7 @@ public class FootballMatchEngine implements MatchEngine {
         if (random.nextDouble() < YELLOW_CARD_CHANCE) {
             Player carded = getRandomPlayer(team);
             if (carded != null) {
+                carded.recordYellowCard();
                 int minute = startMin + random.nextInt(45);
                 MatchEvent card = new MatchEvent.Builder(MatchEvent.EventType.YELLOW_CARD, minute)
                         .team(team)

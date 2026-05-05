@@ -17,6 +17,12 @@ public abstract class Player extends Person {
     private Position position;
     private int injuredGamesRemaining;
 
+    private int goals;
+    private int yellowCards;
+    private int appearances;
+
+    private int initialOverall = -1;
+
     protected Player(String firstName, String lastName, int age, Position position) {
         super(firstName, lastName, age);
         this.id = UUID.randomUUID().toString();
@@ -48,6 +54,31 @@ public abstract class Player extends Person {
         if (injuredGamesRemaining > 0) {
             injuredGamesRemaining--;
         }
+    }
+
+    //stats
+    public void recordGoal()        { goals++; }
+    public void recordYellowCard()  { yellowCards++; }
+    public void recordAppearance()  { appearances++; }
+
+    public int getGoals()       { return goals; }
+    public int getYellowCards() { return yellowCards; }
+    public int getAppearances() { return appearances; }
+
+
+    //Snapshots the current overall at game start
+    public void snapshotInitialOverall() {
+        if (initialOverall == -1) {
+            initialOverall = getOverallRating();
+        }
+    }
+
+    public int getInitialOverall() {
+        return initialOverall == -1 ? getOverallRating() : initialOverall;
+    }
+
+    public int getOverallChange() {
+        return getOverallRating() - getInitialOverall();
     }
 
     // ── Getters ───────────────────────────────────────────────────────────────

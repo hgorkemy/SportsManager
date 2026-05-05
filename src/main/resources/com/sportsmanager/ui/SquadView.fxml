@@ -26,20 +26,22 @@
     </HBox>
 
     <!-- Table + detail panel -->
-    <HBox spacing="16">
+    <HBox spacing="16" VBox.vgrow="ALWAYS">
 
         <!-- Squad TableView -->
-        <TableView fx:id="squadTable" prefWidth="540" prefHeight="500" styleClass="list-view">
+        <TableView fx:id="squadTable" HBox.hgrow="ALWAYS" maxWidth="Infinity" maxHeight="Infinity" styleClass="list-view">
             <columns>
-                <TableColumn fx:id="colName"   text="Name"   prefWidth="195"/>
-                <TableColumn fx:id="colPos"    text="Pos"    prefWidth="65"/>
-                <TableColumn fx:id="colOvr"    text="OVR"   prefWidth="65"/>
-                <TableColumn fx:id="colStatus" text="Status" prefWidth="115"/>
+                <TableColumn fx:id="colName"    text="Name"   prefWidth="220"/>
+                <TableColumn fx:id="colPos"     text="Pos"    prefWidth="65"/>
+                <TableColumn fx:id="colOvr"     text="OVR"    prefWidth="65"/>
+                <TableColumn fx:id="colGoals"   text="Goals"  prefWidth="70"/>
+                <TableColumn fx:id="colApps"    text="Apps"   prefWidth="70"/>
+                <TableColumn fx:id="colStatus"  text="Status" prefWidth="115"/>
             </columns>
         </TableView>
 
         <!-- Attribute detail panel -->
-        <VBox spacing="7" prefWidth="355" prefHeight="500"
+        <VBox spacing="7" prefWidth="380" maxHeight="Infinity"
               style="-fx-padding: 14; -fx-background-color: #1e293b; -fx-background-radius: 8; -fx-border-color: #334155; -fx-border-radius: 8;">
             <Label text="Player Details" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;"/>
             <Label fx:id="lblPlayerName" text="— Select a player —"
@@ -54,6 +56,11 @@
             <Label fx:id="lblBallControl" text="" style="-fx-text-fill: #e2e8f0;"/>
             <Label fx:id="lblDefending"   text="" style="-fx-text-fill: #e2e8f0;"/>
             <Label fx:id="lblPhysicality" text="" style="-fx-text-fill: #e2e8f0;"/>
+            <Separator style="-fx-background-color: #334155;"/>
+            <Label text="Season Stats" style="-fx-font-weight: bold; -fx-text-fill: #94a3b8; -fx-font-size: 12px;"/>
+            <Label fx:id="lblGoals"       text="" style="-fx-text-fill: #4ade80; -fx-font-weight: bold;"/>
+            <Label fx:id="lblYellowCards" text="" style="-fx-text-fill: #facc15;"/>
+            <Label fx:id="lblAppearances" text="" style="-fx-text-fill: #e2e8f0;"/>
             <Separator style="-fx-background-color: #334155;"/>
             <Label fx:id="lblInjury" text="" style="-fx-text-fill: #f87171; -fx-font-weight: bold;"/>
         </VBox>
