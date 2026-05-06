@@ -22,4 +22,7 @@ public interface Sport {
     List<Tactic> getAvailableTactics();
     List<String> getPlayerAttributes();
     Map<String, Double> getAttributeWeights();
+
+
+    default String getTacticsViewName() { return "TacticsLineupView"; }
 }

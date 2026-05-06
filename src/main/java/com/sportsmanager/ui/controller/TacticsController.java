@@ -2,57 +2,47 @@ package com.sportsmanager.ui.controller;
 
 import com.sportsmanager.SportsManagerApp;
 import com.sportsmanager.core.model.GameSession;
+import com.sportsmanager.core.model.Tactic;
 import com.sportsmanager.core.model.Team;
-import com.sportsmanager.football.FootballTactic;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 
+import java.util.List;
+
 // Tactics selection screen
 public class TacticsController {
 
-    @FXML
-    private ComboBox<String> tacticComboBox;
-    @FXML
-    private Label attackLabel;
-    @FXML
-    private Label defenseLabel;
-    @FXML
-    private Label descLabel;
-    @FXML
-    private Label currentTacticLabel;
+    @FXML private ComboBox<String> tacticComboBox;
+    @FXML private Label attackLabel;
+    @FXML private Label defenseLabel;
+    @FXML private Label descLabel;
+    @FXML private Label currentTacticLabel;
 
-    // All tactics in the same order as the combo box
-    private final FootballTactic[] tactics = {
-            FootballTactic.balanced(),
-            FootballTactic.offensive(),
-            FootballTactic.defensive(),
-            FootballTactic.control()
-    };
+    private List<Tactic> tactics;
 
     @FXML
     public void initialize() {
-        // add each tactic to combo box
-        for (FootballTactic t : tactics) {
+        GameSession session = GameSession.getInstance();
+        tactics = session.getSport().getAvailableTactics();
+
+        for (Tactic t : tactics) {
             tacticComboBox.getItems().add(t.getName() + " - " + t.getDescription());
         }
 
-        // show current tactic
-        Team userTeam = GameSession.getInstance().getUserTeam();
+        Team userTeam = session.getUserTeam();
         if (userTeam != null && userTeam.getCurrentTactic() != null) {
             currentTacticLabel.setText("Current: " + userTeam.getCurrentTactic().getName());
         } else {
             currentTacticLabel.setText("Current: None");
         }
 
-        // update labels when selection changes
         tacticComboBox.setOnAction(e -> updateLabels());
 
-        // pre-select current tactic if possible
         if (userTeam != null && userTeam.getCurrentTactic() != null) {
             String currentName = userTeam.getCurrentTactic().getName();
-            for (int i = 0; i < tactics.length; i++) {
-                if (tactics[i].getName().equals(currentName)) {
+            for (int i = 0; i < tactics.size(); i++) {
+                if (tactics.get(i).getName().equals(currentName)) {
                     tacticComboBox.getSelectionModel().select(i);
                     updateLabels();
                     break;
@@ -61,25 +51,20 @@ public class TacticsController {
         }
     }
 
-    // update multiplier labels for selected tactic
     private void updateLabels() {
         int index = tacticComboBox.getSelectionModel().getSelectedIndex();
-        if (index < 0)
-            return;
-
-        FootballTactic selected = tactics[index];
+        if (index < 0) return;
+        Tactic selected = tactics.get(index);
         attackLabel.setText(String.valueOf(selected.getAttackMultiplier()));
         defenseLabel.setText(String.valueOf(selected.getDefenseMultiplier()));
-        descLabel.setText(String.valueOf(selected.getDescription()));
+        descLabel.setText(selected.getDescription());
     }
 
     @FXML
     private void onApplyTactic() {
         int index = tacticComboBox.getSelectionModel().getSelectedIndex();
-        if (index < 0)
-            return;
-
-        FootballTactic selected = tactics[index];
+        if (index < 0) return;
+        Tactic selected = tactics.get(index);
         Team userTeam = GameSession.getInstance().getUserTeam();
         if (userTeam != null) {
             userTeam.setCurrentTactic(selected);

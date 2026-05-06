@@ -9,8 +9,9 @@ import java.util.Objects;
 public class MatchEvent {
 
     public enum EventType {
-        GOAL, INJURY, SUBSTITUTION, YELLOW_CARD, RED_CARD,
-        PERIOD_END, MATCH_END, CUSTOM
+        GOAL, INJURY, YELLOW_CARD, RED_CARD,
+        PERIOD_END, MATCH_END, CUSTOM,
+        SEVEN_METRE_THROW, SEVEN_METRE_SAVED, SUSPENSION
     }
 
     private final EventType type;

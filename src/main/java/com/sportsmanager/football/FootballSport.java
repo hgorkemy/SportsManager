@@ -32,8 +32,12 @@ public class FootballSport implements Sport {
 
     @Override
     public List<Tactic> getAvailableTactics() {
-        // TODO (Berke): Return FootballTactic instances
-        return List.of();
+        return List.of(
+            FootballTactic.balanced(),
+            FootballTactic.offensive(),
+            FootballTactic.defensive(),
+            FootballTactic.control()
+        );
     }
 
     @Override

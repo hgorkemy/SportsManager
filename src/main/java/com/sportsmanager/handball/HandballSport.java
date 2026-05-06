@@ -30,7 +30,11 @@ public class HandballSport implements Sport {
 
     @Override
     public List<Tactic> getAvailableTactics() {
-        return List.of();
+        return List.of(
+            HandballTactic.balanced(),
+            HandballTactic.attacking(),
+            HandballTactic.defensive()
+        );
     }
 
     @Override

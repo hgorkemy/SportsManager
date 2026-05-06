@@ -1,5 +1,10 @@
 package com.sportsmanager.football;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
+
 import com.sportsmanager.core.engine.MatchEngine;
 import com.sportsmanager.core.engine.SegmentResult;
 import com.sportsmanager.core.model.MatchEvent;
@@ -7,24 +12,20 @@ import com.sportsmanager.core.model.MatchResult;
 import com.sportsmanager.core.model.Player;
 import com.sportsmanager.core.model.Team;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
-
 public class FootballMatchEngine implements MatchEngine {
 
     private static final double HOME_ADVANTAGE = 1.1;
     private static final double INJURY_CHANCE = 0.08;
     private static final double YELLOW_CARD_CHANCE = 0.15;
 
-    private int currentPeriod = 0;
-    private final int totalPeriods = 2;
+    private static final int PERIOD_MINUTES = 45;
+    private static final int TOTAL_PERIODS = 2;
 
+
+    private int currentPeriod = 0;
     private MatchResult currentMatchResult;
     private final List<MatchEvent> allEvents = new ArrayList<>();
     private final List<MatchEvent> lastPeriodEvents = new ArrayList<>();
-
     private final Random random = new Random();
 
     @Override
@@ -43,52 +44,25 @@ public class FootballMatchEngine implements MatchEngine {
         double awayDefense = away.calculateDefenseRating();
 
         // apply tactic multipliers if set
-        if (home.getCurrentTactic() instanceof FootballTactic) {
-            FootballTactic ftactic = (FootballTactic) home.getCurrentTactic();
+        if (home.getCurrentTactic() instanceof FootballTactic ftactic) {
             homeAttack *= ftactic.getAttackMultiplier();
             homeDefense *= ftactic.getDefenseMultiplier();
         }
-        if (away.getCurrentTactic() instanceof FootballTactic) {
-            FootballTactic ftactic = (FootballTactic) away.getCurrentTactic();
+        if (away.getCurrentTactic() instanceof FootballTactic ftactic) {
             awayAttack *= ftactic.getAttackMultiplier();
             awayDefense *= ftactic.getDefenseMultiplier();
         }
 
         // minutes 1-45 for first 46-90 for second
-        int startMin = (currentPeriod - 1) * 45 + 1;
+        int startMin = (currentPeriod - 1) * PERIOD_MINUTES + 1;
 
         // simulate goals
         int homeGoalsThisHalf = simulateGoals(homeAttack, awayDefense);
         int awayGoalsThisHalf = simulateGoals(awayAttack, homeDefense);
-
-        // register goals as events
-        for (int i = 0; i < homeGoalsThisHalf; i++) {
-            int minute = startMin + random.nextInt(45);
-            Player scorer = getRandomScorer(home);
-            if (scorer != null) scorer.recordGoal();
-            MatchEvent goal = new MatchEvent.Builder(MatchEvent.EventType.GOAL, minute)
-                    .team(home)
-                    .player(scorer)
-                    .description(scorer != null ? scorer.getFullName() + " scores for " + home.getName()
-                            : home.getName() + " scores")
-                    .build();
-            lastPeriodEvents.add(goal);
-            currentMatchResult.addHomeGoal();
-        }
-
-        for (int i = 0; i < awayGoalsThisHalf; i++) {
-            int minute = startMin + random.nextInt(45);
-            Player scorer = getRandomScorer(away);
-            if (scorer != null) scorer.recordGoal();
-            MatchEvent goal = new MatchEvent.Builder(MatchEvent.EventType.GOAL, minute)
-                    .team(away)
-                    .player(scorer)
-                    .description(scorer != null ? scorer.getFullName() + " scores for " + away.getName()
-                            : away.getName() + " scores")
-                    .build();
-            lastPeriodEvents.add(goal);
-            currentMatchResult.addAwayGoal();
-        }
+        
+        //register goals as events
+        registerGoals(home, homeGoalsThisHalf, startMin, true);
+        registerGoals(away, awayGoalsThisHalf, startMin, false);
 
         // match events
         maybeAddInjury(home, startMin);
@@ -102,17 +76,17 @@ public class FootballMatchEngine implements MatchEngine {
 
         // half-time / full-time marker
         MatchEvent endMarker;
-        if (currentPeriod < totalPeriods) {
-            endMarker = new MatchEvent.Builder(MatchEvent.EventType.PERIOD_END, currentPeriod * 45)
+        if (currentPeriod < TOTAL_PERIODS) {
+            endMarker = new MatchEvent.Builder(MatchEvent.EventType.PERIOD_END, currentPeriod * PERIOD_MINUTES)
                     .description("--- Half-Time ---").build();
         } else {
-            endMarker = new MatchEvent.Builder(MatchEvent.EventType.MATCH_END, totalPeriods * 45)
+            endMarker = new MatchEvent.Builder(MatchEvent.EventType.MATCH_END, TOTAL_PERIODS * PERIOD_MINUTES)
                     .description("--- Full-Time ---").build();
         }
         lastPeriodEvents.add(endMarker);
         allEvents.add(endMarker);
 
-        if (currentPeriod == totalPeriods) { //record appearances of each player
+        if (currentPeriod == TOTAL_PERIODS) { //record appearances of each player
             for (Player p : home.getLineup()) p.recordAppearance();
             for (Player p : away.getLineup()) p.recordAppearance();
         }
@@ -137,6 +111,23 @@ public class FootballMatchEngine implements MatchEngine {
         return goals;
     }
 
+    private void registerGoals(Team team, int count, int startMin, boolean isHome) {
+        for (int i = 0; i < count; i++) {
+            int minute = startMin + random.nextInt(PERIOD_MINUTES);
+            Player scorer = getRandomScorer(team);
+            if (scorer != null) scorer.recordGoal();
+            lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.GOAL, minute)
+                    .team(team)
+                    .player(scorer)
+                    .description(scorer != null
+                            ? scorer.getFullName() + " scores for " + team.getName()
+                            : team.getName() + " scores")
+                    .build());
+            if (isHome) currentMatchResult.addHomeGoal();
+            else        currentMatchResult.addAwayGoal();
+        }
+    }
+
     // 8% chance of injury per half for a random player
     private void maybeAddInjury(Team team, int startMin) {
         if (random.nextDouble() < INJURY_CHANCE) {
@@ -144,7 +135,7 @@ public class FootballMatchEngine implements MatchEngine {
             if (victim != null) {
                 int games = 1 + random.nextInt(4); // 1-4 game injury
                 victim.injure(games);
-                int minute = startMin + random.nextInt(45);
+                int minute = startMin + random.nextInt(PERIOD_MINUTES);
                 MatchEvent injury = new MatchEvent.Builder(MatchEvent.EventType.INJURY, minute)
                         .team(team)
                         .player(victim)
@@ -161,7 +152,7 @@ public class FootballMatchEngine implements MatchEngine {
             Player carded = getRandomPlayer(team);
             if (carded != null) {
                 carded.recordYellowCard();
-                int minute = startMin + random.nextInt(45);
+                int minute = startMin + random.nextInt(PERIOD_MINUTES);
                 MatchEvent card = new MatchEvent.Builder(MatchEvent.EventType.YELLOW_CARD, minute)
                         .team(team)
                         .player(carded)
@@ -188,7 +179,7 @@ public class FootballMatchEngine implements MatchEngine {
     }
 
     // pick goal scorer (not goalkeeper)
-    private Player getRandomScorer(Team team) {
+    private Player getRandomScorer(Team team) { 
         List<Player> pool = new ArrayList<>();
         if (team.getLineup().isEmpty()) {
             pool.addAll(team.getSquad());
@@ -200,7 +191,8 @@ public class FootballMatchEngine implements MatchEngine {
             return null;
 
         // Remove goalkeepers
-        pool.removeIf(p -> p.getPosition() == com.sportsmanager.football.FootballPosition.GOALKEEPER);
+        pool.removeIf(p -> (p.getPosition() == FootballPosition.GOALKEEPER || p.isInjured()));
+        
 
         // if only goalkeeper
         if (pool.isEmpty())
@@ -211,7 +203,7 @@ public class FootballMatchEngine implements MatchEngine {
 
     @Override
     public boolean hasNextPeriod() {
-        return currentPeriod < totalPeriods;
+        return currentPeriod < TOTAL_PERIODS;
     }
 
     @Override
