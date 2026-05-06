@@ -38,6 +38,11 @@ public class DashboardController {
         League league = session.getLeague();
         Team userTeam = session.getUserTeam();
 
+        if (league.isSeasonOver()) {
+            SportsManagerApp.navigateTo("EndOfSeasonView");
+            return;
+        }
+
         lblSeason.setText("Season " + session.getCurrentSeason());
         lblTeamName.setText(userTeam.getName());
 
