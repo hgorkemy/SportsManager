@@ -129,6 +129,8 @@ public class MatchController {
         }
 
         final Team userTeamRef = userTeam;
+        eventLog.getSelectionModel().clearSelection();
+        eventLog.setSelectionModel(null);
         eventLog.setCellFactory(lv -> new ListCell<MatchEvent>() {
             @Override
             protected void updateItem(MatchEvent item, boolean empty) {
@@ -136,18 +138,37 @@ public class MatchController {
                 if (empty || item == null) {
                     setText(null);
                     setGraphic(null);
-                    setStyle("");
                     return;
                 }
                 setText(null);
+
+                // period-end / full-time marker
+                if (item.getType() == MatchEvent.EventType.PERIOD_END || item.getType() == MatchEvent.EventType.MATCH_END) {
+                    Label marker = new Label(item.getDescription());
+                    marker.setStyle("-fx-text-fill: #6e7580; -fx-font-weight: bold; -fx-font-size: 13px;");
+                    return;
+                }
 
                 Label minuteLabel = new Label(item.getMinute() + "'");
                 minuteLabel.setMinWidth(60);
                 minuteLabel.setAlignment(Pos.CENTER);
                 minuteLabel.setStyle("-fx-text-fill: #94a3b8;");
 
+                Team t = item.getTeam();
+                boolean isUser = t != null && t == userTeamRef;
+
+                Label desc = new Label(item.getDescription());
+                Image icon = iconFor(item);
+                if (icon != null) {
+                    desc.setGraphic(makeIconView(icon));
+                    desc.setGraphicTextGap(8);
+                    desc.setContentDisplay(isUser ? ContentDisplay.RIGHT : ContentDisplay.LEFT);
+                }
+
                 HBox left  = new HBox(8);
                 HBox right = new HBox(8);
+                if (isUser)                     left.getChildren().add(desc);
+                else if (t != null)             right.getChildren().add(desc);
                 left.setAlignment(Pos.CENTER_RIGHT);
                 right.setAlignment(Pos.CENTER_LEFT);
                 left.setPrefWidth(0);
@@ -157,24 +178,10 @@ public class MatchController {
                 HBox.setHgrow(left, Priority.ALWAYS);
                 HBox.setHgrow(right, Priority.ALWAYS);
 
-                Team t = item.getTeam();
-                Image icon = iconFor(item);
-                Label desc = new Label(item.getDescription());
-                desc.setWrapText(true);
-
-                if (t != null && t == userTeamRef) {
-                    left.getChildren().add(desc);
-                    if (icon != null) left.getChildren().add(makeIconView(icon));
-                } else if (t != null) {
-                    if (icon != null) right.getChildren().add(makeIconView(icon));
-                    right.getChildren().add(desc);
-                }
-
                 HBox row = new HBox(left, minuteLabel, right);
                 row.setAlignment(Pos.CENTER);
-                row.prefWidthProperty().bind(widthProperty().subtract(20));
+                row.maxWidthProperty().bind(lv.widthProperty().subtract(40));
                 setGraphic(row);
-                setStyle("");
             }
         });
 

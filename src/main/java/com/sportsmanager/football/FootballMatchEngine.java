@@ -100,6 +100,18 @@ public class FootballMatchEngine implements MatchEngine {
         lastPeriodEvents.sort(Comparator.comparingInt(MatchEvent::getMinute));
         allEvents.addAll(lastPeriodEvents);
 
+        // half-time / full-time marker
+        MatchEvent endMarker;
+        if (currentPeriod < totalPeriods) {
+            endMarker = new MatchEvent.Builder(MatchEvent.EventType.PERIOD_END, currentPeriod * 45)
+                    .description("--- Half-Time ---").build();
+        } else {
+            endMarker = new MatchEvent.Builder(MatchEvent.EventType.MATCH_END, totalPeriods * 45)
+                    .description("--- Full-Time ---").build();
+        }
+        lastPeriodEvents.add(endMarker);
+        allEvents.add(endMarker);
+
         if (currentPeriod == totalPeriods) { //record appearances of each player
             for (Player p : home.getLineup()) p.recordAppearance();
             for (Player p : away.getLineup()) p.recordAppearance();
