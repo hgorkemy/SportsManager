@@ -8,6 +8,7 @@ import com.sportsmanager.league.Fixture;
 import com.sportsmanager.league.MatchDay;
 import com.sportsmanager.league.StandingRow;
 import com.sportsmanager.util.GameSaveManager;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -46,7 +47,12 @@ public class DashboardController {
         League league = session.getLeague();
         Team userTeam = session.getUserTeam();
 
-        // Header
+        // Season finished → go to end-of-season screen automatically
+        if (league.isSeasonOver()) {
+            Platform.runLater(() -> SportsManagerApp.navigateTo("EndOfSeasonView"));
+            return;
+        }
+
         lblSeason.setText("Season " + session.getCurrentSeason());
         lblSportName.setText("[" + session.getSelectedSportName() + "]");
         lblTeamName.setText(userTeam.getName());

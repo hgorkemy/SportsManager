@@ -57,8 +57,7 @@ public class SportsManagerApp extends Application {
 
     public static void main(String[] args) {
         SportRegistry.register("Football", new FootballFactory());
-        // TODO (Berke): uncomment when HandballMatchEngine is complete
-        // SportRegistry.register("Handball", new HandballFactory());
+        SportRegistry.register("Handball", new HandballFactory());
         launch(args);
     }
 }

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.sportsmanager.ui.controller.EndOfSeasonController"
+      spacing="30" alignment="CENTER"
+      styleClass="root-pane">
+    <padding><Insets top="60" right="80" bottom="60" left="80"/></padding>
+
+    <!-- Title -->
+    <Label fx:id="lblSeason" text="Season — Final Standings"
+           style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;"/>
+
+    <!-- Champion card -->
+    <VBox spacing="8" alignment="CENTER"
+          style="-fx-padding: 24; -fx-background-color: #1e293b; -fx-background-radius: 12; -fx-border-color: #f59e0b; -fx-border-width: 2; -fx-border-radius: 12;">
+        <Label text="🏆  CHAMPION" style="-fx-text-fill: #f59e0b; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+        <Label fx:id="lblChampion" text="—"
+               style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;"/>
+    </VBox>
+
+    <!-- Info row -->
+    <HBox spacing="24" alignment="CENTER">
+
+        <!-- User position -->
+        <VBox spacing="6" alignment="CENTER" prefWidth="200"
+              style="-fx-padding: 20; -fx-background-color: #1e293b; -fx-background-radius: 10; -fx-border-color: #334155; -fx-border-radius: 10;">
+            <Label text="YOUR FINISH" style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            <Label fx:id="lblUserPosition" text="—"
+                   style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #22c55e;"/>
+        </VBox>
+
+        <!-- Top scorer -->
+        <VBox spacing="6" alignment="CENTER" prefWidth="280"
+              style="-fx-padding: 20; -fx-background-color: #1e293b; -fx-background-radius: 10; -fx-border-color: #334155; -fx-border-radius: 10;">
+            <Label text="TOP SCORER" style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            <Label fx:id="lblTopScorer" text="—"
+                   style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;"/>
+        </VBox>
+
+        <!-- Season stats -->
+        <VBox spacing="6" alignment="CENTER" prefWidth="240"
+              style="-fx-padding: 20; -fx-background-color: #1e293b; -fx-background-radius: 10; -fx-border-color: #334155; -fx-border-radius: 10;">
+            <Label text="YOUR SEASON" style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            <Label fx:id="lblStats" text="—"
+                   style="-fx-font-size: 14px; -fx-text-fill: #cbd5e1;"/>
+        </VBox>
+
+    </HBox>
+
+    <!-- Buttons -->
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="Start New Season" onAction="#onNewSeason" styleClass="primary-button"
+                style="-fx-font-size: 14px; -fx-padding: 10 24;"/>
+        <Button text="Main Menu" onAction="#onMainMenu"
+                style="-fx-font-size: 14px; -fx-padding: 10 24; -fx-background-color: #334155; -fx-text-fill: #f8fafc; -fx-background-radius: 6; -fx-cursor: hand;"/>
+    </HBox>
+
+</VBox>

@@ -13,3 +13,6 @@ target/
 
 # Logs
 *.log
+
+# Claude Code
+.claude/
