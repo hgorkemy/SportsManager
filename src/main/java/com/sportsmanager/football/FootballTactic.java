@@ -6,8 +6,6 @@ import java.util.Map;
 
 /**
  * Football formation/tactic.
- *
- * TODO (Berke): Implement constructor and factory methods for 4-4-2, 4-3-3, etc.
  */
 public class FootballTactic implements Tactic {
 
@@ -23,7 +21,6 @@ public class FootballTactic implements Tactic {
         this.description = description;
     }
 
-    // TODO (Berke): Add static factory methods
     public static FootballTactic balanced()   { return new FootballTactic("4-4-2", 1.0, 1.0, "Balanced"); }
     public static FootballTactic offensive()  { return new FootballTactic("4-3-3", 1.2, 0.9, "Offensive"); }
     public static FootballTactic defensive()  { return new FootballTactic("5-3-2", 0.9, 1.2, "Defensive"); }

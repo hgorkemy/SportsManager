@@ -10,7 +10,6 @@ import java.util.Map;
 /**
  * Football implementation of Sport interface.
  *
- * TODO (Berke): Implement all methods.
  */
 public class FootballSport implements Sport {
 
@@ -47,7 +46,6 @@ public class FootballSport implements Sport {
 
     @Override
     public Map<String, Double> getAttributeWeights() {
-        // TODO (Berke): Return position-agnostic default weights
         return Map.of(
             "speed", 0.15, "shooting", 0.20, "passing", 0.20,
             "ballControl", 0.15, "defending", 0.15, "physicality", 0.15

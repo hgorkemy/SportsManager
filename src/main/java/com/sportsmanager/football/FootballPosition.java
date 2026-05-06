@@ -5,7 +5,6 @@ import com.sportsmanager.core.model.Position;
 /**
  * Football playing positions.
  *
- * TODO (Berke): Verify primaryAttribute values match your rating formula.
  */
 public enum FootballPosition implements Position {
 

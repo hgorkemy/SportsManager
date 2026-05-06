@@ -7,7 +7,6 @@ import com.sportsmanager.core.model.League;
 import com.sportsmanager.core.model.MatchEvent;
 import com.sportsmanager.core.model.Player;
 import com.sportsmanager.core.model.Team;
-import com.sportsmanager.football.FootballPosition;
 import com.sportsmanager.league.Fixture;
 import com.sportsmanager.league.MatchDay;
 import javafx.collections.FXCollections;
@@ -59,9 +58,8 @@ public class MatchController {
     private static final Image GOAL_ICON       = loadIcon("ball.png");
     private static final Image YELLOW_ICON     = loadIcon("yellow-card.png");
     private static final Image INJURY_ICON     = loadIcon("band-aid.png");
-    private static final Image SUSPENSION_ICON   = loadIcon("suspension.png");
-    private static final Image THROW_ICON        = loadIcon("throw.png");
-
+    private static final Image SUSPENSION_ICON = loadIcon("suspension.png");
+    private static final Image THROW_ICON      = loadIcon("throw.png");
 
     private static Image loadIcon(String name) {
         var url = MatchController.class.getResource("/com/sportsmanager/ui/icons/" + name);
@@ -85,11 +83,11 @@ public class MatchController {
 
         currentFixture = matchDay.getFixtureFor(userTeam);
         if (currentFixture == null) {
-            statusLabel.setText("No match for you this week.");
+            statusLabel.setText("No match for you this week — other results simulated.");
             simulateButton.setDisable(true);
             dashboardButton.setVisible(true);
             simulateOtherMatches(matchDay, null);
-            league.advanceWeek();
+            GameSession.getInstance().setMatchPlayedThisWeek(true);
             return;
         }
 
@@ -232,15 +230,16 @@ public class MatchController {
             currentFixture.setResult(engine.getFinalResult());
             league.recordResult(currentFixture.getResult());
 
-            // simulation for the remaining week games
+            // Simulate remaining fixtures for this week
             simulateOtherMatches(league.getCurrentMatchDay(), currentFixture);
-            league.advanceWeek();
+
+            // Mark match as played — user must click "Next Week" on Dashboard to advance
+            GameSession.getInstance().setMatchPlayedThisWeek(true);
         }
     }
 
     @FXML
     private void onChangeTactics() {
-        SportsManagerApp.navigateTo("TacticsView");
         GameSession session = GameSession.getInstance();
         session.setTacticsContext(GameSession.TacticsContext.MID_MATCH);
         SportsManagerApp.navigateTo(session.getSport().getTacticsViewName());
@@ -278,38 +277,37 @@ public class MatchController {
 
     private Image iconFor(MatchEvent e) {
         return switch (e.getType()) {
-            case GOAL               -> GOAL_ICON;
-            case YELLOW_CARD        -> YELLOW_ICON;
-            case SUSPENSION         -> SUSPENSION_ICON;
-            case INJURY             -> INJURY_ICON;
-
-            case SEVEN_METRE_THROW  -> THROW_ICON;
-            default                 -> null;
+            case GOAL              -> GOAL_ICON;
+            case YELLOW_CARD       -> YELLOW_ICON;
+            case INJURY            -> INJURY_ICON;
+            case SUSPENSION        -> SUSPENSION_ICON;
+            case SEVEN_METRE_THROW -> THROW_ICON;
+            default                -> null;
         };
     }
 
-    // Ensure other opponents have a valid 11
+    // Ensure team has a valid starting lineup (works for any sport)
     private void autoSetLineup(Team team) {
         if (!team.getLineup().isEmpty())
             return;
 
+        int needed = GameSession.getInstance().getSport().getPlayersPerTeam();
         List<Player> healthy = team.getHealthyPlayers();
         List<Player> gks = new ArrayList<>();
         List<Player> outfield = new ArrayList<>();
         for (Player p : healthy) {
-            if (p.getPosition() == FootballPosition.GOALKEEPER) {
+            if (p.getPosition() != null && "GK".equals(p.getPosition().getCode()))
                 gks.add(p);
-            } else {
+            else
                 outfield.add(p);
-            }
         }
-        if (gks.isEmpty() || outfield.size() < 10)
-            return;
 
-        List<Player> eleven = new ArrayList<>();
-        eleven.add(gks.get(0));
-        eleven.addAll(outfield.subList(0, 10));
+        if (gks.isEmpty() || outfield.size() < needed - 1) return;
 
-        team.setLineup(eleven);
+        List<Player> lineup = new ArrayList<>();
+        lineup.add(gks.get(0));
+        lineup.addAll(outfield.subList(0, needed - 1));
+
+        try { team.setLineup(lineup); } catch (Exception ignored) {}
     }
 }
