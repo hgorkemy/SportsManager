@@ -146,6 +146,10 @@ public class MatchController {
                 if (item.getType() == MatchEvent.EventType.PERIOD_END || item.getType() == MatchEvent.EventType.MATCH_END) {
                     Label marker = new Label(item.getDescription());
                     marker.setStyle("-fx-text-fill: #6e7580; -fx-font-weight: bold; -fx-font-size: 13px;");
+                    HBox markerBox = new HBox(marker);
+                    markerBox.setAlignment(Pos.CENTER);
+                    markerBox.maxWidthProperty().bind(lv.widthProperty().subtract(40));
+                    setGraphic(markerBox);
                     return;
                 }
 
@@ -238,7 +242,11 @@ public class MatchController {
 
     @FXML
     private void onReturnDashboard() {
-        SportsManagerApp.navigateTo("DashboardView");
+        if (league.isSeasonOver()) {
+            SportsManagerApp.navigateTo("EndOfSeasonView");
+        } else {
+            SportsManagerApp.navigateTo("DashboardView");
+        }
     }
 
     // Runs other matches behind the scenes

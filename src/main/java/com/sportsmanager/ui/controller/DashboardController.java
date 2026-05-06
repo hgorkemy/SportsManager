@@ -7,6 +7,7 @@ import com.sportsmanager.core.model.Team;
 import com.sportsmanager.league.Fixture;
 import com.sportsmanager.league.MatchDay;
 import com.sportsmanager.league.StandingRow;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -39,7 +40,7 @@ public class DashboardController {
         Team userTeam = session.getUserTeam();
 
         if (league.isSeasonOver()) {
-            SportsManagerApp.navigateTo("EndOfSeasonView");
+            Platform.runLater(() -> SportsManagerApp.navigateTo("EndOfSeasonView"));
             return;
         }
 
