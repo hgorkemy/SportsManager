@@ -5,7 +5,7 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.sportsmanager.ui.controller.DashboardController"
-      spacing="24" prefWidth="900" prefHeight="600"
+      spacing="24" prefWidth="900" prefHeight="620"
       styleClass="root-pane">
     <padding><Insets top="40" right="50" bottom="40" left="50"/></padding>
 
@@ -14,6 +14,8 @@
         <Label text="Sports Manager" styleClass="title-label"/>
         <Label fx:id="lblSeason" text="Season 1"
                style="-fx-font-size: 16px; -fx-text-fill: #94a3b8;"/>
+        <Label fx:id="lblSportName" text=""
+               style="-fx-font-size: 13px; -fx-text-fill: #64748b; -fx-font-style: italic;"/>
     </HBox>
 
     <!-- Info cards row -->
@@ -50,12 +52,27 @@
     </HBox>
 
     <!-- Navigation buttons -->
-    <HBox spacing="16" alignment="CENTER_LEFT">
+    <HBox spacing="12" alignment="CENTER_LEFT">
         <Button text="My Squad"     onAction="#onSquad"       styleClass="primary-button"/>
         <Button text="League Table" onAction="#onLeagueTable" styleClass="primary-button"/>
         <Button text="Schedule"     onAction="#onSchedule"    styleClass="primary-button"/>
         <Button text="Tactics"      onAction="#onTactics"     styleClass="primary-button"/>
-        <Button text="Play Match"   onAction="#onPlayMatch"   styleClass="primary-button"/>
+    </HBox>
+
+    <!-- Match control row -->
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Button fx:id="btnPlayMatch" text="▶  Play Match"
+                onAction="#onPlayMatch" styleClass="primary-button"
+                style="-fx-font-size: 15px; -fx-padding: 12 28;"/>
+        <Button fx:id="btnNextWeek" text="Next Week  ›"
+                onAction="#onAdvanceWeek"
+                style="-fx-background-color: #f59e0b; -fx-text-fill: #0f172a;
+                       -fx-font-weight: bold; -fx-font-size: 15px;
+                       -fx-background-radius: 10; -fx-padding: 12 28; -fx-cursor: hand;"/>
+        <Button text="💾  Save" onAction="#onSave"
+                style="-fx-background-color: #334155; -fx-text-fill: #f8fafc;
+                       -fx-font-size: 13px; -fx-background-radius: 10;
+                       -fx-padding: 10 20; -fx-cursor: hand;"/>
     </HBox>
 
     <!-- Season stats row -->

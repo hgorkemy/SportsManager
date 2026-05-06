@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<!--
+    Wrapping StackPane centers the 820px content on any screen size.
+    Left: football pitch (JavaFX shapes, drawn in controller).
+    Right: back, formation picker, bench list, confirm.
+-->
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.sportsmanager.ui.controller.TacticsLineupController"
+           style="-fx-background-color: #0a0f1a;">
+
+    <HBox spacing="0" StackPane.alignment="CENTER">
+
+        <!-- Football pitch drawn by controller -->
+        <Pane fx:id="pitchPane" prefWidth="460" prefHeight="620"/>
+
+        <!-- Right panel -->
+        <VBox spacing="10" prefWidth="360"
+              style="-fx-padding: 20 20 20 20; -fx-background-color: #0f172a;">
+
+            <!-- Back button — top for easy access -->
+            <Button text="← Back to Dashboard" onAction="#onBack"
+                    style="-fx-background-color: #334155; -fx-text-fill: #f8fafc;
+                           -fx-font-size: 13px; -fx-background-radius: 10;
+                           -fx-padding: 10 0; -fx-cursor: hand;" prefWidth="320"/>
+
+            <Separator style="-fx-background-color: #334155;"/>
+
+            <!-- Formation selector -->
+            <VBox spacing="6">
+                <Label text="FORMATION"
+                       style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                <ComboBox fx:id="tacticCombo" prefWidth="320"
+                          style="-fx-background-color: #1e293b; -fx-text-fill: #f8fafc;"/>
+            </VBox>
+
+            <Separator style="-fx-background-color: #334155;"/>
+
+            <!-- Bench header row -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="BENCH"
+                       style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                <Button text="Auto-Fill" onAction="#onAutoFill"
+                        style="-fx-background-color: #334155; -fx-text-fill: #cbd5e1;
+                               -fx-font-size: 11px; -fx-background-radius: 6;
+                               -fx-padding: 3 10; -fx-cursor: hand;"/>
+            </HBox>
+
+            <Label text="Click a player, then click a slot on the pitch"
+                   style="-fx-text-fill: #475569; -fx-font-size: 11px; -fx-wrap-text: true;"
+                   prefWidth="320"/>
+
+            <!-- Bench player list — fills remaining vertical space -->
+            <ListView fx:id="playerList" styleClass="list-view" VBox.vgrow="ALWAYS"/>
+
+            <!-- Status -->
+            <Label fx:id="lblStatus" text="" wrapText="true" prefWidth="320"
+                   style="-fx-font-size: 12px; -fx-font-weight: bold;"/>
+
+            <Separator style="-fx-background-color: #334155;"/>
+
+            <!-- Confirm -->
+            <Button text="✓  Confirm Lineup" onAction="#onConfirm"
+                    styleClass="primary-button" prefWidth="320"
+                    style="-fx-font-size: 14px; -fx-padding: 12 0;"/>
+
+        </VBox>
+    </HBox>
+</StackPane>

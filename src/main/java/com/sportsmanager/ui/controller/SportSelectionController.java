@@ -37,4 +37,9 @@ public class SportSelectionController {
             SportsManagerApp.navigateTo("TeamSelectionView");
         }
     }
+
+    @FXML
+    private void onLoadGame() {
+        SportsManagerApp.navigateTo("SavesView");
+    }
 }

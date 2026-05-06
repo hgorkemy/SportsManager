@@ -5,6 +5,7 @@ import com.sportsmanager.league.MatchDay;
 import com.sportsmanager.league.StandingRow;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Abstract league class. Handles schedule generation and standings.
@@ -54,6 +55,19 @@ public abstract class League {
 
     /** TODO (Yavuz): Reset for new season. */
     public abstract void startNewSeason();
+
+    /** Directly sets the current week index (used by save/load to restore position). */
+    public abstract void restoreWeekIndex(int index);
+
+    /**
+     * Directly imports standings for one team by name (used by save/load).
+     * Called after generateSchedule() resets standings to zero.
+     */
+    public abstract void importStanding(String teamName, int played, int wins, int draws,
+                                        int losses, int goalsFor, int goalsAgainst, int points);
+
+    /** Returns all MatchResults from already-played fixtures (used by save). */
+    public abstract List<MatchResult> getPlayedResults();
 
     // ── Getters ───────────────────────────────────────────────────────────────
 

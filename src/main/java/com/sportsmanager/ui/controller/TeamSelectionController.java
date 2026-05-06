@@ -56,6 +56,11 @@ public class TeamSelectionController {
     }
 
     @FXML
+    private void onBack() {
+        SportsManagerApp.navigateTo("SportSelectionView");
+    }
+
+    @FXML
     private void onSelectTeam() {
         Team selectedTeam = teamListView.getSelectionModel().getSelectedItem();
         if (selectedTeam == null) {

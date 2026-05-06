@@ -32,6 +32,18 @@ public class StandingRow {
 
     public int getGoalDifference()  { return goalsFor - goalsAgainst; }
 
+    /** Directly sets all stats at once (used by save/load). */
+    public void directImport(int played, int wins, int draws, int losses,
+                             int goalsFor, int goalsAgainst, int points) {
+        this.matchesPlayed  = played;
+        this.wins           = wins;
+        this.draws          = draws;
+        this.losses         = losses;
+        this.goalsFor       = goalsFor;
+        this.goalsAgainst   = goalsAgainst;
+        this.points         = points;
+    }
+
     public Team getTeam()           { return team; }
     public int getMatchesPlayed()   { return matchesPlayed; }
     public int getWins()            { return wins; }

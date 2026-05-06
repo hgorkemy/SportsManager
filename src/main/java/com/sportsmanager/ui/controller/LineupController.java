@@ -4,14 +4,17 @@ import com.sportsmanager.SportsManagerApp;
 import com.sportsmanager.core.model.GameSession;
 import com.sportsmanager.core.model.Player;
 import com.sportsmanager.core.model.Team;
+import com.sportsmanager.handball.HandballTeam;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Lineup selection screen.
@@ -29,22 +32,45 @@ public class LineupController {
     private ObservableList<Player> squadItems;
     private ObservableList<Player> lineupItems;
     private Team userTeam;
+    private int maxLineup; // 11 for football, 7 for handball
 
     @FXML
     public void initialize() {
         userTeam = GameSession.getInstance().getUserTeam();
+        maxLineup = (userTeam instanceof HandballTeam) ? 7 : 11;
 
-        // Pre-fill from existing lineup, but automatically drop injured players
-        java.util.List<Player> healthyLineup = userTeam.getLineup().stream()
-                .filter(p -> !p.isInjured())
-                .collect(java.util.stream.Collectors.toList());
-
-        lineupItems = FXCollections.observableArrayList(healthyLineup);
-        squadItems  = FXCollections.observableArrayList(userTeam.getSquad());
+        // Pre-fill from existing lineup, but drop injured players automatically
+        lineupItems = FXCollections.observableArrayList(
+            userTeam.getLineup().stream()
+                    .filter(p -> !p.isInjured())
+                    .collect(Collectors.toList())
+        );
+        squadItems = FXCollections.observableArrayList(userTeam.getSquad());
         squadItems.removeAll(lineupItems);
 
         squadList.setItems(squadItems);
         lineupList.setItems(lineupItems);
+
+        // Highlight injured players in red in the squad list
+        squadList.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(Player p, boolean empty) {
+                super.updateItem(p, empty);
+                if (empty || p == null) {
+                    setText(null);
+                    setStyle("");
+                } else if (p.isInjured()) {
+                    setText("⚠ " + p.getFullName()
+                            + " [" + (p.getPosition() != null ? p.getPosition().getCode() : "?") + "]"
+                            + " OVR:" + p.getOverallRating()
+                            + "  — INJURED (" + p.getInjuredGamesRemaining() + " games)");
+                    setStyle("-fx-text-fill: #f87171; -fx-font-weight: bold;");
+                } else {
+                    setText(p.toString());
+                    setStyle("");
+                }
+            }
+        });
 
         updateCount();
     }
@@ -59,8 +85,8 @@ public class LineupController {
             showError("Cannot add injured player to lineup.");
             return;
         }
-        if (lineupItems.size() >= 11) {
-            showError("Lineup is already full (11 players).");
+        if (lineupItems.size() >= maxLineup) {
+            showError("Lineup is full (" + maxLineup + " players max).");
             return;
         }
         squadItems.remove(p);
@@ -107,7 +133,7 @@ public class LineupController {
     // ── Helpers ───────────────────────────────────────────────────────────────
 
     private void updateCount() {
-        lblCount.setText("(" + lineupItems.size() + " / 11)");
+        lblCount.setText("(" + lineupItems.size() + " / " + maxLineup + ")");
     }
 
     private void showError(String msg) {

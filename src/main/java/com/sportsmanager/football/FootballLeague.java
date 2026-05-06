@@ -251,6 +251,33 @@ public class FootballLeague extends League {
 
     // ── Extra accessor ────────────────────────────────────────────────────────
 
+    @Override
+    public void restoreWeekIndex(int index) {
+        this.currentWeekIndex = Math.max(0, Math.min(index, schedule.size()));
+    }
+
+    @Override
+    public void importStanding(String teamName, int played, int wins, int draws,
+                               int losses, int goalsFor, int goalsAgainst, int points) {
+        for (Map.Entry<Team, StandingRow> e : standingsMap.entrySet()) {
+            if (e.getKey().getName().equals(teamName)) {
+                e.getValue().directImport(played, wins, draws, losses, goalsFor, goalsAgainst, points);
+                return;
+            }
+        }
+    }
+
+    @Override
+    public List<MatchResult> getPlayedResults() {
+        List<MatchResult> results = new ArrayList<>();
+        for (MatchDay md : schedule) {
+            for (Fixture f : md.getFixtures()) {
+                if (f.isPlayed()) results.add(f.getResult());
+            }
+        }
+        return results;
+    }
+
     /** Returns an unmodifiable view of all match days (used by ScheduleController). */
     public List<MatchDay> getSchedule() {
         return Collections.unmodifiableList(schedule);

@@ -2,6 +2,7 @@ package com.sportsmanager;
 
 import com.sportsmanager.core.factory.SportRegistry;
 import com.sportsmanager.football.FootballFactory;
+import com.sportsmanager.handball.HandballFactory;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -56,6 +57,8 @@ public class SportsManagerApp extends Application {
 
     public static void main(String[] args) {
         SportRegistry.register("Football", new FootballFactory());
+        // TODO (Berke): uncomment when HandballMatchEngine is complete
+        // SportRegistry.register("Handball", new HandballFactory());
         launch(args);
     }
 }

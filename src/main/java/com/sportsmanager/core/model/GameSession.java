@@ -19,6 +19,7 @@ public class GameSession {
     private int currentSeason;
     private String saveName;
     private String selectedSportName;
+    private boolean matchPlayedThisWeek = false;
 
     private GameSession() {}
 
@@ -37,6 +38,7 @@ public class GameSession {
         this.matchEngine = matchEngine;
         this.currentSeason = 1;
         this.saveName = saveName;
+        this.matchPlayedThisWeek = false;
         userTeam.setUserTeam(true);
 
         for (Team t : league.getTeams()) {
@@ -63,6 +65,7 @@ public class GameSession {
         currentSeason = 0;
         saveName = null;
         selectedSportName = null;
+        matchPlayedThisWeek = false;
     }
 
     public Sport getSport()           { return sport; }
@@ -74,4 +77,7 @@ public class GameSession {
     public String getSelectedSportName() { return selectedSportName; }
     public void setSaveName(String n) { this.saveName = n; }
     public void setSelectedSportName(String selectedSportName) { this.selectedSportName = selectedSportName; }
+    public boolean isMatchPlayedThisWeek()       { return matchPlayedThisWeek; }
+    public void setMatchPlayedThisWeek(boolean b) { this.matchPlayedThisWeek = b; }
+    public void setCurrentSeason(int season)      { this.currentSeason = season; }
 }

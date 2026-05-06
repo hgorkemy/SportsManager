@@ -82,11 +82,12 @@ public class MatchController {
 
         currentFixture = matchDay.getFixtureFor(userTeam);
         if (currentFixture == null) {
-            statusLabel.setText("No match for you this week.");
+            statusLabel.setText("No match for you this week — other results simulated.");
             simulateButton.setDisable(true);
             dashboardButton.setVisible(true);
             simulateOtherMatches(matchDay, null);
-            league.advanceWeek();
+            // Mark week as "played" so user can click Next Week on Dashboard
+            GameSession.getInstance().setMatchPlayedThisWeek(true);
             return;
         }
 
@@ -225,9 +226,11 @@ public class MatchController {
             currentFixture.setResult(engine.getFinalResult());
             league.recordResult(currentFixture.getResult());
 
-            // simulation for the remaining week games
+            // Simulate remaining fixtures for this week
             simulateOtherMatches(league.getCurrentMatchDay(), currentFixture);
-            league.advanceWeek();
+
+            // Mark match as played — user must click "Next Week" on Dashboard to advance
+            GameSession.getInstance().setMatchPlayedThisWeek(true);
         }
     }
 
@@ -271,28 +274,35 @@ public class MatchController {
         }
     }
 
-    // Ensure other opponents have a valid 11
+    // Ensure team has a valid starting lineup (works for any sport)
     private void autoSetLineup(Team team) {
         if (!team.getLineup().isEmpty())
             return;
 
+        // 7 for handball, 11 for football
+        int needed = (team instanceof com.sportsmanager.handball.HandballTeam) ? 7 : 11;
         List<Player> healthy = team.getHealthyPlayers();
-        List<Player> gks = new ArrayList<>();
+
+        // Separate goalkeepers from outfield (by checking FootballPosition or first player type)
+        List<Player> gks      = new ArrayList<>();
         List<Player> outfield = new ArrayList<>();
         for (Player p : healthy) {
-            if (p.getPosition() == FootballPosition.GOALKEEPER) {
+            if (p.getPosition() == FootballPosition.GOALKEEPER ||
+                p.getPosition() == com.sportsmanager.handball.HandballPosition.GOALKEEPER) {
                 gks.add(p);
             } else {
                 outfield.add(p);
             }
         }
-        if (gks.isEmpty() || outfield.size() < 10)
-            return;
 
-        List<Player> eleven = new ArrayList<>();
-        eleven.add(gks.get(0));
-        eleven.addAll(outfield.subList(0, 10));
+        if (gks.isEmpty() || outfield.size() < needed - 1) return;
 
-        team.setLineup(eleven);
+        List<Player> lineup = new ArrayList<>();
+        lineup.add(gks.get(0));
+        lineup.addAll(outfield.subList(0, needed - 1));
+
+        try {
+            team.setLineup(lineup);
+        } catch (Exception ignored) { }
     }
 }

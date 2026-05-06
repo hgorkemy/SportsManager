@@ -7,20 +7,26 @@ import com.sportsmanager.core.model.Team;
 import com.sportsmanager.league.Fixture;
 import com.sportsmanager.league.MatchDay;
 import com.sportsmanager.league.StandingRow;
+import com.sportsmanager.util.GameSaveManager;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.util.List;
 
 /**
  * Main hub screen. Shows current week, user team info, next match, and league position.
- * Navigation buttons to Squad, League Table, Schedule, and Play Match.
  *
- * Implemented by: Yavuz Mete Afsar
+ * Play Match is disabled after a match is played until "Next Week" is clicked.
+ * Next Week is disabled until a match (or bye) has been played.
+ *
+ * Implemented by: Halil Görkem Yiğit & Yavuz Mete Afsar
  */
 public class DashboardController {
 
     @FXML private Label lblSeason;
+    @FXML private Label lblSportName;
     @FXML private Label lblTeamName;
     @FXML private Label lblPosition;
     @FXML private Label lblWeek;
@@ -31,6 +37,8 @@ public class DashboardController {
     @FXML private Label lblDraws;
     @FXML private Label lblLosses;
     @FXML private Label lblPoints;
+    @FXML private Button btnPlayMatch;
+    @FXML private Button btnNextWeek;
 
     @FXML
     public void initialize() {
@@ -38,16 +46,14 @@ public class DashboardController {
         League league = session.getLeague();
         Team userTeam = session.getUserTeam();
 
+        // Header
         lblSeason.setText("Season " + session.getCurrentSeason());
+        lblSportName.setText("[" + session.getSelectedSportName() + "]");
         lblTeamName.setText(userTeam.getName());
 
         // Current week
         MatchDay current = league.getCurrentMatchDay();
-        if (current != null) {
-            lblWeek.setText("Week " + current.getWeekNumber());
-        } else {
-            lblWeek.setText("Season Over");
-        }
+        lblWeek.setText(current != null ? "Week " + current.getWeekNumber() : "—");
 
         // League position
         List<StandingRow> standings = league.getStandings();
@@ -60,7 +66,7 @@ public class DashboardController {
         }
         lblPosition.setText("League Position: #" + position + " of " + standings.size());
 
-        // Next match
+        // Next match info
         if (current != null) {
             Fixture fixture = current.getFixtureFor(userTeam);
             if (fixture != null) {
@@ -68,7 +74,7 @@ public class DashboardController {
                 String venue = fixture.getHome().equals(userTeam) ? "Home" : "Away";
                 lblMatchDetail.setText(venue + " — Week " + current.getWeekNumber());
             } else {
-                lblNextMatch.setText("No fixture this week");
+                lblNextMatch.setText("Bye week — no fixture");
                 lblMatchDetail.setText("");
             }
         } else {
@@ -76,7 +82,7 @@ public class DashboardController {
             lblMatchDetail.setText("Season complete");
         }
 
-        // User team stats from standings
+        // Season stats
         StandingRow row = standings.stream()
                 .filter(r -> r.getTeam().equals(userTeam))
                 .findFirst().orElse(null);
@@ -87,11 +93,72 @@ public class DashboardController {
             lblLosses.setText("L: " + row.getLosses());
             lblPoints.setText("Pts: " + row.getPoints());
         }
+
+        // Button locking: Play Match ↔ Next Week are mutually exclusive
+        boolean matchPlayed = session.isMatchPlayedThisWeek();
+        boolean seasonOver  = league.isSeasonOver();
+
+        btnPlayMatch.setDisable(matchPlayed || seasonOver);
+        btnNextWeek.setDisable(!matchPlayed || seasonOver);
+
+        if (seasonOver) {
+            lblNextMatch.setText("Season complete!");
+            lblMatchDetail.setText("Check the league table for final standings.");
+        }
+    }
+
+    // ── Button handlers ────────────────────────────────────────────────────────
+
+    @FXML
+    private void onAdvanceWeek() {
+        GameSession session = GameSession.getInstance();
+        League league = session.getLeague();
+        if (!session.isMatchPlayedThisWeek() || league.isSeasonOver()) return;
+
+        league.advanceWeek();                        // recovers injuries, training, increments week
+        session.setMatchPlayedThisWeek(false);
+        initialize();                                // refresh UI
+    }
+
+    @FXML
+    private void onPlayMatch() {
+        GameSession session = GameSession.getInstance();
+        if (session.isMatchPlayedThisWeek()) return; // safety guard
+        SportsManagerApp.navigateTo("TacticsLineupView");
+    }
+
+    @FXML
+    private void onSave() {
+        try {
+            String fileName = GameSession.getInstance().getSaveName();
+            if (fileName == null || fileName.isBlank()) fileName = "quicksave";
+            GameSaveManager.save(fileName);
+            showInfo("Game Saved", "Save file: " + fileName + ".json");
+        } catch (Exception e) {
+            showError("Save Failed", e.getMessage());
+        }
     }
 
     @FXML private void onSquad()       { SportsManagerApp.navigateTo("SquadView"); }
     @FXML private void onLeagueTable() { SportsManagerApp.navigateTo("LeagueTableView"); }
     @FXML private void onSchedule()    { SportsManagerApp.navigateTo("ScheduleView"); }
     @FXML private void onTactics()     { SportsManagerApp.navigateTo("TacticsView"); }
-    @FXML private void onPlayMatch()   { SportsManagerApp.navigateTo("LineupView"); }
+
+    // ── Helpers ────────────────────────────────────────────────────────────────
+
+    private void showInfo(String title, String msg) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
+
+    private void showError(String title, String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
 }

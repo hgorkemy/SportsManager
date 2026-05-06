@@ -10,7 +10,15 @@
 
     <padding><Insets top="40" right="50" bottom="40" left="50"/></padding>
 
-    <Label text="Choose Your Club" styleClass="title-label"/>
+    <!-- Header with back button -->
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Button text="← Back" onAction="#onBack"
+                style="-fx-background-color: #334155; -fx-text-fill: #f8fafc;
+                       -fx-font-size: 13px; -fx-background-radius: 8;
+                       -fx-padding: 8 18; -fx-cursor: hand;"/>
+        <Label text="Choose Your Club" styleClass="title-label"/>
+    </HBox>
+
     <Label text="Select the team you want to manage for the season." styleClass="subtitle-label"/>
     <ListView fx:id="teamListView" prefWidth="520" prefHeight="340" styleClass="team-list"/>
     <Button fx:id="selectTeamButton" text="Select Team" onAction="#onSelectTeam"
