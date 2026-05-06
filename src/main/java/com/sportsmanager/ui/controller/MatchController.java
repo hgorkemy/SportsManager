@@ -240,7 +240,8 @@ public class MatchController {
 
     @FXML
     private void onChangeTactics() {
-        SportsManagerApp.navigateTo("TacticsView");
+        GameSession.getInstance().setTacticsContext(GameSession.TacticsContext.MID_MATCH);
+        SportsManagerApp.navigateTo("TacticsLineupView");
     }
 
     @FXML

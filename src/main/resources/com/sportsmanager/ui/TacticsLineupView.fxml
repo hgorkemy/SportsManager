@@ -10,9 +10,10 @@
 -->
 <StackPane xmlns:fx="http://javafx.com/fxml"
            fx:controller="com.sportsmanager.ui.controller.TacticsLineupController"
+           alignment="CENTER"
            style="-fx-background-color: #0a0f1a;">
 
-    <HBox spacing="0" StackPane.alignment="CENTER">
+    <HBox spacing="0" maxWidth="820" StackPane.alignment="CENTER">
 
         <!-- Football pitch drawn by controller -->
         <Pane fx:id="pitchPane" prefWidth="460" prefHeight="620"/>
@@ -22,7 +23,7 @@
               style="-fx-padding: 20 20 20 20; -fx-background-color: #0f172a;">
 
             <!-- Back button — top for easy access -->
-            <Button text="← Back to Dashboard" onAction="#onBack"
+            <Button fx:id="btnBack" text="← Back to Dashboard" onAction="#onBack"
                     style="-fx-background-color: #334155; -fx-text-fill: #f8fafc;
                            -fx-font-size: 13px; -fx-background-radius: 10;
                            -fx-padding: 10 0; -fx-cursor: hand;" prefWidth="320"/>
@@ -63,7 +64,7 @@
             <Separator style="-fx-background-color: #334155;"/>
 
             <!-- Confirm -->
-            <Button text="✓  Confirm Lineup" onAction="#onConfirm"
+            <Button fx:id="btnConfirm" text="✓  Confirm Lineup" onAction="#onConfirm"
                     styleClass="primary-button" prefWidth="320"
                     style="-fx-font-size: 14px; -fx-padding: 12 0;"/>
 

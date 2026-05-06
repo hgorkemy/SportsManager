@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -50,6 +51,8 @@ public class TacticsLineupController {
     @FXML private ComboBox<FootballTactic> tacticCombo;
     @FXML private ListView<Player> playerList;
     @FXML private Label            lblStatus;
+    @FXML private Button           btnConfirm;
+    @FXML private Button           btnBack;
 
     // ── Pitch geometry ────────────────────────────────────────────────────────
     private static final double PAD  = 28;       // padding around field lines
@@ -100,23 +103,54 @@ public class TacticsLineupController {
         tacticCombo.getSelectionModel().selectedItemProperty()
                    .addListener((obs, old, t) -> { if (t != null) applyTactic(t); });
 
-        // Bench list cell factory
+        // Bench list cell factory — injured players shown in red, selected in amber
         playerList.setCellFactory(lv -> new ListCell<>() {
             @Override protected void updateItem(Player p, boolean empty) {
                 super.updateItem(p, empty);
                 if (empty || p == null) { setText(null); setStyle(""); return; }
-                setText(p.toString());
-                setStyle(p == selectedBenchPlayer
-                    ? "-fx-background-color: #f59e0b; -fx-text-fill: #0f172a; -fx-font-weight: bold;"
-                    : "");
+                if (p.isInjured()) {
+                    setText("⚠ " + p.getFullName()
+                            + " [" + (p.getPosition() != null ? p.getPosition().getCode() : "?") + "]"
+                            + " OVR:" + p.getOverallRating()
+                            + "  — INJURED (" + p.getInjuredGamesRemaining() + " games)");
+                    setStyle("-fx-text-fill: #f87171; -fx-font-weight: bold;");
+                } else if (p == selectedBenchPlayer) {
+                    setText(p.toString());
+                    setStyle("-fx-background-color: #f59e0b; -fx-text-fill: #0f172a; -fx-font-weight: bold;");
+                } else {
+                    setText(p.toString());
+                    setStyle("");
+                }
             }
         });
         playerList.setOnMouseClicked(e -> onBenchPlayerClicked());
 
-        // Select current or default tactic
-        FootballTactic current = (userTeam.getCurrentTactic() instanceof FootballTactic ft)
-                ? ft : FootballTactic.balanced();
-        tacticCombo.setValue(current);   // triggers applyTactic
+        // Select current tactic by matching name against the items list so the
+        // cell factory always finds a proper item (avoids toString() fallback).
+        String currentName = (userTeam.getCurrentTactic() instanceof FootballTactic ft)
+                ? ft.getName() : "4-4-2";
+        FootballTactic toSelect = TACTICS.stream()
+                .filter(t -> t.getName().equals(currentName))
+                .findFirst()
+                .orElse(TACTICS.get(0));
+        tacticCombo.setValue(toSelect);   // triggers applyTactic
+
+        // Adapt button labels to where we came from
+        GameSession.TacticsContext ctx = GameSession.getInstance().getTacticsContext();
+        switch (ctx) {
+            case MID_MATCH -> {
+                btnConfirm.setText("✓  Apply Changes");
+                btnBack.setText("← Back to Match");
+            }
+            case BROWSE -> {
+                btnConfirm.setText("✓  Save Tactic");
+                btnBack.setText("← Back to Dashboard");
+            }
+            default -> {
+                btnConfirm.setText("✓  Confirm Lineup");
+                btnBack.setText("← Back to Dashboard");
+            }
+        }
     }
 
     // ── Pitch drawing ─────────────────────────────────────────────────────────
@@ -201,9 +235,19 @@ public class TacticsLineupController {
     private void applyTactic(FootballTactic tactic) {
         userTeam.setCurrentTactic(tactic);
 
-        // Collect currently assigned players before clearing
-        List<Player> assignedBefore = slots.stream()
-                .map(s -> s.player).filter(Objects::nonNull).collect(Collectors.toList());
+        // Collect currently assigned players before clearing.
+        // On the very first call (slots still empty) seed from the team's saved lineup
+        // so mid-match changes and pre-match edits both start from the existing selection.
+        List<Player> assignedBefore;
+        if (slots.isEmpty()) {
+            // Seed from saved lineup but exclude injured players — they go to bench
+            assignedBefore = userTeam.getLineup().stream()
+                    .filter(p -> !p.isInjured())
+                    .collect(Collectors.toList());
+        } else {
+            assignedBefore = slots.stream()
+                    .map(s -> s.player).filter(Objects::nonNull).collect(Collectors.toList());
+        }
 
         // Remove old slot nodes from pitch
         pitchPane.getChildren().removeAll(slotNodes);
@@ -359,6 +403,17 @@ public class TacticsLineupController {
         SlotState slot = slots.get(idx);
 
         if (selectedBenchPlayer != null) {
+            // Block injured players
+            if (selectedBenchPlayer.isInjured()) {
+                lblStatus.setStyle("-fx-text-fill: #f87171; -fx-font-size: 12px; -fx-font-weight: bold;");
+                lblStatus.setText("⚠ " + selectedBenchPlayer.getFirstName() + " " + selectedBenchPlayer.getLastName()
+                        + " is injured and cannot play.");
+                selectedBenchPlayer = null;
+                playerList.getSelectionModel().clearSelection();
+                playerList.refresh();
+                return;
+            }
+
             // Assign selectedBenchPlayer to this slot
             Player displaced = slot.player;
 
@@ -420,10 +475,45 @@ public class TacticsLineupController {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
+        // Pre-validate with clear messages before calling setLineup
+        long filled = slots.stream().filter(s -> s.player != null).count();
+        int  total  = slots.size();
+        if (filled < total) {
+            lblStatus.setStyle("-fx-text-fill: #f87171; -fx-font-size: 12px; -fx-font-weight: bold;");
+            lblStatus.setText("⚠ " + (total - filled) + " position(s) empty — fill all slots.");
+            return;
+        }
+        lineup.stream().filter(Player::isInjured).findFirst().ifPresent(p -> {
+            lblStatus.setStyle("-fx-text-fill: #f87171; -fx-font-size: 12px; -fx-font-weight: bold;");
+            lblStatus.setText("⚠ " + p.getFirstName() + " " + p.getLastName() + " is injured — remove from lineup.");
+        });
+        if (lineup.stream().anyMatch(Player::isInjured)) return;
+
+        boolean hasGK = lineup.stream().anyMatch(p ->
+                p.getPosition() instanceof FootballPosition fp && fp == FootballPosition.GOALKEEPER);
+        if (!hasGK) {
+            lblStatus.setStyle("-fx-text-fill: #f87171; -fx-font-size: 12px; -fx-font-weight: bold;");
+            lblStatus.setText("⚠ No goalkeeper in lineup — assign a GK to the GK slot.");
+            return;
+        }
+
         try {
             userTeam.setLineup(lineup);
-            GameSession.getInstance().getMatchEngine().resetMatch();
-            SportsManagerApp.navigateTo("MatchView");
+            GameSession session = GameSession.getInstance();
+            switch (session.getTacticsContext()) {
+                case PRE_MATCH -> {
+                    session.getMatchEngine().resetMatch();
+                    SportsManagerApp.navigateTo("MatchView");
+                }
+                case MID_MATCH -> {
+                    // No engine reset — changes take effect immediately in ongoing match
+                    SportsManagerApp.navigateTo("MatchView");
+                }
+                case BROWSE -> {
+                    // Just save tactic/lineup for later, return to dashboard
+                    SportsManagerApp.navigateTo("DashboardView");
+                }
+            }
         } catch (IllegalArgumentException e) {
             lblStatus.setStyle("-fx-text-fill: #f87171; -fx-font-size: 12px; -fx-font-weight: bold;");
             lblStatus.setText("⚠ " + e.getMessage());
@@ -432,7 +522,12 @@ public class TacticsLineupController {
 
     @FXML
     private void onBack() {
-        SportsManagerApp.navigateTo("DashboardView");
+        GameSession.TacticsContext ctx = GameSession.getInstance().getTacticsContext();
+        if (ctx == GameSession.TacticsContext.MID_MATCH) {
+            SportsManagerApp.navigateTo("MatchView");
+        } else {
+            SportsManagerApp.navigateTo("DashboardView");
+        }
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

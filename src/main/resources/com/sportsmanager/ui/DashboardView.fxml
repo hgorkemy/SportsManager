@@ -73,6 +73,10 @@
                 style="-fx-background-color: #334155; -fx-text-fill: #f8fafc;
                        -fx-font-size: 13px; -fx-background-radius: 10;
                        -fx-padding: 10 20; -fx-cursor: hand;"/>
+        <Button text="⏎  Main Menu" onAction="#onMainMenu"
+                style="-fx-background-color: #1e293b; -fx-text-fill: #94a3b8;
+                       -fx-font-size: 13px; -fx-background-radius: 10;
+                       -fx-padding: 10 20; -fx-cursor: hand; -fx-border-color: #334155; -fx-border-radius: 10;"/>
     </HBox>
 
     <!-- Season stats row -->

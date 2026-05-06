@@ -21,6 +21,10 @@ public class GameSession {
     private String selectedSportName;
     private boolean matchPlayedThisWeek = false;
 
+    /** Where the TacticsLineupView was opened from — controls confirm/back behaviour. */
+    public enum TacticsContext { PRE_MATCH, MID_MATCH, BROWSE }
+    private TacticsContext tacticsContext = TacticsContext.PRE_MATCH;
+
     private GameSession() {}
 
     public static GameSession getInstance() {
@@ -80,4 +84,6 @@ public class GameSession {
     public boolean isMatchPlayedThisWeek()       { return matchPlayedThisWeek; }
     public void setMatchPlayedThisWeek(boolean b) { this.matchPlayedThisWeek = b; }
     public void setCurrentSeason(int season)      { this.currentSeason = season; }
+    public TacticsContext getTacticsContext()               { return tacticsContext; }
+    public void setTacticsContext(TacticsContext ctx)       { this.tacticsContext = ctx; }
 }

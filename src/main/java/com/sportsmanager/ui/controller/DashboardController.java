@@ -130,6 +130,7 @@ public class DashboardController {
     private void onPlayMatch() {
         GameSession session = GameSession.getInstance();
         if (session.isMatchPlayedThisWeek()) return; // safety guard
+        session.setTacticsContext(GameSession.TacticsContext.PRE_MATCH);
         SportsManagerApp.navigateTo("TacticsLineupView");
     }
 
@@ -145,10 +146,18 @@ public class DashboardController {
         }
     }
 
+    @FXML private void onMainMenu() {
+        GameSession.getInstance().reset();
+        SportsManagerApp.navigateTo("SportSelectionView");
+    }
+
     @FXML private void onSquad()       { SportsManagerApp.navigateTo("SquadView"); }
     @FXML private void onLeagueTable() { SportsManagerApp.navigateTo("LeagueTableView"); }
     @FXML private void onSchedule()    { SportsManagerApp.navigateTo("ScheduleView"); }
-    @FXML private void onTactics()     { SportsManagerApp.navigateTo("TacticsView"); }
+    @FXML private void onTactics() {
+        GameSession.getInstance().setTacticsContext(GameSession.TacticsContext.BROWSE);
+        SportsManagerApp.navigateTo("TacticsLineupView");
+    }
 
     // ── Helpers ────────────────────────────────────────────────────────────────
 
