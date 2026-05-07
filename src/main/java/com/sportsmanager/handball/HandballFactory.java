@@ -51,6 +51,9 @@ public class HandballFactory implements SportFactory {
             addPlayers(team, HandballPosition.BACK,       6, firstNames, lastNames, rng);
             addPlayers(team, HandballPosition.PIVOT,      4, firstNames, lastNames, rng);
 
+            // Default tactic
+            team.setCurrentTactic(HandballTactic.balanced());
+
             // One coach
             String cf = coachFirst.get(rng.nextInt(coachFirst.size()));
             String cl = coachLast.get(rng.nextInt(coachLast.size()));

@@ -4,7 +4,6 @@ import com.sportsmanager.SportsManagerApp;
 import com.sportsmanager.core.model.GameSession;
 import com.sportsmanager.core.model.League;
 import com.sportsmanager.core.model.Team;
-import com.sportsmanager.football.FootballLeague;
 import com.sportsmanager.league.Fixture;
 import com.sportsmanager.league.MatchDay;
 import javafx.collections.FXCollections;
@@ -37,12 +36,7 @@ public class ScheduleController {
         userTeam = GameSession.getInstance().getUserTeam();
         League league = GameSession.getInstance().getLeague();
 
-        // Retrieve full schedule (FootballLeague exposes getSchedule())
-        if (league instanceof FootballLeague fl) {
-            allMatchDays = new ArrayList<>(fl.getSchedule());
-        } else {
-            allMatchDays = new ArrayList<>();
-        }
+        allMatchDays = new ArrayList<>(league.getSchedule());
 
         // Populate week selector
         List<String> weekOptions = new ArrayList<>();
