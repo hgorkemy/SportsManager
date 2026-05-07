@@ -366,7 +366,13 @@ public class TacticsLineupController {
         nameLabel.setAlignment(Pos.CENTER);
         nameLabel.setWrapText(true);
 
-        VBox vbox = new VBox(2, jersey, nameLabel);
+        Label ovrLabel = new Label(hasPlayer ? "OVR:" + slot.player.getOverallRating() : "");
+        ovrLabel.setStyle("-fx-text-fill: #fbbf24; -fx-font-size: 9px; -fx-font-weight: bold;");
+        ovrLabel.setMaxWidth(68);
+        ovrLabel.setPrefWidth(68);
+        ovrLabel.setAlignment(Pos.CENTER);
+
+        VBox vbox = new VBox(2, jersey, nameLabel, ovrLabel);
         vbox.setAlignment(Pos.TOP_CENTER);
         vbox.setMinWidth(68);
         vbox.setMaxWidth(68);
