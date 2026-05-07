@@ -118,12 +118,9 @@ public class DashboardController {
     @FXML
     private void onAdvanceWeek() {
         GameSession session = GameSession.getInstance();
-        League league = session.getLeague();
-        if (!session.isMatchPlayedThisWeek() || league.isSeasonOver()) return;
-
-        league.advanceWeek();                        // recovers injuries, training, increments week
-        session.setMatchPlayedThisWeek(false);
-        initialize();                                // refresh UI
+        if (!session.isMatchPlayedThisWeek() || session.getLeague().isSeasonOver()) return;
+        // Go to training selection — TrainingController will advance the week after
+        SportsManagerApp.navigateTo("TrainingView");
     }
 
     @FXML

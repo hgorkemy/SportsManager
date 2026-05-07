@@ -1,5 +1,6 @@
 package com.sportsmanager.core.model;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -27,8 +28,8 @@ public abstract class Coach extends Person {
     // ── Abstract methods ──────────────────────────────────────────────────────
 
     /**
-     * Returns which attributes this coach improves and by how much.
-     * e.g. {"shooting": 3, "passing": 2}
+     * Returns which attributes this coach's specialty improves and by how much.
+     * Used for the automatic weekly training in advanceWeek().
      */
     public abstract Map<String, Integer> getTrainingBonus();
 
@@ -38,11 +39,17 @@ public abstract class Coach extends Person {
      */
     public abstract int calculateCoachingEffectiveness();
 
-    // ── Template Method ───────────────────────────────────────────────────────
+    /**
+     * Returns ALL training programs available for this coach's sport.
+     * The controller calls this — it never needs to know the sport type.
+     * Each Coach subclass defines the programs for its own sport.
+     */
+    public abstract List<TrainingProgram> getTrainingPrograms();
+
+    // ── Template Methods ──────────────────────────────────────────────────────
 
     /**
-     * Applies one week of training to the given player.
-     * The flow is fixed; sport-specific bonuses come from getTrainingBonus().
+     * Applies this coach's specialty training to one player (used by advanceWeek).
      */
     public void conductTraining(Player player) {
         Map<String, Integer> bonus = getTrainingBonus();
@@ -52,6 +59,23 @@ public abstract class Coach extends Person {
         bonus.forEach((attr, maxGain) -> {
             if (attrs.containsKey(attr)) {
                 int gain = (int) Math.round(Math.random() * maxGain * quality);
+                attrs.put(attr, Math.min(100, attrs.get(attr) + gain));
+            }
+        });
+    }
+
+    /**
+     * Applies a user-chosen training program to one player.
+     * If the program matches the coach's specialty, gains are ×1.5.
+     */
+    public void conductTraining(Player player, TrainingProgram program) {
+        Map<String, Integer> attrs = player.getAttributes();
+        double quality     = calculateCoachingEffectiveness() / 100.0;
+        double multiplier  = program.name().equals(getSpecialty()) ? 1.5 : 1.0;
+
+        program.bonuses().forEach((attr, maxGain) -> {
+            if (attrs.containsKey(attr)) {
+                int gain = (int) Math.round(Math.random() * maxGain * quality * multiplier);
                 attrs.put(attr, Math.min(100, attrs.get(attr) + gain));
             }
         });

@@ -3,6 +3,7 @@ package com.sportsmanager.handball;
 import com.sportsmanager.core.model.Coach;
 import com.sportsmanager.core.model.Player;
 import com.sportsmanager.core.model.Team;
+import com.sportsmanager.core.model.TrainingProgram;
 
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,24 @@ public class HandballCoach extends Coach {
     @Override
     public int calculateCoachingEffectiveness() {
         return Math.min(100, 50 + getExperience() * 2);
+    }
+
+    @Override
+    public List<TrainingProgram> getTrainingPrograms() {
+        return List.of(
+            new TrainingProgram("Attack",      "🤾",
+                "Throwing & speed",
+                Map.of("throwing", 3, "speed", 2)),
+            new TrainingProgram("Defense",     "🛡",
+                "Defending & jumping",
+                Map.of("defending", 3, "jumping", 2)),
+            new TrainingProgram("Fitness",     "🏃",
+                "Stamina & agility",
+                Map.of("stamina", 3, "agility", 2)),
+            new TrainingProgram("Goalkeeping", "🧤",
+                "Reflexes & agility",
+                Map.of("defending", 4, "agility", 2))
+        );
     }
 
     /**
