@@ -25,20 +25,38 @@ public class FootballTeam extends Team {
 
     @Override
     public int calculateAttackRating() {
-        // TODO : Average shooting+passing of MID and FWD in lineup
-        return getLineup().stream()
-                .filter(p -> p instanceof FootballPlayer)
-                .mapToInt(p -> ((FootballPlayer) p).getShooting())
-                .sum() / Math.max(1, getLineup().size());
+        // FWD primary, MID secondary, DEF minor (modern fullbacks/ball-playing CBs), GK ignored
+        int total = 0, weight = 0;
+        for (Player p : getLineup()) {
+            if (p.getPosition() == null) continue;
+            int w = switch (p.getPosition().getCode()) {
+                case "FWD" -> 3;
+                case "MID" -> 2;
+                case "DEF" -> 1;
+                default    -> 0;
+            };
+            total += p.getOverallRating() * w;
+            weight += w;
+        }
+        return weight == 0 ? 0 : total / weight;
     }
 
     @Override
     public int calculateDefenseRating() {
-        // TODO : Average defending of DEF and GK in lineup
-        return getLineup().stream()
-                .filter(p -> p instanceof FootballPlayer)
-                .mapToInt(p -> ((FootballPlayer) p).getDefending())
-                .sum() / Math.max(1, getLineup().size());
+        // GK and DEF primary, MID secondary, FWD minor (high press)
+        int total = 0, weight = 0;
+        for (Player p : getLineup()) {
+            if (p.getPosition() == null) continue;
+            int w = switch (p.getPosition().getCode()) {
+                case "GK", "DEF" -> 3;
+                case "MID"       -> 2;
+                case "FWD"       -> 1;
+                default          -> 0;
+            };
+            total += p.getOverallRating() * w;
+            weight += w;
+        }
+        return weight == 0 ? 0 : total / weight;
     }
 
     @Override

@@ -15,14 +15,9 @@
         <Label text="Squad Management" styleClass="title-label" style="-fx-font-size: 26px;"/>
     </HBox>
 
-    <!-- Position filter buttons -->
-    <HBox spacing="8" alignment="CENTER_LEFT">
+    <!-- Position filter buttons — populated dynamically from Sport.getAvailablePositions() -->
+    <HBox fx:id="filterBar" spacing="8" alignment="CENTER_LEFT">
         <Label text="Filter:" style="-fx-text-fill: #cbd5e1; -fx-font-size: 13px;"/>
-        <Button fx:id="btnAll"  text="All"  onAction="#onFilterAll"/>
-        <Button fx:id="btnGK"   text="GK"   onAction="#onFilterGK"/>
-        <Button fx:id="btnDEF"  text="DEF"  onAction="#onFilterDEF"/>
-        <Button fx:id="btnMID"  text="MID"  onAction="#onFilterMID"/>
-        <Button fx:id="btnFWD"  text="FWD"  onAction="#onFilterFWD"/>
     </HBox>
 
     <!-- Table + detail panel -->
@@ -31,12 +26,12 @@
         <!-- Squad TableView -->
         <TableView fx:id="squadTable" HBox.hgrow="ALWAYS" maxWidth="Infinity" maxHeight="Infinity" styleClass="list-view">
             <columns>
-                <TableColumn fx:id="colName"    text="Name"   prefWidth="220"/>
-                <TableColumn fx:id="colPos"     text="Pos"    prefWidth="65"/>
-                <TableColumn fx:id="colOvr"     text="OVR"    prefWidth="65"/>
-                <TableColumn fx:id="colGoals"   text="Goals"  prefWidth="70"/>
-                <TableColumn fx:id="colApps"    text="Apps"   prefWidth="70"/>
-                <TableColumn fx:id="colStatus"  text="Status" prefWidth="115"/>
+                <TableColumn fx:id="colName"   text="Name"   prefWidth="220"/>
+                <TableColumn fx:id="colPos"    text="Pos"    prefWidth="65"/>
+                <TableColumn fx:id="colOvr"    text="OVR"    prefWidth="65"/>
+                <TableColumn fx:id="colGoals"  text="Goals"  prefWidth="70"/>
+                <TableColumn fx:id="colApps"   text="Apps"   prefWidth="70"/>
+                <TableColumn fx:id="colStatus" text="Status" prefWidth="115"/>
             </columns>
         </TableView>
 
@@ -46,16 +41,12 @@
             <Label text="Player Details" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;"/>
             <Label fx:id="lblPlayerName" text="— Select a player —"
                    style="-fx-font-size: 14px; -fx-text-fill: #94a3b8;"/>
-            <Label fx:id="lblPlayerPos"  text="" style="-fx-text-fill: #cbd5e1;"/>
-            <Label fx:id="lblPlayerAge"  text="" style="-fx-text-fill: #cbd5e1;"/>
+            <Label fx:id="lblPlayerPos" text="" style="-fx-text-fill: #cbd5e1;"/>
+            <Label fx:id="lblPlayerAge" text="" style="-fx-text-fill: #cbd5e1;"/>
             <Separator style="-fx-background-color: #334155;"/>
             <Label text="Attributes" style="-fx-font-weight: bold; -fx-text-fill: #94a3b8; -fx-font-size: 12px;"/>
-            <Label fx:id="lblSpeed"       text="" style="-fx-text-fill: #e2e8f0;"/>
-            <Label fx:id="lblShooting"    text="" style="-fx-text-fill: #e2e8f0;"/>
-            <Label fx:id="lblPassing"     text="" style="-fx-text-fill: #e2e8f0;"/>
-            <Label fx:id="lblBallControl" text="" style="-fx-text-fill: #e2e8f0;"/>
-            <Label fx:id="lblDefending"   text="" style="-fx-text-fill: #e2e8f0;"/>
-            <Label fx:id="lblPhysicality" text="" style="-fx-text-fill: #e2e8f0;"/>
+            <!-- Attribute rows populated dynamically per sport -->
+            <VBox fx:id="attributeRows" spacing="5"/>
             <Separator style="-fx-background-color: #334155;"/>
             <Label text="Season Stats" style="-fx-font-weight: bold; -fx-text-fill: #94a3b8; -fx-font-size: 12px;"/>
             <Label fx:id="lblGoals"       text="" style="-fx-text-fill: #4ade80; -fx-font-weight: bold;"/>
