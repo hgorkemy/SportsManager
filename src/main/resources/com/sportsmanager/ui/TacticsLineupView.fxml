@@ -4,29 +4,32 @@
 <?import javafx.geometry.Insets?>
 
 <!--
-    Wrapping StackPane centers the 820px content on any screen size.
-    Left: football pitch (JavaFX shapes, drawn in controller).
-    Right: back, formation picker, bench list, confirm.
+    Outer StackPane fills the full maximized window.
+    HBox fills the window: left StackPane grows to center the pitch,
+    right VBox is a fixed-width panel that fills full height.
 -->
 <StackPane xmlns:fx="http://javafx.com/fxml"
            fx:controller="com.sportsmanager.ui.controller.TacticsLineupController"
            alignment="CENTER"
            style="-fx-background-color: #0a0f1a;">
 
-    <HBox spacing="0" maxWidth="820" StackPane.alignment="CENTER">
+    <HBox spacing="0" fillHeight="true" maxWidth="1200" StackPane.alignment="CENTER">
 
-        <!-- Football pitch drawn by controller -->
-        <Pane fx:id="pitchPane" prefWidth="460" prefHeight="620"/>
+        <!-- Pitch wrapper — grows up to 740px then stops, so panel sits right beside field -->
+        <StackPane HBox.hgrow="ALWAYS" maxWidth="740"
+                   style="-fx-background-color: #0a0f1a;">
+            <Pane fx:id="pitchPane"/>
+        </StackPane>
 
-        <!-- Right panel -->
-        <VBox spacing="10" prefWidth="360"
+        <!-- Right panel — fixed 460px, fills full window height -->
+        <VBox spacing="10" prefWidth="460" VBox.vgrow="ALWAYS"
               style="-fx-padding: 20 20 20 20; -fx-background-color: #0f172a;">
 
-            <!-- Back button — top for easy access -->
+            <!-- Back button -->
             <Button fx:id="btnBack" text="← Back to Dashboard" onAction="#onBack"
                     style="-fx-background-color: #334155; -fx-text-fill: #f8fafc;
                            -fx-font-size: 13px; -fx-background-radius: 10;
-                           -fx-padding: 10 0; -fx-cursor: hand;" prefWidth="320"/>
+                           -fx-padding: 10 0; -fx-cursor: hand;" prefWidth="420"/>
 
             <Separator style="-fx-background-color: #334155;"/>
 
@@ -34,9 +37,14 @@
             <VBox spacing="6">
                 <Label text="FORMATION"
                        style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
-                <ComboBox fx:id="tacticCombo" prefWidth="320"
-                          style="-fx-background-color: #1e293b; -fx-text-fill: #f8fafc;"/>
+                <ComboBox fx:id="tacticCombo" prefWidth="420"
+                          style="-fx-background-color: #1e293b; -fx-text-fill: #f8fafc;
+                                 -fx-border-color: #334155; -fx-border-radius: 8;
+                                 -fx-background-radius: 8;"/>
             </VBox>
+
+            <Label fx:id="lblAvgOvr" text="AVG OVR: —"
+                   style="-fx-text-fill: #94a3b8; -fx-font-size: 12px;"/>
 
             <Separator style="-fx-background-color: #334155;"/>
 
@@ -52,20 +60,22 @@
 
             <Label text="Click a player, then click a slot on the pitch"
                    style="-fx-text-fill: #475569; -fx-font-size: 11px; -fx-wrap-text: true;"
-                   prefWidth="320"/>
+                   prefWidth="420"/>
 
-            <!-- Bench player list — fills remaining vertical space -->
-            <ListView fx:id="playerList" styleClass="list-view" VBox.vgrow="ALWAYS"/>
+            <!-- Bench player list — dark themed, fills remaining vertical space -->
+            <ListView fx:id="playerList" VBox.vgrow="ALWAYS"
+                      style="-fx-background-color: #1e293b; -fx-background-radius: 8;
+                             -fx-border-color: #334155; -fx-border-radius: 8; -fx-border-width: 1;"/>
 
             <!-- Status -->
-            <Label fx:id="lblStatus" text="" wrapText="true" prefWidth="320"
+            <Label fx:id="lblStatus" text="" wrapText="true" prefWidth="420"
                    style="-fx-font-size: 12px; -fx-font-weight: bold;"/>
 
             <Separator style="-fx-background-color: #334155;"/>
 
             <!-- Confirm -->
             <Button fx:id="btnConfirm" text="✓  Confirm Lineup" onAction="#onConfirm"
-                    styleClass="primary-button" prefWidth="320"
+                    styleClass="primary-button" prefWidth="420"
                     style="-fx-font-size: 14px; -fx-padding: 12 0;"/>
 
         </VBox>

@@ -2,6 +2,7 @@ package com.sportsmanager.football;
 
 import com.sportsmanager.core.model.Tactic;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,4 +32,28 @@ public class FootballTactic implements Tactic {
     @Override public double getDefenseMultiplier() { return defenseMultiplier; }
     @Override public String getDescription()       { return description; }
     @Override public Map<String, Integer> getAttributeBonuses() { return Map.of(); }
+
+    @Override
+    public List<Line> getFormationLines() {
+        return switch (name) {
+            case "4-4-2"   -> List.of(new Line("GK", 1, 0.05),
+                                      new Line("DEF", 4, 0.22),
+                                      new Line("MID", 4, 0.52),
+                                      new Line("FWD", 2, 0.83));
+            case "4-3-3"   -> List.of(new Line("GK", 1, 0.05),
+                                      new Line("DEF", 4, 0.22),
+                                      new Line("MID", 3, 0.52),
+                                      new Line("FWD", 3, 0.83));
+            case "4-2-3-1" -> List.of(new Line("GK", 1, 0.05),
+                                      new Line("DEF", 4, 0.22),
+                                      new Line("MID", 2, 0.44),
+                                      new Line("MID", 3, 0.65),
+                                      new Line("FWD", 1, 0.86));
+            case "5-3-2"   -> List.of(new Line("GK", 1, 0.05),
+                                      new Line("DEF", 5, 0.22),
+                                      new Line("MID", 3, 0.55),
+                                      new Line("FWD", 2, 0.83));
+            default        -> List.of();
+        };
+    }
 }

@@ -2,6 +2,7 @@ package com.sportsmanager.handball;
 
 import com.sportsmanager.core.model.Tactic;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,4 +31,22 @@ public class HandballTactic implements Tactic {
     @Override public double getDefenseMultiplier() { return defenseMultiplier; }
     @Override public String getDescription()       { return description; }
     @Override public Map<String, Integer> getAttributeBonuses() { return Map.of(); }
+
+    @Override
+    public List<Line> getFormationLines() {
+        return switch (name) {
+            // GK → backs (midfield) → wings (forward) → pivot (opponent 6m)
+            case "3-2-1" -> List.of(new Line("GK",   1, 0.05),
+                                    new Line("BACK",  3, 0.42),
+                                    new Line("WING",  2, 0.62),
+                                    new Line("PIV",   1, 0.82));
+            case "4-2"   -> List.of(new Line("GK",   1, 0.05),
+                                    new Line("BACK",  4, 0.45),
+                                    new Line("WING",  2, 0.62));
+            // 6-0: all 6 backs defend at own 6-9m arc, close to GK
+            case "6-0"   -> List.of(new Line("GK",   1, 0.05),
+                                    new Line("BACK",  6, 0.22));
+            default      -> List.of();
+        };
+    }
 }
