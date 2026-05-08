@@ -6,11 +6,7 @@ import com.sportsmanager.core.model.Team;
 
 import java.util.List;
 
-/**
- * Match simulation engine interface.
- *
- * TODO (Egemen): This interface is defined. No changes needed here.
- */
+
 public interface MatchEngine {
     SegmentResult simulateNextPeriod(Team home, Team away);
     boolean hasNextPeriod();

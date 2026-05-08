@@ -2,7 +2,9 @@ package com.sportsmanager.handball;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -18,7 +20,8 @@ public class HandballMatchEngine implements MatchEngine {
     private static final double HOME_ADVANTAGE     = 1.05;
     private static final double INJURY_CHANCE      = 0.06;
     private static final double YELLOW_CARD_CHANCE = 0.20;
-    private static final double SUSPENSION_CHANCE  = 0.35;
+    private static final double SUSPENSION_CHANCE        = 0.35;
+    private static final double DISQUALIFICATION_CHANCE  = 0.03;  // red card equivalent, per period
     private static final double SEVEN_METRE_PER_MIN_CHANCE = 0.06;
     private static final double SEVEN_METRE_GOAL_CHANCE    = 0.65;
 
@@ -27,8 +30,9 @@ public class HandballMatchEngine implements MatchEngine {
 
     private int currentPeriod = 0;
     private MatchResult currentMatchResult;
-    private final List<MatchEvent> allEvents = new ArrayList<>();
-    private final List<MatchEvent> lastPeriodEvents = new ArrayList<>();
+    private final List<MatchEvent>     allEvents        = new ArrayList<>();
+    private final List<MatchEvent>     lastPeriodEvents = new ArrayList<>();
+    private final Map<Player, Integer> yellowsThisMatch = new HashMap<>();
     private final Random random = new Random();
 
     @Override
@@ -76,6 +80,8 @@ public class HandballMatchEngine implements MatchEngine {
         maybeAddYellowCard(away, startMin);
         maybeAddSuspension(home, startMin);
         maybeAddSuspension(away, startMin);
+        maybeAddDisqualification(home, startMin);
+        maybeAddDisqualification(away, startMin);
         maybeAddInjury(home, startMin);
         maybeAddInjury(away, startMin);
 
@@ -188,17 +194,39 @@ public class HandballMatchEngine implements MatchEngine {
                 .build());
     }
 
+    // 20% chance of yellow card per period; 2nd yellow = automatic red card (disqualification)
     private void maybeAddYellowCard(Team team, int startMin) {
         if (random.nextDouble() >= YELLOW_CARD_CHANCE) return;
-        Player carded = getRandomPlayer(team);
-        if (carded == null) return;
+
+        // Only active players (not already off the pitch)
+        List<Player> pool = new ArrayList<>(
+                team.getLineup().isEmpty() ? team.getSquad() : team.getLineup());
+        pool.removeIf(p -> p.isInjured() || p.isSuspended());
+        if (pool.isEmpty()) return;
+
+        Player carded = pool.get(random.nextInt(pool.size()));
         carded.recordYellowCard();
         int minute = startMin + random.nextInt(PERIOD_MINUTES);
-        lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.YELLOW_CARD, minute)
-                .team(team)
-                .player(carded)
-                .description(carded.getFullName() + " receives a yellow card")
-                .build());
+        int yellowCount = yellowsThisMatch.merge(carded, 1, Integer::sum);
+
+        if (yellowCount >= 2) {
+            // Second yellow → disqualification (red card equivalent in handball)
+            lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.YELLOW_CARD, minute)
+                    .team(team).player(carded)
+                    .description(carded.getFullName() + " receives a second yellow card!")
+                    .build());
+            carded.suspend(2);
+            lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.RED_CARD, minute)
+                    .team(team).player(carded)
+                    .description(carded.getFullName() + " is disqualified! "
+                            + team.getName() + " down to 6 players (2nd yellow)")
+                    .build());
+        } else {
+            lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.YELLOW_CARD, minute)
+                    .team(team).player(carded)
+                    .description(carded.getFullName() + " receives a yellow card")
+                    .build());
+        }
     }
 
     // 2-minute suspension, common in handball 
@@ -216,6 +244,24 @@ public class HandballMatchEngine implements MatchEngine {
                 .team(team)
                 .player(suspended)
                 .description(suspended.getFullName() + " receives a 2-minute suspension")
+                .build());
+    }
+
+    // 3% chance of disqualification (red card) per period — suspended 1 game
+    private void maybeAddDisqualification(Team team, int startMin) {
+        if (random.nextDouble() >= DISQUALIFICATION_CHANCE) return;
+        List<Player> eligible = new ArrayList<>(
+                team.getLineup().isEmpty() ? team.getSquad() : team.getLineup());
+        eligible.removeIf(p -> p.isInjured() || p.isSuspended());
+        if (eligible.isEmpty()) return;
+        Player carded = eligible.get(random.nextInt(eligible.size()));
+        carded.suspend(2); // 1 remaining after this week's advance = banned next match too
+        int minute = startMin + random.nextInt(PERIOD_MINUTES);
+        lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.RED_CARD, minute)
+                .team(team)
+                .player(carded)
+                .description(carded.getFullName() + " is disqualified! "
+                        + team.getName() + " down to 6 players")
                 .build());
     }
 
@@ -278,6 +324,7 @@ public class HandballMatchEngine implements MatchEngine {
         currentPeriod = 0;
         allEvents.clear();
         lastPeriodEvents.clear();
+        yellowsThisMatch.clear();
         currentMatchResult = null;
     }
 }

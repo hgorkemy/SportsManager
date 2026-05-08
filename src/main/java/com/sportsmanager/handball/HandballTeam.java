@@ -3,10 +3,7 @@ package com.sportsmanager.handball;
 import com.sportsmanager.core.model.Player;
 import com.sportsmanager.core.model.Team;
 
-/**
- * Handball team — 16 max squad, lineup = 7 players with at least 1 GK.
- * Implemented by: Irmak Önder
- */
+
 public class HandballTeam extends Team {
 
     public HandballTeam(String name, String logoPath) {
@@ -15,11 +12,13 @@ public class HandballTeam extends Team {
 
     @Override
     public boolean validateLineup() {
-        if (getLineup().size() != 7) return false;
-        if (getLineup().stream().anyMatch(Player::isInjured)) return false;
+        // Allow 5-7: up to 2 red cards (disqualifications) may reduce the playable squad
+        int size = getLineup().size();
+        if (size < 5 || size > 7) return false;
+        if (getLineup().stream().anyMatch(p -> p.isInjured() || p.isSuspended())) return false;
         return getLineup().stream()
-                .anyMatch(p -> p.getPosition() instanceof HandballPosition pos
-                               && pos == HandballPosition.GOALKEEPER);
+                .anyMatch(p -> p.getPosition() != null
+                               && "GK".equals(p.getPosition().getCode()));
     }
 
     @Override
@@ -27,7 +26,7 @@ public class HandballTeam extends Team {
         // BACK and WING primary attackers, PIV minor, GK ignored
         int total = 0, weight = 0;
         for (Player p : getLineup()) {
-            if (p.getPosition() == null) continue;
+            if (p.getPosition() == null || p.isSuspended()) continue;
             int w = switch (p.getPosition().getCode()) {
                 case "BACK", "WING" -> 3;
                 case "PIV"          -> 1;
@@ -44,7 +43,7 @@ public class HandballTeam extends Team {
         // GK primary, all outfield contribute (collective defensive wall)
         int total = 0, weight = 0;
         for (Player p : getLineup()) {
-            if (p.getPosition() == null) continue;
+            if (p.getPosition() == null || p.isSuspended()) continue;
             int w = switch (p.getPosition().getCode()) {
                 case "GK"           -> 3;
                 case "PIV"          -> 2;

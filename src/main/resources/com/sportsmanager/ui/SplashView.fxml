@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+
+<!--
+    Minimal shell — splash content is built programmatically in SplashController.
+-->
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:id="rootPane"
+           fx:controller="com.sportsmanager.ui.controller.SplashController"
+           prefWidth="900" prefHeight="620"
+           style="-fx-background-color: #0a0f1a;"/>

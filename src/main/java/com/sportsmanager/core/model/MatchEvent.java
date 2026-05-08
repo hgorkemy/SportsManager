@@ -11,7 +11,8 @@ public class MatchEvent {
     public enum EventType {
         GOAL, INJURY, YELLOW_CARD, RED_CARD,
         PERIOD_END, MATCH_END, CUSTOM,
-        SEVEN_METRE_THROW, SEVEN_METRE_SAVED, SUSPENSION
+        SEVEN_METRE_THROW, SEVEN_METRE_SAVED, SUSPENSION,
+        PENALTY, PENALTY_SAVED
     }
 
     private final EventType type;

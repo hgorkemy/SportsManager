@@ -13,17 +13,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 
 import java.util.List;
 
-/**
- * Main hub screen. Shows current week, user team info, next match, and league position.
- *
- * Play Match is disabled after a match is played until "Next Week" is clicked.
- * Next Week is disabled until a match (or bye) has been played.
- *
- * Implemented by: Halil Görkem Yiğit & Yavuz Mete Afsar
- */
+
 public class DashboardController {
 
     @FXML private Label lblSeason;
@@ -118,12 +112,9 @@ public class DashboardController {
     @FXML
     private void onAdvanceWeek() {
         GameSession session = GameSession.getInstance();
-        League league = session.getLeague();
-        if (!session.isMatchPlayedThisWeek() || league.isSeasonOver()) return;
-
-        league.advanceWeek();                        // recovers injuries, training, increments week
-        session.setMatchPlayedThisWeek(false);
-        initialize();                                // refresh UI
+        if (!session.isMatchPlayedThisWeek() || session.getLeague().isSeasonOver()) return;
+        // Go to training selection — TrainingController will advance the week after
+        SportsManagerApp.navigateTo("TrainingView");
     }
 
     @FXML
@@ -136,14 +127,30 @@ public class DashboardController {
 
     @FXML
     private void onSave() {
-        try {
-            String fileName = GameSession.getInstance().getSaveName();
-            if (fileName == null || fileName.isBlank()) fileName = "quicksave";
-            GameSaveManager.save(fileName);
-            showInfo("Game Saved", "Save file: " + fileName + ".json");
-        } catch (Exception e) {
-            showError("Save Failed", e.getMessage());
+        GameSession session = GameSession.getInstance();
+
+        // Pre-fill with the existing save name (or a sensible default)
+        String currentName = session.getSaveName();
+        if (currentName == null || currentName.isBlank()) {
+            currentName = session.getUserTeam().getName() + " Save";
         }
+
+        TextInputDialog dialog = new TextInputDialog(currentName);
+        dialog.setTitle("Save Game");
+        dialog.setHeaderText("Choose a name for your save file");
+        dialog.setContentText("Save name:");
+
+        dialog.showAndWait().ifPresent(name -> {
+            name = name.strip();
+            if (name.isBlank()) return;
+            try {
+                GameSaveManager.save(name);
+                session.setSaveName(name);          // remember it for next quick-save
+                showInfo("Game Saved", "Saved as: " + name + ".json");
+            } catch (Exception e) {
+                showError("Save Failed", e.getMessage());
+            }
+        });
     }
 
     @FXML private void onMainMenu() {

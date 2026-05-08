@@ -5,23 +5,27 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.sportsmanager.ui.controller.SavesController"
-      alignment="CENTER" spacing="24" prefWidth="500" prefHeight="420"
+      alignment="CENTER" spacing="24" prefWidth="500" prefHeight="440"
       styleClass="root-pane">
     <padding><Insets top="50" right="60" bottom="50" left="60"/></padding>
 
-    <Label text="Load Game" styleClass="title-label" style="-fx-font-size: 28px;"/>
+    <Label fx:id="lblTitle" text="Load Game" styleClass="title-label" style="-fx-font-size: 28px;"/>
 
     <Label text="Select a save file:" styleClass="subtitle-label"/>
 
     <ListView fx:id="savesList" prefHeight="200" styleClass="list-view"/>
 
-    <HBox spacing="14" alignment="CENTER">
+    <HBox spacing="12" alignment="CENTER">
         <Button text="Load Selected" onAction="#onLoad"
                 styleClass="primary-button" prefWidth="160"/>
+        <Button text="🗑  Delete" onAction="#onDelete"
+                style="-fx-background-color: #7f1d1d; -fx-text-fill: #fca5a5;
+                       -fx-font-size: 13px; -fx-background-radius: 10;
+                       -fx-padding: 10 20; -fx-cursor: hand;" prefWidth="110"/>
         <Button text="← Back" onAction="#onBack"
                 style="-fx-background-color: #334155; -fx-text-fill: #f8fafc;
                        -fx-font-size: 14px; -fx-background-radius: 10;
-                       -fx-padding: 12 24; -fx-cursor: hand;" prefWidth="100"/>
+                       -fx-padding: 10 20; -fx-cursor: hand;" prefWidth="100"/>
     </HBox>
 
     <Label fx:id="lblStatus" text="" style="-fx-text-fill: #f87171; -fx-font-size: 13px;"/>

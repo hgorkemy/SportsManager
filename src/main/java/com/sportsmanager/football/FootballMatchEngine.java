@@ -2,7 +2,9 @@ package com.sportsmanager.football;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import com.sportsmanager.core.engine.MatchEngine;
@@ -14,9 +16,12 @@ import com.sportsmanager.core.model.Team;
 
 public class FootballMatchEngine implements MatchEngine {
 
-    private static final double HOME_ADVANTAGE = 1.1;
-    private static final double INJURY_CHANCE = 0.08;
+    private static final double HOME_ADVANTAGE     = 1.1;
+    private static final double INJURY_CHANCE      = 0.08;
     private static final double YELLOW_CARD_CHANCE = 0.15;
+    private static final double RED_CARD_CHANCE    = 0.04;  // per half
+    private static final double PENALTY_CHANCE     = 0.05;  // per half
+    private static final double PENALTY_GOAL_CHANCE = 0.80; // conversion rate
 
     private static final int PERIOD_MINUTES = 45;
     private static final int TOTAL_PERIODS = 2;
@@ -24,8 +29,9 @@ public class FootballMatchEngine implements MatchEngine {
 
     private int currentPeriod = 0;
     private MatchResult currentMatchResult;
-    private final List<MatchEvent> allEvents = new ArrayList<>();
-    private final List<MatchEvent> lastPeriodEvents = new ArrayList<>();
+    private final List<MatchEvent>       allEvents          = new ArrayList<>();
+    private final List<MatchEvent>       lastPeriodEvents   = new ArrayList<>();
+    private final Map<Player, Integer>   yellowsThisMatch   = new HashMap<>();
     private final Random random = new Random();
 
     @Override
@@ -70,6 +76,12 @@ public class FootballMatchEngine implements MatchEngine {
 
         maybeAddYellowCard(home, startMin);
         maybeAddYellowCard(away, startMin);
+
+        maybeAddRedCard(home, startMin);
+        maybeAddRedCard(away, startMin);
+
+        maybeAddPenalty(home, away, startMin, true);
+        maybeAddPenalty(away, home, startMin, false);
 
         lastPeriodEvents.sort(Comparator.comparingInt(MatchEvent::getMinute));
         allEvents.addAll(lastPeriodEvents);
@@ -146,21 +158,102 @@ public class FootballMatchEngine implements MatchEngine {
         }
     }
 
-    // 15% chance of yellow card per half
+    // 15% chance of yellow card per half; 2nd yellow = automatic red card
     private void maybeAddYellowCard(Team team, int startMin) {
-        if (random.nextDouble() < YELLOW_CARD_CHANCE) {
-            Player carded = getRandomPlayer(team);
-            if (carded != null) {
-                carded.recordYellowCard();
-                int minute = startMin + random.nextInt(PERIOD_MINUTES);
-                MatchEvent card = new MatchEvent.Builder(MatchEvent.EventType.YELLOW_CARD, minute)
-                        .team(team)
-                        .player(carded)
-                        .description(carded.getFullName() + " gets a yellow card")
-                        .build();
-                lastPeriodEvents.add(card);
-            }
+        if (random.nextDouble() >= YELLOW_CARD_CHANCE) return;
+
+        // Only active players (not already off the pitch)
+        List<Player> pool = new ArrayList<>(
+                team.getLineup().isEmpty() ? team.getSquad() : team.getLineup());
+        pool.removeIf(p -> p.isInjured() || p.isSuspended());
+        if (pool.isEmpty()) return;
+
+        Player carded = pool.get(random.nextInt(pool.size()));
+        carded.recordYellowCard();
+        int minute = startMin + random.nextInt(PERIOD_MINUTES);
+        int yellowCount = yellowsThisMatch.merge(carded, 1, Integer::sum);
+
+        if (yellowCount >= 2) {
+            // Second yellow → automatic red card
+            lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.YELLOW_CARD, minute)
+                    .team(team).player(carded)
+                    .description(carded.getFullName() + " receives a second yellow card!")
+                    .build());
+            carded.suspend(2);
+            lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.RED_CARD, minute)
+                    .team(team).player(carded)
+                    .description(carded.getFullName() + " is sent off! "
+                            + team.getName() + " down to 10 men (2nd yellow)")
+                    .build());
+        } else {
+            lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.YELLOW_CARD, minute)
+                    .team(team).player(carded)
+                    .description(carded.getFullName() + " gets a yellow card")
+                    .build());
         }
+    }
+
+    // 4% chance of red card per half — player is suspended for next match
+    private void maybeAddRedCard(Team team, int startMin) {
+        if (random.nextDouble() >= RED_CARD_CHANCE) return;
+        List<Player> eligible = new ArrayList<>(
+                team.getLineup().isEmpty() ? team.getSquad() : team.getLineup());
+        eligible.removeIf(p -> p.isInjured() || p.isSuspended()); // already out
+        if (eligible.isEmpty()) return;
+        Player carded = eligible.get(random.nextInt(eligible.size()));
+        carded.suspend(2); // 1 remaining after this week's advance = banned next match too
+        int minute = startMin + random.nextInt(PERIOD_MINUTES);
+        lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.RED_CARD, minute)
+                .team(team)
+                .player(carded)
+                .description(carded.getFullName() + " is sent off! "
+                        + team.getName() + " down to 10 men")
+                .build());
+    }
+
+    // 5% chance of a penalty per half — 80% conversion
+    private void maybeAddPenalty(Team attacking, Team defending, int startMin, boolean attackingIsHome) {
+        if (random.nextDouble() >= PENALTY_CHANCE) return;
+
+        Player taker      = getRandomScorer(attacking);
+        Player goalkeeper = getGoalkeeper(defending);
+        int    minute     = startMin + random.nextInt(PERIOD_MINUTES);
+
+        // Penalty awarded event
+        lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.PENALTY, minute)
+                .team(attacking)
+                .player(taker)
+                .description("⚽ Penalty! "
+                        + (taker != null ? taker.getFullName() : attacking.getName())
+                        + " steps up for " + attacking.getName())
+                .build());
+
+        if (random.nextDouble() < PENALTY_GOAL_CHANCE) {
+            if (taker != null) taker.recordGoal();
+            lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.GOAL, minute)
+                    .team(attacking)
+                    .player(taker)
+                    .description((taker != null ? taker.getFullName() : attacking.getName())
+                            + " converts the penalty!")
+                    .build());
+            if (attackingIsHome) currentMatchResult.addHomeGoal();
+            else                 currentMatchResult.addAwayGoal();
+        } else {
+            lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.PENALTY_SAVED, minute)
+                    .team(defending)
+                    .player(goalkeeper)
+                    .description((goalkeeper != null ? goalkeeper.getFullName() : defending.getName())
+                            + " saves the penalty!")
+                    .build());
+        }
+    }
+
+    // pick goalkeeper from lineup (or squad fallback)
+    private Player getGoalkeeper(Team team) {
+        List<Player> pool = new ArrayList<>(
+                team.getLineup().isEmpty() ? team.getSquad() : team.getLineup());
+        pool.removeIf(p -> p.getPosition() != FootballPosition.GOALKEEPER);
+        return pool.isEmpty() ? getRandomPlayer(team) : pool.get(random.nextInt(pool.size()));
     }
 
     // pick random player
@@ -235,6 +328,7 @@ public class FootballMatchEngine implements MatchEngine {
         currentPeriod = 0;
         allEvents.clear();
         lastPeriodEvents.clear();
+        yellowsThisMatch.clear();
         currentMatchResult = null;
     }
 }
