@@ -24,18 +24,37 @@ public class HandballTeam extends Team {
 
     @Override
     public int calculateAttackRating() {
-        return getLineup().stream()
-                .filter(p -> p instanceof HandballPlayer)
-                .mapToInt(p -> ((HandballPlayer) p).getThrowing())
-                .sum() / Math.max(1, getLineup().size());
+        // BACK and WING primary attackers, PIV minor, GK ignored
+        int total = 0, weight = 0;
+        for (Player p : getLineup()) {
+            if (p.getPosition() == null) continue;
+            int w = switch (p.getPosition().getCode()) {
+                case "BACK", "WING" -> 3;
+                case "PIV"          -> 1;
+                default             -> 0;
+            };
+            total += p.getOverallRating() * w;
+            weight += w;
+        }
+        return weight == 0 ? 0 : total / weight;
     }
 
     @Override
     public int calculateDefenseRating() {
-        return getLineup().stream()
-                .filter(p -> p instanceof HandballPlayer)
-                .mapToInt(p -> ((HandballPlayer) p).getDefending())
-                .sum() / Math.max(1, getLineup().size());
+        // GK primary, all outfield contribute (collective defensive wall)
+        int total = 0, weight = 0;
+        for (Player p : getLineup()) {
+            if (p.getPosition() == null) continue;
+            int w = switch (p.getPosition().getCode()) {
+                case "GK"           -> 3;
+                case "PIV"          -> 2;
+                case "BACK", "WING" -> 1;
+                default             -> 0;
+            };
+            total += p.getOverallRating() * w;
+            weight += w;
+        }
+        return weight == 0 ? 0 : total / weight;
     }
 
     @Override

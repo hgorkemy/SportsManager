@@ -69,6 +69,9 @@ public abstract class League {
     /** Returns all MatchResults from already-played fixtures (used by save). */
     public abstract List<MatchResult> getPlayedResults();
 
+    /** Returns the full list of match days in schedule order. */
+    public abstract List<MatchDay> getSchedule();
+
     // ── Getters ───────────────────────────────────────────────────────────────
 
     public String getName()         { return name; }

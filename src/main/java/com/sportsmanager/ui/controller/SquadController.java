@@ -3,20 +3,24 @@ package com.sportsmanager.ui.controller;
 import com.sportsmanager.SportsManagerApp;
 import com.sportsmanager.core.model.GameSession;
 import com.sportsmanager.core.model.Player;
-import com.sportsmanager.football.FootballPlayer;
+import com.sportsmanager.core.model.Position;
+import com.sportsmanager.core.model.Sport;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
  * Squad management screen.
- * Shows all squad players with position filter and attribute detail panel.
+ * Fully sport-agnostic: filters and attributes are driven by the active Sport.
  */
 public class SquadController {
 
@@ -28,25 +32,25 @@ public class SquadController {
     @FXML private TableColumn<Player, Integer> colApps;
     @FXML private TableColumn<Player, String>  colStatus;
 
+    @FXML private HBox filterBar;
+
     @FXML private Label lblPlayerName;
     @FXML private Label lblPlayerPos;
     @FXML private Label lblPlayerAge;
-    @FXML private Label lblSpeed;
-    @FXML private Label lblShooting;
-    @FXML private Label lblPassing;
-    @FXML private Label lblBallControl;
-    @FXML private Label lblDefending;
-    @FXML private Label lblPhysicality;
+    @FXML private VBox  attributeRows;
     @FXML private Label lblGoals;
     @FXML private Label lblYellowCards;
     @FXML private Label lblAppearances;
     @FXML private Label lblInjury;
 
     private ObservableList<Player> allPlayers;
+    private Sport sport;
 
     @FXML
     public void initialize() {
-        List<Player> squad = GameSession.getInstance().getUserTeam().getSquad();
+        GameSession session = GameSession.getInstance();
+        sport = session.getSport();
+        List<Player> squad = session.getUserTeam().getSquad();
         allPlayers = FXCollections.observableArrayList(squad);
 
         colName.setCellValueFactory(d ->
@@ -73,18 +77,28 @@ public class SquadController {
         squadTable.setItems(allPlayers);
         squadTable.getSelectionModel().selectedItemProperty()
                 .addListener((obs, old, selected) -> showDetails(selected));
+
+        buildFilterButtons();
     }
 
-    // ── Filter handlers ───────────────────────────────────────────────────────
+    // ── Filter ────────────────────────────────────────────────────────────────
 
-    @FXML private void onFilterAll() { applyFilter("All"); }
-    @FXML private void onFilterGK()  { applyFilter("GK"); }
-    @FXML private void onFilterDEF() { applyFilter("DEF"); }
-    @FXML private void onFilterMID() { applyFilter("MID"); }
-    @FXML private void onFilterFWD() { applyFilter("FWD"); }
+    private void buildFilterButtons() {
+        filterBar.getChildren().clear();
+
+        Button btnAll = new Button("All");
+        btnAll.setOnAction(e -> applyFilter(null));
+        filterBar.getChildren().add(btnAll);
+
+        for (Position pos : sport.getAvailablePositions()) {
+            Button btn = new Button(pos.getCode());
+            btn.setOnAction(e -> applyFilter(pos.getCode()));
+            filterBar.getChildren().add(btn);
+        }
+    }
 
     private void applyFilter(String code) {
-        if ("All".equals(code)) {
+        if (code == null) {
             squadTable.setItems(allPlayers);
         } else {
             List<Player> filtered = allPlayers.stream()
@@ -101,12 +115,7 @@ public class SquadController {
             lblPlayerName.setText("— Select a player —");
             lblPlayerPos.setText("");
             lblPlayerAge.setText("");
-            lblSpeed.setText("");
-            lblShooting.setText("");
-            lblPassing.setText("");
-            lblBallControl.setText("");
-            lblDefending.setText("");
-            lblPhysicality.setText("");
+            attributeRows.getChildren().clear();
             lblGoals.setText("");
             lblYellowCards.setText("");
             lblAppearances.setText("");
@@ -120,22 +129,28 @@ public class SquadController {
         lblPlayerPos.setText("Position:  " + (player.getPosition() != null ? player.getPosition().getDisplayName() : "?"));
         lblPlayerAge.setText("Age:       " + player.getAge());
 
-        if (player instanceof FootballPlayer fp) {
-            lblSpeed.setText("Speed:        " + fp.getSpeed());
-            lblShooting.setText("Shooting:     " + fp.getShooting());
-            lblPassing.setText("Passing:      " + fp.getPassing());
-            lblBallControl.setText("Ball Control: " + fp.getBallControl());
-            lblDefending.setText("Defending:    " + fp.getDefending());
-            lblPhysicality.setText("Physicality:  " + fp.getPhysicality());
+        attributeRows.getChildren().clear();
+        Map<String, Integer> attrs = player.getAttributes();
+        for (String attrName : sport.getPlayerAttributes()) {
+            Integer val = attrs.get(attrName);
+            if (val == null) continue;
+            String display = capitalize(attrName) + ":  " + val;
+            Label lbl = new Label(display);
+            lbl.setStyle("-fx-text-fill: #e2e8f0;");
+            attributeRows.getChildren().add(lbl);
         }
 
         lblGoals.setText("Goals:         " + player.getGoals());
         lblYellowCards.setText("Yellow Cards:  " + player.getYellowCards());
         lblAppearances.setText("Appearances:   " + player.getAppearances());
-
         lblInjury.setText(player.isInjured()
                 ? "INJURED — out for " + player.getInjuredGamesRemaining() + " game(s)"
                 : "");
+    }
+
+    private String capitalize(String s) {
+        if (s == null || s.isEmpty()) return s;
+        return Character.toUpperCase(s.charAt(0)) + s.substring(1);
     }
 
     @FXML

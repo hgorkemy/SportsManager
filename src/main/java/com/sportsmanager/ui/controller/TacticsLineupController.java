@@ -1,10 +1,16 @@
 package com.sportsmanager.ui.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import com.sportsmanager.SportsManagerApp;
 import com.sportsmanager.core.model.GameSession;
 import com.sportsmanager.core.model.Player;
 import com.sportsmanager.core.model.Tactic;
 import com.sportsmanager.core.model.Team;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,6 +20,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -24,11 +33,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Combines tactics selection and lineup building in one screen.
@@ -42,24 +46,26 @@ public class TacticsLineupController {
     @FXML private ComboBox<Tactic> tacticCombo;
     @FXML private ListView<Player> playerList;
     @FXML private Label            lblStatus;
+    @FXML private Label            lblAvgOvr;
     @FXML private Button           btnConfirm;
     @FXML private Button           btnBack;
 
     // ── Pitch geometry ────────────────────────────────────────────────────────
     private static final double PAD = 28;
-    private static final double PW  = 460;
-    private static final double PH  = 620;
-    private static final double FW  = PW - 2 * PAD;
-    private static final double FH  = PH - 2 * PAD;
+
+    private static final Image INJURY_ICON = loadIcon("band-aid.png");
+    private static Image loadIcon(String name) {
+        var url = TacticsLineupController.class.getResource("/com/sportsmanager/ui/icons/" + name);
+        return url == null ? null : new Image(url.toExternalForm());
+    }
 
     // ── State ─────────────────────────────────────────────────────────────────
 
-    private record SlotDef(String label, double relX, double relY) {}
+    private record SlotDef(String label, double relX, double relY, String positionCode) {}
 
     private static class SlotState {
         final SlotDef def;
         Player player;
-        VBox   node;
         SlotState(SlotDef def) { this.def = def; }
     }
 
@@ -81,7 +87,9 @@ public class TacticsLineupController {
         sportTactics = session.getSport().getAvailableTactics();
         isHandball   = session.getSport().getPlayersPerTeam() == 7;
 
-        drawPitch();
+        // Redraw pitch whenever the pane is resized
+        pitchPane.widthProperty().addListener((obs, o, n) -> redraw());
+        pitchPane.heightProperty().addListener((obs, o, n) -> redraw());
 
         tacticCombo.getItems().setAll(sportTactics);
         tacticCombo.setCellFactory(lv -> tacticCell());
@@ -92,19 +100,29 @@ public class TacticsLineupController {
         playerList.setCellFactory(lv -> new ListCell<>() {
             @Override protected void updateItem(Player p, boolean empty) {
                 super.updateItem(p, empty);
-                if (empty || p == null) { setText(null); setStyle(""); return; }
+                if (empty || p == null) { setText(null); setGraphic(null); setStyle(""); return; }
                 if (p.isInjured()) {
-                    setText("⚠ " + p.getFullName()
-                            + " [" + (p.getPosition() != null ? p.getPosition().getCode() : "?") + "]"
-                            + " OVR:" + p.getOverallRating()
-                            + "  — INJURED (" + p.getInjuredGamesRemaining() + " games)");
-                    setStyle("-fx-text-fill: #f87171; -fx-font-weight: bold;");
+                    ImageView icon = new ImageView(INJURY_ICON);
+                    icon.setFitWidth(14); icon.setFitHeight(14); icon.setPreserveRatio(true);
+                    Label lbl = new Label(p.getFullName()
+                            + "  [" + (p.getPosition() != null ? p.getPosition().getCode() : "?") + "]"
+                            + "  OVR:" + p.getOverallRating()
+                            + "  — " + p.getInjuredGamesRemaining() + " game(s)");
+                    lbl.setStyle("-fx-text-fill: #f59e0b; -fx-font-size: 12px;");
+                    HBox row = new HBox(6, icon, lbl);
+                    row.setAlignment(Pos.CENTER_LEFT);
+                    setText(null);
+                    setGraphic(row);
+                    setStyle("-fx-background-color: #2d1515; -fx-padding: 5 10;");
                 } else if (p == selectedBenchPlayer) {
+                    setGraphic(null);
                     setText(p.toString());
                     setStyle("-fx-background-color: #f59e0b; -fx-text-fill: #0f172a; -fx-font-weight: bold;");
                 } else {
+                    setGraphic(null);
                     setText(p.toString());
-                    setStyle("");
+                    setStyle("-fx-text-fill: #e2e8f0; -fx-font-size: 13px; -fx-padding: 6 10;" +
+                             "-fx-background-color: transparent;");
                 }
             }
         });
@@ -138,27 +156,44 @@ public class TacticsLineupController {
 
     // ── Pitch / court drawing ─────────────────────────────────────────────────
 
-    private void drawPitch() {
+    private void redraw() {
+        double PW = pitchPane.getWidth();
+        double PH = pitchPane.getHeight();
+        if (PW == 0 || PH == 0) return;
+        pitchPane.getChildren().removeAll(slotNodes);
+        pitchPane.getChildren().clear();
+        drawPitch(PW, PH);
+        renderSlots(PW, PH);
+    }
+
+    private void drawPitch(double PW, double PH) {
+        double FW = PW - 2 * PAD;
+        double FH = PH - 2 * PAD;
+
         Rectangle bg = new Rectangle(0, 0, PW, PH);
-        bg.setFill(Color.web("#1a5276"));
+        bg.setFill(Color.web(isHandball ? "#6b3d1e" : "#1a5276"));
         pitchPane.getChildren().add(bg);
 
         for (int i = 0; i < 8; i++) {
             Rectangle stripe = new Rectangle(0, PAD + i * (FH / 8), PW, FH / 8);
-            stripe.setFill(i % 2 == 0 ? Color.web("#1a5c2e") : Color.web("#1d6633"));
+            if (isHandball) {
+                stripe.setFill(i % 2 == 0 ? Color.web("#b8703a") : Color.web("#a06030"));
+            } else {
+                stripe.setFill(i % 2 == 0 ? Color.web("#1a5c2e") : Color.web("#1d6633"));
+            }
             pitchPane.getChildren().add(stripe);
         }
 
         addRect(PAD, PAD, FW, FH);
         addLine(PAD, PH / 2, PAD + FW, PH / 2);
-        addCircle(PW / 2, PH / 2, 52);
+        double circleR = FH * 0.092;
+        addCircle(PW / 2, PH / 2, circleR);
         addDot(PW / 2, PH / 2, 4);
 
         if (isHandball) {
-            // 6-metre goal area arcs (top + bottom)
-            drawHandballArc(PW / 2, PAD, 110, false);
-            drawHandballArc(PW / 2, PAD + FH, 110, true);
-            // 9-metre dashed line placeholder (simple rect)
+            double arcR = FH * 0.195;
+            drawHandballArc(PW / 2, PAD, arcR, false);
+            drawHandballArc(PW / 2, PAD + FH, arcR, true);
             addDashedRect(PAD + FW * 0.15, PAD, FW * 0.70, FH * 0.28);
             addDashedRect(PAD + FW * 0.15, PAD + FH * 0.72, FW * 0.70, FH * 0.28);
         } else {
@@ -243,17 +278,14 @@ public class TacticsLineupController {
         slotNodes.clear();
         slots.clear();
 
-        for (SlotDef def : formationFor(tactic.getName())) {
+        for (SlotDef def : slotsFromTactic(tactic)) {
             slots.add(new SlotState(def));
         }
-
-        List<Player> healthy = userTeam.getSquad().stream()
-                .filter(p -> !p.isInjured()).collect(Collectors.toList());
 
         for (SlotState slot : slots) {
             for (int i = 0; i < assignedBefore.size(); i++) {
                 Player p = assignedBefore.get(i);
-                if (p != null && matchesSlot(p, slot.def.label())) {
+                if (p != null && matchesSlot(p, slot.def)) {
                     slot.player = p;
                     assignedBefore.set(i, null);
                     break;
@@ -263,8 +295,9 @@ public class TacticsLineupController {
 
         List<Player> assigned = slots.stream().map(s -> s.player)
                 .filter(Objects::nonNull).collect(Collectors.toList());
+        // show all squad players (including injured)
         bench = FXCollections.observableArrayList(
-                healthy.stream().filter(p -> !assigned.contains(p)).collect(Collectors.toList()));
+                userTeam.getSquad().stream().filter(p -> !assigned.contains(p)).collect(Collectors.toList()));
         playerList.setItems(bench);
         selectedBenchPlayer = null;
 
@@ -272,41 +305,60 @@ public class TacticsLineupController {
         updateStatus();
     }
 
-    private boolean matchesSlot(Player p, String slotLabel) {
+    private boolean matchesSlot(Player p, SlotDef slot) {
         if (p.getPosition() == null) return false;
-        String code = p.getPosition().getCode();
-        return switch (slotLabel) {
-            case "GK"                           -> code.equals("GK");
-            // Football outfield
-            case "LB", "RB", "LWB", "RWB",
-                 "CB", "LCB", "RCB"             -> code.equals("DEF");
-            case "LM", "RM", "CM", "DM", "AM"  -> code.equals("MID");
-            case "LW", "RW", "CF", "ST"         -> code.equals("FWD");
-            // Handball outfield
-            case "LWG", "RWG"                   -> code.equals("WING");
-            case "LB2", "CB2", "RB2", "LCB2",
-                 "RCB2"                          -> code.equals("BACK");
-            case "PIV"                           -> code.equals("PIV");
-            default                              -> false;
+        return p.getPosition().getCode().equals(slot.positionCode());
+    }
+
+    /** Converts a tactic's formation lines into evenly-distributed slot definitions. */
+    private List<SlotDef> slotsFromTactic(Tactic tactic) {
+        List<SlotDef> result = new ArrayList<>();
+        for (Tactic.Line line : tactic.getFormationLines()) {
+            int n = line.count();
+            for (int i = 0; i < n; i++) {
+                double margin = n <= 2 ? 0.30 : 0.08;
+                double relX = n == 1 ? 0.50
+                        : margin + (i / (n - 1.0)) * (1.0 - 2 * margin);
+                String label = slotLabel(line.positionCode(), n, i);
+                result.add(new SlotDef(label, relX, line.relY(), line.positionCode()));
+            }
+        }
+        return result;
+    }
+
+    private static String slotLabel(String pos, int count, int idx) {
+        return switch (pos) { //temp
+            case "GK"   -> "GK";
+            case "DEF"  -> count <= 2 ? "CB" : idx == 0 ? "LB" : idx == count - 1 ? "RB" : "CB";
+            case "MID"  -> count <= 3 ? "CM" : idx == 0 ? "LM" : idx == count - 1 ? "RM" : "CM";
+            case "FWD"  -> count == 1 ? "CF" : count == 2 ? "ST" : idx == 0 ? "LW" : idx == count - 1 ? "RW" : "CF";
+            case "BACK" -> idx == 0 ? "LB" : idx == count - 1 ? "RB" : "CB";
+            case "WING" -> idx == 0 ? "LWG" : "RWG";
+            case "PIV"  -> "PIV";
+            default     -> pos;
         };
     }
 
     // ── Slot rendering ────────────────────────────────────────────────────────
 
     private void renderSlots() {
-        pitchPane.getChildren().removeAll(slotNodes);
+        redraw();
+    }
+
+    private void renderSlots(double PW, double PH) {
+        double FW = PW - 2 * PAD;
+        double FH = PH - 2 * PAD;
         slotNodes.clear();
 
         for (int i = 0; i < slots.size(); i++) {
             SlotState slot = slots.get(i);
             VBox node = buildSlotNode(slot);
-            slot.node = node;
 
             double px = PAD + slot.def.relX() * FW;
             double py = PAD + (1.0 - slot.def.relY()) * FH;
 
-            node.setLayoutX(px - 34);   // VBox is fixed 68px wide → exact center
-            node.setLayoutY(py - 24);   // jersey is 48px → center at py
+            node.setLayoutX(px - 34);
+            node.setLayoutY(py - 24);
 
             final int idx = i;
             node.setOnMouseClicked(e -> onSlotClicked(idx));
@@ -314,13 +366,12 @@ public class TacticsLineupController {
 
             pitchPane.getChildren().add(node);
             slotNodes.add(node);
-            slot.node = node;
         }
     }
 
     private VBox buildSlotNode(SlotState slot) {
         boolean hasPlayer = slot.player != null;
-        boolean outOfPos  = hasPlayer && !matchesSlot(slot.player, slot.def.label());
+        boolean outOfPos  = hasPlayer && !matchesSlot(slot.player, slot.def);
 
         StackPane jersey = new StackPane();
         jersey.setPrefSize(54, 48);
@@ -328,8 +379,10 @@ public class TacticsLineupController {
 
         Rectangle body = new Rectangle(54, 48);
         body.setArcWidth(10); body.setArcHeight(10);
-        body.setFill(Color.web(hasPlayer ? "#7f1d1d" : "#1e3a5f"));
-        body.setStroke(Color.web(outOfPos ? "#ef4444" : "#fbbf24"));
+        String bodyColor = !hasPlayer ? "#1e3a5f" : outOfPos ? "#7f1d1d" : "#14532d";
+        String strokeColor = !hasPlayer ? "#fbbf24" : outOfPos ? "#ef4444" : "#22c55e";
+        body.setFill(Color.web(bodyColor));
+        body.setStroke(Color.web(strokeColor));
         body.setStrokeWidth(2);
 
         Rectangle collar = new Rectangle(34, 10);
@@ -425,9 +478,9 @@ public class TacticsLineupController {
         }
         for (SlotState slot : slots) {
             Player best = bench.stream()
-                    .filter(p -> matchesSlot(p, slot.def.label()))
+                    .filter(p -> !p.isInjured() && matchesSlot(p, slot.def))
                     .findFirst().orElse(null);
-            if (best == null) best = bench.isEmpty() ? null : bench.get(0);
+            if (best == null) best = bench.stream().filter(p -> !p.isInjured()).findFirst().orElse(null);
             if (best != null) { slot.player = best; bench.remove(best); }
         }
         renderSlots();
@@ -505,6 +558,16 @@ public class TacticsLineupController {
             lblStatus.setStyle("-fx-text-fill: #fbbf24; -fx-font-size: 12px;");
             lblStatus.setText(filled + " / " + total + " positions filled");
         }
+
+        double avg = slots.stream()
+                .filter(s -> s.player != null)
+                .mapToInt(s -> s.player.getOverallRating())
+                .average().orElse(0);
+        if (avg > 0) {
+            lblAvgOvr.setText(String.format("AVG OVR: %.0f", avg));
+        } else {
+            lblAvgOvr.setText("AVG OVR: —");
+        }
     }
 
     private ListCell<Tactic> tacticCell() {
@@ -517,70 +580,4 @@ public class TacticsLineupController {
         };
     }
 
-    // ── Formation definitions ─────────────────────────────────────────────────
-
-    private List<SlotDef> formationFor(String name) {
-        return switch (name) {
-            // ── Football ──────────────────────────────────────────────────────
-            case "4-4-2" -> List.of(
-                new SlotDef("GK",  0.50, 0.05),
-                new SlotDef("LB",  0.12, 0.23), new SlotDef("CB",  0.37, 0.21),
-                new SlotDef("CB",  0.63, 0.21), new SlotDef("RB",  0.88, 0.23),
-                new SlotDef("LM",  0.08, 0.53), new SlotDef("CM",  0.35, 0.51),
-                new SlotDef("CM",  0.65, 0.51), new SlotDef("RM",  0.92, 0.53),
-                new SlotDef("ST",  0.36, 0.83), new SlotDef("ST",  0.64, 0.83)
-            );
-            case "4-3-3" -> List.of(
-                new SlotDef("GK",  0.50, 0.05),
-                new SlotDef("LB",  0.12, 0.23), new SlotDef("CB",  0.37, 0.21),
-                new SlotDef("CB",  0.63, 0.21), new SlotDef("RB",  0.88, 0.23),
-                new SlotDef("CM",  0.24, 0.53), new SlotDef("CM",  0.50, 0.53),
-                new SlotDef("CM",  0.76, 0.53),
-                new SlotDef("LW",  0.12, 0.83), new SlotDef("CF",  0.50, 0.86),
-                new SlotDef("RW",  0.88, 0.83)
-            );
-            case "4-2-3-1" -> List.of(
-                new SlotDef("GK",  0.50, 0.05),
-                new SlotDef("LB",  0.12, 0.23), new SlotDef("CB",  0.37, 0.21),
-                new SlotDef("CB",  0.63, 0.21), new SlotDef("RB",  0.88, 0.23),
-                new SlotDef("DM",  0.36, 0.44), new SlotDef("DM",  0.64, 0.44),
-                new SlotDef("LW",  0.11, 0.65), new SlotDef("AM",  0.50, 0.65),
-                new SlotDef("RW",  0.89, 0.65),
-                new SlotDef("CF",  0.50, 0.86)
-            );
-            case "5-3-2" -> List.of(
-                new SlotDef("GK",   0.50, 0.05),
-                new SlotDef("LWB",  0.05, 0.30), new SlotDef("LCB", 0.25, 0.21),
-                new SlotDef("CB",   0.50, 0.19), new SlotDef("RCB", 0.75, 0.21),
-                new SlotDef("RWB",  0.95, 0.30),
-                new SlotDef("CM",   0.25, 0.56), new SlotDef("CM",  0.50, 0.56),
-                new SlotDef("CM",   0.75, 0.56),
-                new SlotDef("ST",   0.36, 0.83), new SlotDef("ST",  0.64, 0.83)
-            );
-            // ── Handball ──────────────────────────────────────────────────────
-            // 3-2-1: GK + 3 backs + 2 wings + 1 pivot
-            case "3-2-1" -> List.of(
-                new SlotDef("GK",   0.50, 0.05),
-                new SlotDef("LWG",  0.10, 0.60), new SlotDef("RWG",  0.90, 0.60),
-                new SlotDef("LB2",  0.25, 0.75), new SlotDef("CB2",  0.50, 0.78),
-                new SlotDef("RB2",  0.75, 0.75),
-                new SlotDef("PIV",  0.50, 0.90)
-            );
-            // 4-2: GK + 4 backs + 2 wings
-            case "4-2" -> List.of(
-                new SlotDef("GK",   0.50, 0.05),
-                new SlotDef("LWG",  0.08, 0.62), new SlotDef("RWG",  0.92, 0.62),
-                new SlotDef("LB2",  0.20, 0.78), new SlotDef("LCB2", 0.40, 0.82),
-                new SlotDef("RCB2", 0.60, 0.82), new SlotDef("RB2",  0.80, 0.78)
-            );
-            // 6-0: GK + 6 backs (defensive wall)
-            case "6-0" -> List.of(
-                new SlotDef("GK",   0.50, 0.05),
-                new SlotDef("LWG",  0.05, 0.70), new SlotDef("LB2",  0.22, 0.78),
-                new SlotDef("LCB2", 0.38, 0.83), new SlotDef("RCB2", 0.62, 0.83),
-                new SlotDef("RB2",  0.78, 0.78), new SlotDef("RWG",  0.95, 0.70)
-            );
-            default -> isHandball ? formationFor("3-2-1") : formationFor("4-4-2");
-        };
-    }
 }

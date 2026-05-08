@@ -288,7 +288,9 @@ public class MatchController {
 
     // Ensure team has a valid starting lineup (works for any sport)
     private void autoSetLineup(Team team) {
-        if (!team.getLineup().isEmpty())
+        boolean hasInjured = !team.getLineup().isEmpty() &&
+                              team.getLineup().stream().anyMatch(Player::isInjured);
+        if (!team.getLineup().isEmpty() && !hasInjured)
             return;
 
         int needed = GameSession.getInstance().getSport().getPlayersPerTeam();

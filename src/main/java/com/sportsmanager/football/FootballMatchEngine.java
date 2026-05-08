@@ -97,14 +97,14 @@ public class FootballMatchEngine implements MatchEngine {
     // goal chance based on attack vs defense ratio
     private int simulateGoals(double attack, double defense) {
         double total = attack + defense;
-        if (total == 0)
+        if (total == 0) 
             return 0;
 
         double goalProb = attack / total;
 
         int goals = 0;
-        for (int i = 0; i < 5; i++) {
-            if (random.nextDouble() < goalProb * 0.35) {
+        for (int i = 0; i < 20; i++) {
+            if (random.nextDouble() < goalProb * 0.07) {
                 goals++;
             }
         }
