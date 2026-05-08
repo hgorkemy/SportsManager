@@ -25,6 +25,9 @@ public class GameSession {
     public enum TacticsContext { PRE_MATCH, MID_MATCH, BROWSE }
     private TacticsContext tacticsContext = TacticsContext.PRE_MATCH;
 
+    /** Set before navigating to TacticsLineupView due to an in-match injury. Cleared after display. */
+    private String pendingInjuryMessage = null;
+
     private GameSession() {}
 
     public static GameSession getInstance() {
@@ -86,4 +89,6 @@ public class GameSession {
     public void setCurrentSeason(int season)      { this.currentSeason = season; }
     public TacticsContext getTacticsContext()               { return tacticsContext; }
     public void setTacticsContext(TacticsContext ctx)       { this.tacticsContext = ctx; }
+    public String getPendingInjuryMessage()                 { return pendingInjuryMessage; }
+    public void setPendingInjuryMessage(String msg)         { this.pendingInjuryMessage = msg; }
 }

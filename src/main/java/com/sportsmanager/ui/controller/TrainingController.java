@@ -104,9 +104,6 @@ public class TrainingController {
         card.setMinHeight(200);
         card.setStyle(cardStyle(selected, isSpecialty));
 
-        Label emoji = new Label(p.emoji());
-        emoji.setStyle("-fx-font-size: 34px;");
-
         Label name = new Label(p.name() + " Training");
         name.setStyle("-fx-text-fill: #f8fafc; -fx-font-size: 13px; -fx-font-weight: bold;");
         name.setWrapText(true);
@@ -127,7 +124,7 @@ public class TrainingController {
         bonusLabel.setMaxWidth(150);
         bonusLabel.setTextAlignment(TextAlignment.CENTER);
 
-        card.getChildren().addAll(emoji, name, desc, bonusLabel);
+        card.getChildren().addAll(name, desc, bonusLabel);
 
         if (isSpecialty) {
             Label badge = new Label("⭐ Coach specialty  ×1.5");

@@ -1,6 +1,7 @@
 package com.sportsmanager.ui.controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -136,6 +137,14 @@ public class TacticsLineupController {
                 .findFirst()
                 .orElse(sportTactics.isEmpty() ? null : sportTactics.get(0));
         if (toSelect != null) tacticCombo.setValue(toSelect); // triggers applyTactic
+
+        // Show injury warning if we were redirected here due to an in-match injury
+        String injuryMsg = session.getPendingInjuryMessage();
+        if (injuryMsg != null && !injuryMsg.isBlank()) {
+            lblStatus.setStyle("-fx-text-fill: #f87171; -fx-font-size: 12px; -fx-font-weight: bold;");
+            lblStatus.setText(injuryMsg);
+            session.setPendingInjuryMessage(null); // consume once shown
+        }
 
         GameSession.TacticsContext ctx = session.getTacticsContext();
         switch (ctx) {
@@ -473,14 +482,23 @@ public class TacticsLineupController {
 
     @FXML
     private void onAutoFill() {
+        // Clear all slots first
         for (SlotState s : slots) {
             if (s.player != null) { bench.add(s.player); s.player = null; }
         }
+        // Fill each slot with the highest-OVR healthy player that matches the position
         for (SlotState slot : slots) {
             Player best = bench.stream()
                     .filter(p -> !p.isInjured() && matchesSlot(p, slot.def))
-                    .findFirst().orElse(null);
-            if (best == null) best = bench.stream().filter(p -> !p.isInjured()).findFirst().orElse(null);
+                    .max(Comparator.comparingInt(Player::getOverallRating))
+                    .orElse(null);
+            // Fallback: highest-OVR healthy player regardless of position
+            if (best == null) {
+                best = bench.stream()
+                        .filter(p -> !p.isInjured())
+                        .max(Comparator.comparingInt(Player::getOverallRating))
+                        .orElse(null);
+            }
             if (best != null) { slot.player = best; bench.remove(best); }
         }
         renderSlots();

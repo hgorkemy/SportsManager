@@ -19,8 +19,8 @@ public class FootballTeam extends Team {
         if (getLineup().size() != 11) return false;
         if (getLineup().stream().anyMatch(Player::isInjured)) return false;
         return getLineup().stream()
-                .anyMatch(p -> p.getPosition() instanceof FootballPosition fp
-                               && fp == FootballPosition.GOALKEEPER);
+                .anyMatch(p -> p.getPosition() != null
+                               && "GK".equals(p.getPosition().getCode()));
     }
 
     @Override

@@ -215,6 +215,25 @@ public class MatchController {
         scoreLabel.setText(engine.getFinalResult().getHomeScore() + " - " + engine.getFinalResult().getAwayScore());
 
         if (engine.hasNextPeriod()) {
+            // Check if any user-team lineup player got injured this half
+            GameSession session = GameSession.getInstance();
+            Team userTeam = session.getUserTeam();
+            List<Player> injuredInLineup = userTeam.getLineup().stream()
+                    .filter(Player::isInjured)
+                    .collect(java.util.stream.Collectors.toList());
+
+            if (!injuredInLineup.isEmpty()) {
+                // Build message listing all injured players
+                String names = injuredInLineup.stream()
+                        .map(p -> p.getFirstName() + " " + p.getLastName())
+                        .collect(java.util.stream.Collectors.joining(", "));
+                session.setPendingInjuryMessage(
+                        "⚠ Injured during the match: " + names + " — please substitute before the 2nd half.");
+                session.setTacticsContext(GameSession.TacticsContext.MID_MATCH);
+                SportsManagerApp.navigateTo("TacticsLineupView");
+                return;
+            }
+
             periodLabel.setText("Half-Time");
             statusLabel.setText("Both teams resting...");
             simulateButton.setText("Start 2nd Half");

@@ -18,8 +18,8 @@ public class HandballTeam extends Team {
         if (getLineup().size() != 7) return false;
         if (getLineup().stream().anyMatch(Player::isInjured)) return false;
         return getLineup().stream()
-                .anyMatch(p -> p.getPosition() instanceof HandballPosition pos
-                               && pos == HandballPosition.GOALKEEPER);
+                .anyMatch(p -> p.getPosition() != null
+                               && "GK".equals(p.getPosition().getCode()));
     }
 
     @Override
