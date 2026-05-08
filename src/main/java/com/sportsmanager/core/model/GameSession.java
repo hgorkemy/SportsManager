@@ -2,12 +2,7 @@ package com.sportsmanager.core.model;
 
 import com.sportsmanager.core.engine.MatchEngine;
 
-/**
- * Singleton holding the active game state.
- * All UI controllers read from this class.
- *
- * Implemented by: Halil Görkem Yiğit
- */
+
 public class GameSession {
 
     private static GameSession instance;
@@ -24,6 +19,9 @@ public class GameSession {
     /** Where the TacticsLineupView was opened from — controls confirm/back behaviour. */
     public enum TacticsContext { PRE_MATCH, MID_MATCH, BROWSE }
     private TacticsContext tacticsContext = TacticsContext.PRE_MATCH;
+
+    /** Set before navigating to TacticsLineupView due to an in-match injury. Cleared after display. */
+    private String pendingInjuryMessage = null;
 
     private GameSession() {}
 
@@ -86,4 +84,6 @@ public class GameSession {
     public void setCurrentSeason(int season)      { this.currentSeason = season; }
     public TacticsContext getTacticsContext()               { return tacticsContext; }
     public void setTacticsContext(TacticsContext ctx)       { this.tacticsContext = ctx; }
+    public String getPendingInjuryMessage()                 { return pendingInjuryMessage; }
+    public void setPendingInjuryMessage(String msg)         { this.pendingInjuryMessage = msg; }
 }

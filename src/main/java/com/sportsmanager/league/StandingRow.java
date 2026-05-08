@@ -2,11 +2,7 @@ package com.sportsmanager.league;
 
 import com.sportsmanager.core.model.Team;
 
-/**
- * One team's row in the league standings table.
- *
- * TODO (Yavuz): Implement this class.
- */
+
 public class StandingRow {
 
     private final Team team;

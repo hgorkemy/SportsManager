@@ -7,12 +7,7 @@ import com.sportsmanager.core.model.Team;
 
 import java.util.List;
 
-/**
- * Factory interface — creates all sport-specific objects.
- * Adding a new sport = new factory implementation only.
- *
- * TODO (Egemen): This interface is defined. No changes needed here.
- */
+
 public interface SportFactory {
     Sport createSport();
     List<Team> generateTeams(int count);

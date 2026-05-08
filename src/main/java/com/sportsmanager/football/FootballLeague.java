@@ -13,11 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Football league — double round-robin, WIN=3 DRAW=1 LOSS=0.
- *
- * Implemented by: Yavuz Mete Afsar
- */
+
 public class FootballLeague extends League {
 
     private final List<MatchDay> schedule = new ArrayList<>();
@@ -230,6 +226,7 @@ public class FootballLeague extends League {
                 t.conductWeeklyTraining();
                 for (com.sportsmanager.core.model.Player p : t.getSquad()) {
                     p.recoverOneGame();
+                    p.recoverOneSuspension();
                 }
             }
             currentWeekIndex++;

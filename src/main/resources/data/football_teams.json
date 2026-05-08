@@ -1,0 +1,33 @@
+{
+  "teams": [
+    "Galatasaray", "Fenerbahce", "Besiktas", "Trabzonspor",
+    "Basaksehir", "Sivasspor", "Alanyaspor", "Antalyaspor",
+    "Kasimpasa", "Konyaspor", "Gaziantep FK", "Hatayspor",
+    "Rizespor", "Pendikspor", "Kayserispor", "Ankaragücü",
+    "Samsunspor", "Fatih Karagümrük", "Istanbulspor", "Adana Demirspor"
+  ],
+  "firstNames": [
+    "Carlos", "Marco", "Lucas", "Pedro", "Joao",
+    "Luis", "Antonio", "Roberto", "Sergio", "Diego",
+    "Ahmet", "Mehmet", "Mustafa", "Ibrahim", "Hasan",
+    "Ali", "Kemal", "Burak", "Arda", "Emre",
+    "James", "Thomas", "Oliver", "Harry", "George",
+    "Noah", "Liam", "Mason", "Jack", "Charlie"
+  ],
+  "lastNames": [
+    "Silva", "Santos", "Costa", "Ferreira", "Oliveira",
+    "Souza", "Lima", "Pereira", "Alves", "Carvalho",
+    "Yilmaz", "Kaya", "Demir", "Sahin", "Celik",
+    "Arslan", "Aydin", "Dogan", "Polat", "Cetin",
+    "Smith", "Jones", "Brown", "Taylor", "Davies",
+    "Wilson", "Evans", "Thomas", "Roberts", "Lewis"
+  ],
+  "coachFirstNames": [
+    "Jose", "Pep", "Carlo", "Jurgen", "Diego",
+    "Fatih", "Aykut", "Okan", "Abdullah", "Erik"
+  ],
+  "coachLastNames": [
+    "Mourinho", "Guardiola", "Ancelotti", "Klopp", "Simeone",
+    "Terim", "Kocaman", "Buruk", "Avci", "ten Hag"
+  ]
+}

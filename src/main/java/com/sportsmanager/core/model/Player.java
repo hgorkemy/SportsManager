@@ -3,19 +3,13 @@ package com.sportsmanager.core.model;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * Abstract player class. All sport-specific players extend this.
- *
- * Encapsulation: injuredGamesRemaining is only modified through
- * injure() and recoverOneGame() methods.
- *
- * Implemented by: Halil Görkem Yiğit
- */
+
 public abstract class Player extends Person {
 
     private final String id;
     private Position position;
     private int injuredGamesRemaining;
+    private int suspendedGamesRemaining;
 
     private int goals;
     private int yellowCards;
@@ -51,10 +45,16 @@ public abstract class Player extends Person {
     }
 
     public void recoverOneGame() {
-        if (injuredGamesRemaining > 0) {
-            injuredGamesRemaining--;
-        }
+        if (injuredGamesRemaining > 0) injuredGamesRemaining--;
     }
+
+    // ── Suspension system ─────────────────────────────────────────────────────
+
+    public boolean isSuspended()             { return suspendedGamesRemaining > 0; }
+    public void suspend(int games)           { if (games > 0) suspendedGamesRemaining = games; }
+    public void recoverOneSuspension()       { if (suspendedGamesRemaining > 0) suspendedGamesRemaining--; }
+    public int  getSuspendedGamesRemaining() { return suspendedGamesRemaining; }
+    public void restoreSuspension(int val)   { this.suspendedGamesRemaining = val; }
 
     //stats
     public void recordGoal()        { goals++; }
@@ -64,6 +64,18 @@ public abstract class Player extends Person {
     public int getGoals()       { return goals; }
     public int getYellowCards() { return yellowCards; }
     public int getAppearances() { return appearances; }
+
+    /** Restores match statistics from a save file. */
+    public void restoreStats(int goals, int yellowCards, int appearances) {
+        this.goals       = goals;
+        this.yellowCards = yellowCards;
+        this.appearances = appearances;
+    }
+
+    /** Restores the season-start snapshot from a save file. */
+    public void restoreInitialOverall(int val) {
+        this.initialOverall = val;
+    }
 
 
     //Snapshots the current overall at game start

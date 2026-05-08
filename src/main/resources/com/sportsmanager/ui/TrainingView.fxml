@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.sportsmanager.ui.controller.TrainingController"
+           alignment="CENTER"
+           style="-fx-background-color: #0a0f1a;">
+
+    <VBox spacing="24" maxWidth="800"
+          style="-fx-padding: 40 0;" StackPane.alignment="CENTER">
+
+        <!-- Header -->
+        <VBox spacing="4">
+            <Label text="WEEKLY TRAINING"
+                   style="-fx-text-fill: #f8fafc; -fx-font-size: 22px; -fx-font-weight: bold;"/>
+            <Label text="Choose your training focus for this week"
+                   style="-fx-text-fill: #64748b; -fx-font-size: 13px;"/>
+        </VBox>
+
+        <!-- Coach card -->
+        <HBox spacing="20" alignment="CENTER_LEFT"
+              style="-fx-background-color: #1e293b; -fx-padding: 20;
+                     -fx-background-radius: 12; -fx-border-color: #334155;
+                     -fx-border-radius: 12; -fx-border-width: 1;">
+            <Label text="🎽" style="-fx-font-size: 36px;"/>
+            <VBox spacing="4">
+                <Label text="YOUR COACH"
+                       style="-fx-text-fill: #64748b; -fx-font-size: 10px; -fx-font-weight: bold;"/>
+                <Label fx:id="lblCoachName" text="—"
+                       style="-fx-text-fill: #f8fafc; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <Label fx:id="lblCoachSpecialty" text="—"
+                       style="-fx-text-fill: #94a3b8; -fx-font-size: 13px;"/>
+                <Label fx:id="lblCoachSkill" text="—"
+                       style="-fx-text-fill: #4ade80; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+            </VBox>
+        </HBox>
+
+        <!-- Focus section label -->
+        <Label text="SELECT TRAINING FOCUS"
+               style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+
+        <!-- Training cards — built programmatically by controller -->
+        <HBox fx:id="trainingCards" spacing="16" alignment="CENTER"/>
+
+        <!-- Status message -->
+        <Label fx:id="lblStatus" text="" wrapText="true" maxWidth="760"
+               style="-fx-font-size: 12px; -fx-font-weight: bold;"/>
+
+        <!-- Action buttons -->
+        <HBox spacing="16" alignment="CENTER_LEFT">
+            <Button text="Skip Training" onAction="#onSkip"
+                    style="-fx-background-color: #334155; -fx-text-fill: #94a3b8;
+                           -fx-font-size: 13px; -fx-background-radius: 10;
+                           -fx-padding: 10 24; -fx-cursor: hand;"/>
+            <Button fx:id="btnConfirm" text="✓  Confirm Training" onAction="#onConfirm"
+                    styleClass="primary-button"
+                    style="-fx-font-size: 14px; -fx-padding: 10 28;" disable="true"/>
+        </HBox>
+
+    </VBox>
+</StackPane>
