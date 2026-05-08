@@ -24,7 +24,7 @@ public class SportsManagerApp extends Application {
         stage.setTitle("Sports Manager");
         stage.setResizable(true);
         stage.setMaximized(true);
-        navigateTo("SportSelectionView");
+        navigateTo("SplashView");
         stage.show();
     }
 

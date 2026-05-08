@@ -1,6 +1,7 @@
 package com.sportsmanager.ui.controller;
 
 import com.sportsmanager.SportsManagerApp;
+import com.sportsmanager.core.model.GameSession;
 import com.sportsmanager.util.GameSaveManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -12,25 +13,40 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Shows existing save files and lets the user load or delete them.
+ * Shows save files for the selected sport and lets the user load or delete them.
  *
  * Implemented by: Halil Görkem Yiğit
  */
 public class SavesController {
 
     @FXML private ListView<String> savesList;
+    @FXML private Label            lblTitle;
     @FXML private Label            lblStatus;
+
+    private String selectedSport;
 
     @FXML
     public void initialize() {
+        selectedSport = GameSession.getInstance().getSelectedSportName();
+
+        if (selectedSport != null && !selectedSport.isBlank()) {
+            lblTitle.setText("Load Game  —  " + selectedSport);
+        } else {
+            lblTitle.setText("Load Game");
+        }
+
         refreshList();
     }
 
     private void refreshList() {
-        List<String> saves = GameSaveManager.listSaves();
+        List<String> saves = (selectedSport != null && !selectedSport.isBlank())
+                ? GameSaveManager.listSavesForSport(selectedSport)
+                : GameSaveManager.listSaves();
+
         savesList.getItems().setAll(saves);
+
         if (saves.isEmpty()) {
-            setStatus("No save files found.", false);
+            setStatus("No " + (selectedSport != null ? selectedSport : "") + " save files found.", false);
         } else {
             lblStatus.setText("");
         }

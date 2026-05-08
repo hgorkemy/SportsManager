@@ -231,7 +231,7 @@ public class GameSaveManager {
         Files.delete(file);
     }
 
-    /** Returns save file names (without .json) in the saves directory. */
+    /** Returns all save file names (without .json) in the saves directory. */
     public static List<String> listSaves() {
         try {
             Files.createDirectories(savesDir());
@@ -242,6 +242,36 @@ public class GameSaveManager {
                         .toList();
         } catch (IOException e) {
             return List.of();
+        }
+    }
+
+    /**
+     * Returns save file names that belong to the given sport.
+     * Reads only the "sportName" field from each JSON — fast, no full deserialization.
+     */
+    public static List<String> listSavesForSport(String sportName) {
+        try {
+            Files.createDirectories(savesDir());
+            return Files.list(savesDir())
+                        .filter(p -> p.toString().endsWith(".json"))
+                        .filter(p -> sportNameMatches(p, sportName))
+                        .map(p -> p.getFileName().toString().replace(".json", ""))
+                        .sorted()
+                        .toList();
+        } catch (IOException e) {
+            return List.of();
+        }
+    }
+
+    /** Reads only the top-level "sportName" field from a save file. */
+    private static boolean sportNameMatches(Path file, String expected) {
+        try {
+            String json = Files.readString(file);
+            // Parse just enough to get sportName — reuse the same Gson
+            SaveData partial = GSON.fromJson(json, SaveData.class);
+            return expected.equals(partial.sportName);
+        } catch (Exception e) {
+            return false; // corrupt or unreadable file — exclude it
         }
     }
 

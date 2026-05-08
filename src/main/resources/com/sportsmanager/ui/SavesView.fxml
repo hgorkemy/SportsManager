@@ -9,7 +9,7 @@
       styleClass="root-pane">
     <padding><Insets top="50" right="60" bottom="50" left="60"/></padding>
 
-    <Label text="Load Game" styleClass="title-label" style="-fx-font-size: 28px;"/>
+    <Label fx:id="lblTitle" text="Load Game" styleClass="title-label" style="-fx-font-size: 28px;"/>
 
     <Label text="Select a save file:" styleClass="subtitle-label"/>
 
