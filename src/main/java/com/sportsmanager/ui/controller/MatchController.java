@@ -55,11 +55,13 @@ public class MatchController {
     private ObservableList<MatchEvent> events;
 
     private static final double ICON_SIZE = 18;
-    private static final Image GOAL_ICON       = loadIcon("ball.png");
-    private static final Image YELLOW_ICON     = loadIcon("yellow-card.png");
-    private static final Image INJURY_ICON     = loadIcon("band-aid.png");
-    private static final Image SUSPENSION_ICON = loadIcon("suspension.png");
-    private static final Image THROW_ICON      = loadIcon("throw.png");
+    private static final Image GOAL_ICON         = loadIcon("ball.png");
+    private static final Image YELLOW_ICON       = loadIcon("yellow-card.png");
+    private static final Image RED_CARD_ICON     = loadIcon("suspension.png");
+    private static final Image INJURY_ICON       = loadIcon("band-aid.png");
+    private static final Image SUSPENSION_ICON   = loadIcon("suspension.png");
+    private static final Image THROW_ICON        = loadIcon("throw.png");
+    private static final Image PENALTY_ICON      = loadIcon("throw.png");   // spot kick
 
     private static Image loadIcon(String name) {
         var url = MatchController.class.getResource("/com/sportsmanager/ui/icons/" + name);
@@ -130,6 +132,7 @@ public class MatchController {
         }
 
         final Team userTeamRef = userTeam;
+        final Team homeTeamRef = currentFixture.getHome();
         eventLog.getSelectionModel().clearSelection();
         eventLog.setSelectionModel(null);
         eventLog.setCellFactory(lv -> new ListCell<MatchEvent>() {
@@ -139,48 +142,69 @@ public class MatchController {
                 if (empty || item == null) {
                     setText(null);
                     setGraphic(null);
+                    setStyle("-fx-background-color: #111827; -fx-border-color: transparent;");
                     return;
                 }
                 setText(null);
 
-                // period-end / full-time marker
-                if (item.getType() == MatchEvent.EventType.PERIOD_END || item.getType() == MatchEvent.EventType.MATCH_END) {
+                // ── Period-end / full-time separator ─────────────────────────
+                if (item.getType() == MatchEvent.EventType.PERIOD_END
+                        || item.getType() == MatchEvent.EventType.MATCH_END) {
                     Label marker = new Label(item.getDescription());
-                    marker.setStyle("-fx-text-fill: #6e7580; -fx-font-weight: bold; -fx-font-size: 13px;");
+                    marker.setStyle("-fx-text-fill: #94a3b8; -fx-font-weight: bold; -fx-font-size: 13px;");
                     HBox markerBox = new HBox(marker);
                     markerBox.setAlignment(Pos.CENTER);
                     markerBox.maxWidthProperty().bind(lv.widthProperty().subtract(40));
                     setGraphic(markerBox);
+                    setStyle("-fx-background-color: #0d1520; -fx-border-color: transparent;");
                     return;
                 }
 
-                Label minuteLabel = new Label(item.getMinute() + "'");
-                minuteLabel.setMinWidth(60);
-                minuteLabel.setAlignment(Pos.CENTER);
-                minuteLabel.setStyle("-fx-text-fill: #94a3b8;");
-
-                Team t = item.getTeam();
+                Team t     = item.getTeam();
                 boolean isUser = t != null && t == userTeamRef;
+                boolean isHome = t != null && t == homeTeamRef;  // home always left
 
+                // ── Row background ────────────────────────────────────────────
+                // Slightly lifted panels so near-white text reads cleanly
+                if (isUser) {
+                    setStyle("-fx-background-color: #1a3555; -fx-border-color: transparent;"); // dark blue  — user
+                } else if (t != null) {
+                    setStyle("-fx-background-color: #0d2e3d; -fx-border-color: transparent;"); // dark teal  — opponent
+                } else {
+                    setStyle("-fx-background-color: #111827; -fx-border-color: transparent;");
+                }
+
+                // ── Minute badge ──────────────────────────────────────────────
+                Label minuteLabel = new Label(item.getMinute() + "'");
+                minuteLabel.setMinWidth(50);
+                minuteLabel.setAlignment(Pos.CENTER);
+                minuteLabel.setStyle("-fx-text-fill: #94a3b8; -fx-font-size: 12px; -fx-font-weight: bold;");
+
+                // ── Description — near-white; each side has a matching cool tint ──
                 Label desc = new Label(item.getDescription());
+                desc.setStyle(isUser
+                        ? "-fx-text-fill: #e8f4ff; -fx-font-size: 12px;"   // near-white, blue tint  — user
+                        : "-fx-text-fill: #e4f6f9; -fx-font-size: 12px;"); // near-white, teal tint  — opponent
+
                 Image icon = iconFor(item);
                 if (icon != null) {
                     desc.setGraphic(makeIconView(icon));
                     desc.setGraphicTextGap(8);
-                    desc.setContentDisplay(isUser ? ContentDisplay.RIGHT : ContentDisplay.LEFT);
+                    // Icon faces the centre: home (left side) → icon right, away (right side) → icon left
+                    desc.setContentDisplay(isHome ? ContentDisplay.RIGHT : ContentDisplay.LEFT);
                 }
 
+                // ── Side: home team always LEFT, away team always RIGHT ───────
                 HBox left  = new HBox(8);
                 HBox right = new HBox(8);
-                if (isUser)                     left.getChildren().add(desc);
-                else if (t != null)             right.getChildren().add(desc);
+                if (isHome)          left.getChildren().add(desc);
+                else if (t != null)  right.getChildren().add(desc);
+
                 left.setAlignment(Pos.CENTER_RIGHT);
                 right.setAlignment(Pos.CENTER_LEFT);
-                left.setPrefWidth(0);
-                right.setPrefWidth(0);
-                left.setMinWidth(0);
-                right.setMinWidth(0);
-                HBox.setHgrow(left, Priority.ALWAYS);
+                left.setPrefWidth(0);   left.setMinWidth(0);
+                right.setPrefWidth(0);  right.setMinWidth(0);
+                HBox.setHgrow(left,  Priority.ALWAYS);
                 HBox.setHgrow(right, Priority.ALWAYS);
 
                 HBox row = new HBox(left, minuteLabel, right);
@@ -215,7 +239,8 @@ public class MatchController {
         scoreLabel.setText(engine.getFinalResult().getHomeScore() + " - " + engine.getFinalResult().getAwayScore());
 
         if (engine.hasNextPeriod()) {
-            // Check if any user-team lineup player got injured this half
+            // Only interrupt for injuries — red-card (suspended) players stay off the pitch
+            // but the team plays on with fewer men; no forced substitution needed.
             GameSession session = GameSession.getInstance();
             Team userTeam = session.getUserTeam();
             List<Player> injuredInLineup = userTeam.getLineup().stream()
@@ -223,12 +248,11 @@ public class MatchController {
                     .collect(java.util.stream.Collectors.toList());
 
             if (!injuredInLineup.isEmpty()) {
-                // Build message listing all injured players
                 String names = injuredInLineup.stream()
                         .map(p -> p.getFirstName() + " " + p.getLastName())
                         .collect(java.util.stream.Collectors.joining(", "));
-                session.setPendingInjuryMessage(
-                        "⚠ Injured during the match: " + names + " — please substitute before the 2nd half.");
+                String msg = "⚠ Injured: " + names + " — please substitute before the 2nd half.";
+                session.setPendingInjuryMessage(msg);
                 session.setTacticsContext(GameSession.TacticsContext.MID_MATCH);
                 SportsManagerApp.navigateTo("TacticsLineupView");
                 return;
@@ -298,22 +322,26 @@ public class MatchController {
         return switch (e.getType()) {
             case GOAL              -> GOAL_ICON;
             case YELLOW_CARD       -> YELLOW_ICON;
+            case RED_CARD          -> RED_CARD_ICON;
             case INJURY            -> INJURY_ICON;
             case SUSPENSION        -> SUSPENSION_ICON;
             case SEVEN_METRE_THROW -> THROW_ICON;
+            case PENALTY           -> PENALTY_ICON;
             default                -> null;
         };
     }
 
     // Ensure team has a valid starting lineup (works for any sport)
     private void autoSetLineup(Team team) {
-        boolean hasInjured = !team.getLineup().isEmpty() &&
-                              team.getLineup().stream().anyMatch(Player::isInjured);
-        if (!team.getLineup().isEmpty() && !hasInjured)
-            return;
+        boolean needsReset = team.getLineup().isEmpty()
+                || team.getLineup().stream().anyMatch(p -> p.isInjured() || p.isSuspended());
+        if (!needsReset) return;
 
         int needed = GameSession.getInstance().getSport().getPlayersPerTeam();
-        List<Player> healthy = team.getHealthyPlayers();
+        // Exclude both injured AND suspended players from the replacement pool
+        List<Player> healthy = team.getHealthyPlayers().stream()
+                .filter(p -> !p.isSuspended())
+                .collect(java.util.stream.Collectors.toList());
         List<Player> gks = new ArrayList<>();
         List<Player> outfield = new ArrayList<>();
         for (Player p : healthy) {

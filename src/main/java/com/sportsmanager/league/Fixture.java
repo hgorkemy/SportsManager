@@ -3,11 +3,7 @@ package com.sportsmanager.league;
 import com.sportsmanager.core.model.MatchResult;
 import com.sportsmanager.core.model.Team;
 
-/**
- * One match pairing. result is null until the match is played.
- *
- * TODO (Yavuz): Implement this class.
- */
+
 public class Fixture {
 
     private final Team home;

@@ -66,7 +66,8 @@ public class TacticsLineupController {
 
     private static class SlotState {
         final SlotDef def;
-        Player player;
+        Player  player;
+        boolean redCardLocked; // slot burned by a red card — cannot be filled
         SlotState(SlotDef def) { this.def = def; }
     }
 
@@ -78,6 +79,8 @@ public class TacticsLineupController {
     private Team      userTeam;
     private List<Tactic> sportTactics;
     private boolean   isHandball;
+    /** Number of slots that cannot be filled because of in-match red cards. */
+    private int       lockedSlotsCount = 0;
 
     // ── Lifecycle ─────────────────────────────────────────────────────────────
 
@@ -102,7 +105,19 @@ public class TacticsLineupController {
             @Override protected void updateItem(Player p, boolean empty) {
                 super.updateItem(p, empty);
                 if (empty || p == null) { setText(null); setGraphic(null); setStyle(""); return; }
-                if (p.isInjured()) {
+                if (p.isSuspended()) {
+                    Label badge = new Label("🟥");
+                    badge.setStyle("-fx-font-size: 13px;");
+                    Label lbl = new Label(p.getFullName()
+                            + "  [" + (p.getPosition() != null ? p.getPosition().getCode() : "?") + "]"
+                            + "  OVR:" + p.getOverallRating()
+                            + "  — SUSPENDED (" + p.getSuspendedGamesRemaining() + " game(s))");
+                    lbl.setStyle("-fx-text-fill: #f87171; -fx-font-size: 12px;");
+                    HBox row = new HBox(6, badge, lbl);
+                    row.setAlignment(Pos.CENTER_LEFT);
+                    setText(null); setGraphic(row);
+                    setStyle("-fx-background-color: #2d0a0a; -fx-padding: 5 10;");
+                } else if (p.isInjured()) {
                     ImageView icon = new ImageView(INJURY_ICON);
                     icon.setFitWidth(14); icon.setFitHeight(14); icon.setPreserveRatio(true);
                     Label lbl = new Label(p.getFullName()
@@ -128,6 +143,14 @@ public class TacticsLineupController {
             }
         });
         playerList.setOnMouseClicked(e -> onBenchPlayerClicked());
+
+        // Count red-carded players from the current lineup (MID_MATCH only).
+        // Must be done BEFORE applyTactic() runs (triggered by setValue below).
+        lockedSlotsCount = 0;
+        if (session.getTacticsContext() == GameSession.TacticsContext.MID_MATCH) {
+            lockedSlotsCount = (int) userTeam.getLineup().stream()
+                    .filter(Player::isSuspended).count();
+        }
 
         // Pre-select current tactic by name, fall back to first
         String currentName = userTeam.getCurrentTactic() != null
@@ -275,12 +298,16 @@ public class TacticsLineupController {
 
         List<Player> assignedBefore;
         if (slots.isEmpty()) {
+            // Suspended players go to bench automatically — only healthy players pre-fill slots
             assignedBefore = userTeam.getLineup().stream()
-                    .filter(p -> !p.isInjured())
+                    .filter(p -> !p.isInjured() && !p.isSuspended())
                     .collect(Collectors.toList());
         } else {
+            // When switching tactics mid-session, keep already-assigned healthy players
             assignedBefore = slots.stream()
-                    .map(s -> s.player).filter(Objects::nonNull).collect(Collectors.toList());
+                    .map(s -> s.player)
+                    .filter(p -> p != null && !p.isInjured() && !p.isSuspended())
+                    .collect(Collectors.toList());
         }
 
         pitchPane.getChildren().removeAll(slotNodes);
@@ -304,11 +331,22 @@ public class TacticsLineupController {
 
         List<Player> assigned = slots.stream().map(s -> s.player)
                 .filter(Objects::nonNull).collect(Collectors.toList());
-        // show all squad players (including injured)
+        // show all squad players (including injured / suspended)
         bench = FXCollections.observableArrayList(
                 userTeam.getSquad().stream().filter(p -> !assigned.contains(p)).collect(Collectors.toList()));
         playerList.setItems(bench);
         selectedBenchPlayer = null;
+
+        // Mark red-card-locked slots: last N empty slots cannot be filled
+        if (lockedSlotsCount > 0) {
+            int toLock = lockedSlotsCount;
+            for (int i = slots.size() - 1; i >= 0 && toLock > 0; i--) {
+                if (slots.get(i).player == null) {
+                    slots.get(i).redCardLocked = true;
+                    toLock--;
+                }
+            }
+        }
 
         renderSlots();
         updateStatus();
@@ -379,8 +417,44 @@ public class TacticsLineupController {
     }
 
     private VBox buildSlotNode(SlotState slot) {
-        boolean hasPlayer = slot.player != null;
-        boolean outOfPos  = hasPlayer && !matchesSlot(slot.player, slot.def);
+        boolean locked     = slot.redCardLocked;
+        boolean hasPlayer  = slot.player != null;
+        boolean suspended  = hasPlayer && slot.player.isSuspended();
+        boolean outOfPos   = hasPlayer && !suspended && !matchesSlot(slot.player, slot.def);
+
+        // ── Red-card-locked slot: special "burned" visual ─────────────────
+        if (locked) {
+            StackPane jersey = new StackPane();
+            jersey.setPrefSize(54, 48);
+            jersey.setMaxSize(54, 48);
+
+            Rectangle body = new Rectangle(54, 48);
+            body.setArcWidth(10); body.setArcHeight(10);
+            body.setFill(Color.web("#2d0000"));
+            body.setStroke(Color.web("#dc2626"));
+            body.setStrokeWidth(2);
+            body.getStrokeDashArray().addAll(4.0, 3.0); // dashed border
+
+            Text icon = new Text("🟥");
+            icon.setFont(Font.font("System", FontWeight.BOLD, 20));
+
+            jersey.getChildren().addAll(body, icon);
+
+            Label nameLabel = new Label("RED CARD");
+            nameLabel.setStyle("-fx-text-fill: #ef4444; -fx-font-size: 9px; -fx-font-weight: bold;");
+            nameLabel.setMaxWidth(68); nameLabel.setPrefWidth(68);
+            nameLabel.setAlignment(Pos.CENTER);
+
+            Label ovrLabel = new Label("LOCKED");
+            ovrLabel.setStyle("-fx-text-fill: #7f1d1d; -fx-font-size: 9px;");
+            ovrLabel.setMaxWidth(68); ovrLabel.setPrefWidth(68);
+            ovrLabel.setAlignment(Pos.CENTER);
+
+            VBox vbox = new VBox(2, jersey, nameLabel, ovrLabel);
+            vbox.setAlignment(Pos.TOP_CENTER);
+            vbox.setMinWidth(68); vbox.setMaxWidth(68);
+            return vbox;
+        }
 
         StackPane jersey = new StackPane();
         jersey.setPrefSize(54, 48);
@@ -388,8 +462,12 @@ public class TacticsLineupController {
 
         Rectangle body = new Rectangle(54, 48);
         body.setArcWidth(10); body.setArcHeight(10);
-        String bodyColor = !hasPlayer ? "#1e3a5f" : outOfPos ? "#7f1d1d" : "#14532d";
-        String strokeColor = !hasPlayer ? "#fbbf24" : outOfPos ? "#ef4444" : "#22c55e";
+        String bodyColor   = !hasPlayer ? "#1e3a5f"
+                           : suspended  ? "#4a0000"
+                           : outOfPos   ? "#7f1d1d" : "#14532d";
+        String strokeColor = !hasPlayer ? "#fbbf24"
+                           : suspended  ? "#ef4444"
+                           : outOfPos   ? "#ef4444" : "#22c55e";
         body.setFill(Color.web(bodyColor));
         body.setStroke(Color.web(strokeColor));
         body.setStrokeWidth(2);
@@ -407,7 +485,14 @@ public class TacticsLineupController {
 
         jersey.getChildren().addAll(body, collar, posText);
 
-        if (outOfPos) {
+        if (suspended) {
+            Text badge = new Text("🟥");
+            badge.setFont(Font.font("System", FontWeight.BOLD, 13));
+            StackPane.setAlignment(badge, Pos.TOP_RIGHT);
+            badge.setTranslateX(-3);
+            badge.setTranslateY(3);
+            jersey.getChildren().add(badge);
+        } else if (outOfPos) {
             Text warning = new Text("⚠");
             warning.setFill(Color.web("#fbbf24"));
             warning.setFont(Font.font("System", FontWeight.BOLD, 13));
@@ -421,7 +506,7 @@ public class TacticsLineupController {
                 ? slot.player.getFirstName().charAt(0) + ". " + slot.player.getLastName()
                 : "";
         Label nameLabel = new Label(nameStr);
-        nameLabel.setStyle("-fx-text-fill: " + (outOfPos ? "#fca5a5" : "white")
+        nameLabel.setStyle("-fx-text-fill: " + (suspended ? "#fca5a5" : outOfPos ? "#fca5a5" : "white")
                            + "; -fx-font-size: 10px;");
         nameLabel.setMaxWidth(68);
         nameLabel.setPrefWidth(68);
@@ -453,7 +538,27 @@ public class TacticsLineupController {
     private void onSlotClicked(int idx) {
         SlotState slot = slots.get(idx);
 
+        // Locked slot: this position is gone due to a red card — cannot be filled
+        if (slot.redCardLocked) {
+            lblStatus.setStyle("-fx-text-fill: #f87171; -fx-font-size: 12px; -fx-font-weight: bold;");
+            lblStatus.setText("🟥 This slot is locked — your team is down to "
+                    + (slots.size() - lockedSlotsCount) + " men due to a red card.");
+            selectedBenchPlayer = null;
+            playerList.getSelectionModel().clearSelection();
+            playerList.refresh();
+            return;
+        }
+
         if (selectedBenchPlayer != null) {
+            if (selectedBenchPlayer.isSuspended()) {
+                lblStatus.setStyle("-fx-text-fill: #f87171; -fx-font-size: 12px; -fx-font-weight: bold;");
+                lblStatus.setText("🟥 " + selectedBenchPlayer.getFirstName() + " "
+                        + selectedBenchPlayer.getLastName() + " is suspended and cannot play.");
+                selectedBenchPlayer = null;
+                playerList.getSelectionModel().clearSelection();
+                playerList.refresh();
+                return;
+            }
             if (selectedBenchPlayer.isInjured()) {
                 lblStatus.setStyle("-fx-text-fill: #f87171; -fx-font-size: 12px; -fx-font-weight: bold;");
                 lblStatus.setText("⚠ " + selectedBenchPlayer.getFirstName() + " "
@@ -482,20 +587,21 @@ public class TacticsLineupController {
 
     @FXML
     private void onAutoFill() {
-        // Clear all slots first
+        // Clear non-locked slots first
         for (SlotState s : slots) {
-            if (s.player != null) { bench.add(s.player); s.player = null; }
+            if (!s.redCardLocked && s.player != null) { bench.add(s.player); s.player = null; }
         }
-        // Fill each slot with the highest-OVR healthy player that matches the position
+        // Fill each non-locked slot with the highest-OVR healthy player
         for (SlotState slot : slots) {
+            if (slot.redCardLocked) continue; // this slot stays empty (red card)
             Player best = bench.stream()
-                    .filter(p -> !p.isInjured() && matchesSlot(p, slot.def))
+                    .filter(p -> !p.isInjured() && !p.isSuspended() && matchesSlot(p, slot.def))
                     .max(Comparator.comparingInt(Player::getOverallRating))
                     .orElse(null);
             // Fallback: highest-OVR healthy player regardless of position
             if (best == null) {
                 best = bench.stream()
-                        .filter(p -> !p.isInjured())
+                        .filter(p -> !p.isInjured() && !p.isSuspended())
                         .max(Comparator.comparingInt(Player::getOverallRating))
                         .orElse(null);
             }
@@ -514,11 +620,11 @@ public class TacticsLineupController {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        long filled = slots.stream().filter(s -> s.player != null).count();
-        int  total  = slots.size();
-        if (filled < total) {
+        long filled   = slots.stream().filter(s -> s.player != null).count();
+        int  required = slots.size() - lockedSlotsCount;
+        if (filled < required) {
             lblStatus.setStyle("-fx-text-fill: #f87171; -fx-font-size: 12px; -fx-font-weight: bold;");
-            lblStatus.setText("⚠ " + (total - filled) + " position(s) empty — fill all slots.");
+            lblStatus.setText("⚠ " + (required - filled) + " position(s) empty — fill all slots.");
             return;
         }
         if (lineup.stream().anyMatch(Player::isInjured)) {
@@ -526,6 +632,14 @@ public class TacticsLineupController {
                 lblStatus.setStyle("-fx-text-fill: #f87171; -fx-font-size: 12px; -fx-font-weight: bold;");
                 lblStatus.setText("⚠ " + p.getFirstName() + " " + p.getLastName()
                         + " is injured — remove from lineup.");
+            });
+            return;
+        }
+        if (lineup.stream().anyMatch(Player::isSuspended)) {
+            lineup.stream().filter(Player::isSuspended).findFirst().ifPresent(p -> {
+                lblStatus.setStyle("-fx-text-fill: #f87171; -fx-font-size: 12px; -fx-font-weight: bold;");
+                lblStatus.setText("🟥 " + p.getFirstName() + " " + p.getLastName()
+                        + " is suspended — remove from lineup.");
             });
             return;
         }
@@ -567,14 +681,18 @@ public class TacticsLineupController {
     // ── Helpers ───────────────────────────────────────────────────────────────
 
     private void updateStatus() {
-        long filled = slots.stream().filter(s -> s.player != null).count();
-        int  total  = slots.size();
-        if (filled == total) {
+        long filled   = slots.stream().filter(s -> s.player != null).count();
+        int  required = slots.size() - lockedSlotsCount;
+        if (filled == required) {
             lblStatus.setStyle("-fx-text-fill: #4ade80; -fx-font-size: 12px; -fx-font-weight: bold;");
-            lblStatus.setText("✓ All " + total + " positions filled — ready!");
+            String suffix = lockedSlotsCount > 0
+                    ? " — ⚠ " + lockedSlotsCount + " slot(s) locked (red card)"
+                    : " — ready!";
+            lblStatus.setText("✓ " + required + "/" + slots.size() + " positions filled" + suffix);
         } else {
             lblStatus.setStyle("-fx-text-fill: #fbbf24; -fx-font-size: 12px;");
-            lblStatus.setText(filled + " / " + total + " positions filled");
+            lblStatus.setText(filled + " / " + required + " positions filled"
+                    + (lockedSlotsCount > 0 ? "  🟥 " + lockedSlotsCount + " locked" : ""));
         }
 
         double avg = slots.stream()

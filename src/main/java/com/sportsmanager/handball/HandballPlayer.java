@@ -5,10 +5,7 @@ import com.sportsmanager.core.model.Player;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Handball-specific player with 6 attributes (all 40-90).
- * Implemented by: Irmak Önder
- */
+
 public class HandballPlayer extends Player {
 
     private final Map<String, Integer> attributes;

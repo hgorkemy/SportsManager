@@ -17,14 +17,7 @@ import javafx.scene.control.TextInputDialog;
 
 import java.util.List;
 
-/**
- * Main hub screen. Shows current week, user team info, next match, and league position.
- *
- * Play Match is disabled after a match is played until "Next Week" is clicked.
- * Next Week is disabled until a match (or bye) has been played.
- *
- * Implemented by: Halil Görkem Yiğit & Yavuz Mete Afsar
- */
+
 public class DashboardController {
 
     @FXML private Label lblSeason;

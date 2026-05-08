@@ -6,11 +6,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-/**
- * Abstract team class. All sport-specific teams extend this.
- *
- * TODO (Irmak ): This class is defined. FootballTeam extends this.
- */
+
 public abstract class Team {
 
     private final String id;

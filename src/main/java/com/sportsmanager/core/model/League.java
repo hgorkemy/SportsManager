@@ -7,11 +7,7 @@ import com.sportsmanager.league.StandingRow;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Abstract league class. Handles schedule generation and standings.
- *
- * TODO (Yavuz): Implement this class. FootballLeague extends this.
- */
+
 public abstract class League {
 
     private final String name;

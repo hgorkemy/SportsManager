@@ -4,14 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * Abstract coach class. Sport-specific coaches extend this.
- *
- * Template Method: conductTraining() defines the training flow.
- * Subclasses implement getTrainingBonus() and calculateCoachingEffectiveness().
- *
- * Implemented by: Halil Görkem Yiğit
- */
+
 public abstract class Coach extends Person {
 
     private final String id;

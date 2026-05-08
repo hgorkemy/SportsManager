@@ -5,6 +5,7 @@ import com.sportsmanager.core.factory.SportFactory;
 import com.sportsmanager.core.model.League;
 import com.sportsmanager.core.model.Sport;
 import com.sportsmanager.core.model.Team;
+import com.sportsmanager.util.TeamDataLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,37 +13,11 @@ import java.util.Random;
 
 /**
  * Creates all Football-specific objects.
- * This is the only class the UI uses to bootstrap a new football game.
+ * Team, player and coach names are loaded from src/main/resources/data/football_teams.json.
  */
 public class FootballFactory implements SportFactory {
 
-    private static final String[] TEAM_NAMES = {
-        "Galatasaray", "Fenerbahce", "Besiktas", "Trabzonspor",
-        "Basaksehir", "Sivasspor", "Alanyaspor", "Antalyaspor",
-        "Kasimpasa", "Konyaspor", "Gaziantep FK", "Hatayspor",
-        "Rizespor", "Pendikspor", "Kayserispor", "Ankaragücü",
-        "Samsunspor", "Fatih Karagümrük", "Istanbulspor", "Adana Demirspor"
-    };
-
-    private static final String[] FIRST_NAMES = {
-        "Carlos", "Marco", "Lucas", "Pedro", "Joao", "Luis", "Antonio", "Roberto", "Sergio", "Diego",
-        "Ahmet", "Mehmet", "Mustafa", "Ibrahim", "Hasan", "Ali", "Kemal", "Burak", "Arda", "Emre",
-        "James", "Thomas", "Oliver", "Harry", "George", "Noah", "Liam", "Mason", "Jack", "Charlie"
-    };
-
-    private static final String[] LAST_NAMES = {
-        "Silva", "Santos", "Costa", "Ferreira", "Oliveira", "Souza", "Lima", "Pereira", "Alves", "Carvalho",
-        "Yilmaz", "Kaya", "Demir", "Sahin", "Celik", "Arslan", "Aydin", "Dogan", "Polat", "Cetin",
-        "Smith", "Jones", "Brown", "Taylor", "Davies", "Wilson", "Evans", "Thomas", "Roberts", "Lewis"
-    };
-
-    private static final String[] COACH_FIRST = {
-        "Jose", "Pep", "Carlo", "Jurgen", "Diego", "Fatih", "Aykut", "Okan", "Abdullah", "Erik"
-    };
-
-    private static final String[] COACH_LAST = {
-        "Mourinho", "Guardiola", "Ancelotti", "Klopp", "Simeone", "Terim", "Kocaman", "Buruk", "Avci", "ten Hag"
-    };
+    private static final String DATA_PATH = "/data/football_teams.json";
 
     private static final String[] SPECIALTIES = {"Attack", "Defense", "Fitness", "Goalkeeping"};
 
@@ -53,37 +28,46 @@ public class FootballFactory implements SportFactory {
 
     @Override
     public List<Team> generateTeams(int count) {
-        List<Team> teams = new ArrayList<>();
-        Random random = new Random();
+        List<String> teamNames  = TeamDataLoader.loadField(DATA_PATH, "teams");
+        List<String> firstNames = TeamDataLoader.loadField(DATA_PATH, "firstNames");
+        List<String> lastNames  = TeamDataLoader.loadField(DATA_PATH, "lastNames");
+        List<String> coachFirst = TeamDataLoader.loadField(DATA_PATH, "coachFirstNames");
+        List<String> coachLast  = TeamDataLoader.loadField(DATA_PATH, "coachLastNames");
 
-        for (int i = 0; i < Math.min(count, TEAM_NAMES.length); i++) {
-            FootballTeam team = new FootballTeam(TEAM_NAMES[i], null);
+        List<Team> teams = new ArrayList<>();
+        Random rng = new Random();
+
+        int limit = Math.min(count, teamNames.size());
+        for (int i = 0; i < limit; i++) {
+            FootballTeam team = new FootballTeam(teamNames.get(i), null);
 
             // Squad: 2 GK, 5 DEF, 5 MID, 5 FWD = 17 players
-            addPlayers(team, FootballPosition.GOALKEEPER, 2, random);
-            addPlayers(team, FootballPosition.DEFENDER,   5, random);
-            addPlayers(team, FootballPosition.MIDFIELDER, 5, random);
-            addPlayers(team, FootballPosition.FORWARD,    5, random);
+            addPlayers(team, FootballPosition.GOALKEEPER, 2, firstNames, lastNames, rng);
+            addPlayers(team, FootballPosition.DEFENDER,   5, firstNames, lastNames, rng);
+            addPlayers(team, FootballPosition.MIDFIELDER, 5, firstNames, lastNames, rng);
+            addPlayers(team, FootballPosition.FORWARD,    5, firstNames, lastNames, rng);
 
             // Default tactic
             team.setCurrentTactic(FootballTactic.balanced());
 
             // One coach
-            String cf = COACH_FIRST[random.nextInt(COACH_FIRST.length)];
-            String cl = COACH_LAST[random.nextInt(COACH_LAST.length)];
-            String sp = SPECIALTIES[random.nextInt(SPECIALTIES.length)];
-            team.addCoach(new FootballCoach(cf, cl, 38 + random.nextInt(20), 5 + random.nextInt(20), sp));
+            String cf = coachFirst.get(rng.nextInt(coachFirst.size()));
+            String cl = coachLast.get(rng.nextInt(coachLast.size()));
+            String sp = SPECIALTIES[rng.nextInt(SPECIALTIES.length)];
+            team.addCoach(new FootballCoach(cf, cl, 38 + rng.nextInt(20), 5 + rng.nextInt(20), sp));
 
             teams.add(team);
         }
         return teams;
     }
 
-    private void addPlayers(FootballTeam team, FootballPosition position, int count, Random rng) {
+    private void addPlayers(FootballTeam team, FootballPosition position,
+                            int count, List<String> firstNames,
+                            List<String> lastNames, Random rng) {
         for (int i = 0; i < count; i++) {
-            String first = FIRST_NAMES[rng.nextInt(FIRST_NAMES.length)];
-            String last  = LAST_NAMES[rng.nextInt(LAST_NAMES.length)];
-            int age = 18 + rng.nextInt(18);
+            String first = firstNames.get(rng.nextInt(firstNames.size()));
+            String last  = lastNames.get(rng.nextInt(lastNames.size()));
+            int age  = 18 + rng.nextInt(18);
             int base = 50 + rng.nextInt(25);
             team.addPlayer(new FootballPlayer(
                 first, last, age, position,

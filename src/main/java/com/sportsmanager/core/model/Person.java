@@ -1,11 +1,6 @@
 package com.sportsmanager.core.model;
 
-/**
- * Abstract base class for all persons in the system.
- * Both Player and Coach extend this class.
- *
- * Implemented by: Halil Görkem Yiğit
- */
+
 public abstract class Person {
 
     private String firstName;

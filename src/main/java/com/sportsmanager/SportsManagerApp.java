@@ -8,12 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- * JavaFX Application entry point.
- * Run with: mvn javafx:run
- *
- * Implemented by: Irmak Önder
- */
+
 public class SportsManagerApp extends Application {
 
     private static Stage primaryStage;

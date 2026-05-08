@@ -15,19 +15,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
-/**
- * Intro splash screen shown once at startup.
- *
- * Animation sequence:
- *  1. Sport icons (⚽ 🤾) slide in from sides + fade in
- *  2. "SPORTS MANAGER" rises up + fades in
- *  3. Subtitle "Developed by Dining Philosophers" fades in
- *  4. Brief hold, then whole screen fades out → SportSelectionView
- *
- * Click or press any key to skip.
- *
- * Implemented by: Halil Görkem Yiğit
- */
+
 public class SplashController {
 
     @FXML private StackPane rootPane;

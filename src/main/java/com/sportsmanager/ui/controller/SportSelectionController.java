@@ -19,19 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-/**
- * Split-screen sport selection screen.
- *
- * Left half  → Football  (dark green gradient)
- * Right half → Handball  (dark red/orange gradient)
- *
- * Mouse position drives a smooth divider animation (AnimationTimer lerp).
- * Clicking either side opens a centred overlay with New Game / Load Save buttons.
- *
- * All layout is built in Java — the FXML is a bare StackPane shell.
- *
- * Implemented by: Halil Görkem Yiğit
- */
+
 public class SportSelectionController {
 
     @FXML private StackPane rootPane;

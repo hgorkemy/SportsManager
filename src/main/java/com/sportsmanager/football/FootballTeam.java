@@ -3,11 +3,7 @@ package com.sportsmanager.football;
 import com.sportsmanager.core.model.Player;
 import com.sportsmanager.core.model.Team;
 
-/**
- * Football team — validates 11 players with at least 1 GK.
- *
- * TODO (Irmak): Implement validateLineup(), calculateAttackRating(), calculateDefenseRating().
- */
+
 public class FootballTeam extends Team {
 
     public FootballTeam(String name, String logoPath) {
@@ -16,8 +12,10 @@ public class FootballTeam extends Team {
 
     @Override
     public boolean validateLineup() {
-        if (getLineup().size() != 11) return false;
-        if (getLineup().stream().anyMatch(Player::isInjured)) return false;
+        // Allow 9-11: up to 2 red cards may reduce the playable squad
+        int size = getLineup().size();
+        if (size < 9 || size > 11) return false;
+        if (getLineup().stream().anyMatch(p -> p.isInjured() || p.isSuspended())) return false;
         return getLineup().stream()
                 .anyMatch(p -> p.getPosition() != null
                                && "GK".equals(p.getPosition().getCode()));
@@ -28,7 +26,7 @@ public class FootballTeam extends Team {
         // FWD primary, MID secondary, DEF minor (modern fullbacks/ball-playing CBs), GK ignored
         int total = 0, weight = 0;
         for (Player p : getLineup()) {
-            if (p.getPosition() == null) continue;
+            if (p.getPosition() == null || p.isSuspended()) continue;
             int w = switch (p.getPosition().getCode()) {
                 case "FWD" -> 3;
                 case "MID" -> 2;
@@ -46,7 +44,7 @@ public class FootballTeam extends Team {
         // GK and DEF primary, MID secondary, FWD minor (high press)
         int total = 0, weight = 0;
         for (Player p : getLineup()) {
-            if (p.getPosition() == null) continue;
+            if (p.getPosition() == null || p.isSuspended()) continue;
             int w = switch (p.getPosition().getCode()) {
                 case "GK", "DEF" -> 3;
                 case "MID"       -> 2;

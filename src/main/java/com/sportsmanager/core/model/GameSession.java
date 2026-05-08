@@ -2,12 +2,7 @@ package com.sportsmanager.core.model;
 
 import com.sportsmanager.core.engine.MatchEngine;
 
-/**
- * Singleton holding the active game state.
- * All UI controllers read from this class.
- *
- * Implemented by: Halil Görkem Yiğit
- */
+
 public class GameSession {
 
     private static GameSession instance;

@@ -9,11 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-/**
- * Handball coach implementation.
- * Specialty areas: "Attack", "Defense", "Goalkeeping", "Fitness"
- * Implemented by: Irmak Önder
- */
+
 public class HandballCoach extends Coach {
 
     private static final Random RNG = new Random();

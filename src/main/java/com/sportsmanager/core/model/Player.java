@@ -3,19 +3,13 @@ package com.sportsmanager.core.model;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * Abstract player class. All sport-specific players extend this.
- *
- * Encapsulation: injuredGamesRemaining is only modified through
- * injure() and recoverOneGame() methods.
- *
- * Implemented by: Halil Görkem Yiğit
- */
+
 public abstract class Player extends Person {
 
     private final String id;
     private Position position;
     private int injuredGamesRemaining;
+    private int suspendedGamesRemaining;
 
     private int goals;
     private int yellowCards;
@@ -51,10 +45,16 @@ public abstract class Player extends Person {
     }
 
     public void recoverOneGame() {
-        if (injuredGamesRemaining > 0) {
-            injuredGamesRemaining--;
-        }
+        if (injuredGamesRemaining > 0) injuredGamesRemaining--;
     }
+
+    // ── Suspension system ─────────────────────────────────────────────────────
+
+    public boolean isSuspended()             { return suspendedGamesRemaining > 0; }
+    public void suspend(int games)           { if (games > 0) suspendedGamesRemaining = games; }
+    public void recoverOneSuspension()       { if (suspendedGamesRemaining > 0) suspendedGamesRemaining--; }
+    public int  getSuspendedGamesRemaining() { return suspendedGamesRemaining; }
+    public void restoreSuspension(int val)   { this.suspendedGamesRemaining = val; }
 
     //stats
     public void recordGoal()        { goals++; }

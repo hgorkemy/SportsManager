@@ -11,12 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Creates all Handball-specific objects.
- * Team and player names are loaded from src/main/resources/data/handball_teams.json.
- *
- * Implemented by: Yavuz Mete Afsar
- */
+
 public class HandballFactory implements SportFactory {
 
     private static final String DATA_PATH = "/data/handball_teams.json";

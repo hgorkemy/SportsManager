@@ -5,12 +5,7 @@ import com.sportsmanager.core.model.Player;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Football-specific player with 6 attributes.
- *
- * TODO (Irmak): Implement getOverallRating() using position-based weights.
- * GK: defending heavy, FWD: shooting heavy, MID: passing heavy, DEF: defending heavy.
- */
+
 public class FootballPlayer extends Player {
 
     private final Map<String, Integer> attributes;

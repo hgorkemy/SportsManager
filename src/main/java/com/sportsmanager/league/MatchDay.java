@@ -6,11 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Represents one week's set of fixtures.
- *
- * TODO (Irmak): This class is used by League. Check it fits your needs.
- */
+
 public class MatchDay {
 
     private final int weekNumber;

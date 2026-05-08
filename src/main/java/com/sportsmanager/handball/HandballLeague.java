@@ -14,18 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Handball league — double round-robin, WIN=2 DRAW=1 LOSS=0.
- *
- * Tiebreaker order (when points are equal):
- *   1. Head-to-head points
- *   2. Head-to-head goal difference
- *   3. Head-to-head goals scored
- *   4. Overall goal difference
- *   5. Overall goals scored
- *
- * Implemented by: Yavuz Mete Afsar
- */
+
 public class HandballLeague extends League {
 
     private final List<MatchDay> schedule = new ArrayList<>();
@@ -234,6 +223,7 @@ public class HandballLeague extends League {
                 t.conductWeeklyTraining();
                 for (Player p : t.getSquad()) {
                     p.recoverOneGame();
+                    p.recoverOneSuspension();
                 }
             }
             currentWeekIndex++;

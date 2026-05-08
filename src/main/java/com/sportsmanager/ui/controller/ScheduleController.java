@@ -15,13 +15,7 @@ import javafx.scene.control.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Shows all fixtures grouped by week.
- * Completed matches show the score; upcoming matches show both team names.
- * A week ComboBox and "My team only" checkbox allow filtering.
- *
- * Implemented by: Yavuz Mete Afsar
- */
+
 public class ScheduleController {
 
     @FXML private ComboBox<String>  weekSelector;

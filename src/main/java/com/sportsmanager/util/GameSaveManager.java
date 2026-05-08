@@ -83,7 +83,8 @@ public class GameSaveManager {
                 pd.age                   = p.getAge();
                 pd.positionName          = (p.getPosition() instanceof Enum<?> e) ? e.name() : "UNKNOWN";
                 pd.attributes            = p.getAttributes();
-                pd.injuredGamesRemaining = p.getInjuredGamesRemaining();
+                pd.injuredGamesRemaining    = p.getInjuredGamesRemaining();
+                pd.suspendedGamesRemaining  = p.getSuspendedGamesRemaining();
                 pd.goals                 = p.getGoals();
                 pd.yellowCards           = p.getYellowCards();
                 pd.appearances           = p.getAppearances();
@@ -307,8 +308,9 @@ public class GameSaveManager {
                         a.getOrDefault("defending",    65),
                         a.getOrDefault("physicality",  65));
             }
-            // Restore injury
-            if (pd.injuredGamesRemaining > 0) p.injure(pd.injuredGamesRemaining);
+            // Restore injury and suspension
+            if (pd.injuredGamesRemaining   > 0) p.injure(pd.injuredGamesRemaining);
+            if (pd.suspendedGamesRemaining > 0) p.restoreSuspension(pd.suspendedGamesRemaining);
             // Restore match stats
             p.restoreStats(pd.goals, pd.yellowCards, pd.appearances);
             // Restore initial overall (season-start snapshot)
@@ -359,6 +361,7 @@ public class GameSaveManager {
         String               positionName;
         Map<String, Integer> attributes;
         int                  injuredGamesRemaining;
+        int                  suspendedGamesRemaining;
         int                  goals;
         int                  yellowCards;
         int                  appearances;
