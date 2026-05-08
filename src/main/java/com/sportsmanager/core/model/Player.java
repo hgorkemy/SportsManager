@@ -65,6 +65,18 @@ public abstract class Player extends Person {
     public int getYellowCards() { return yellowCards; }
     public int getAppearances() { return appearances; }
 
+    /** Restores match statistics from a save file. */
+    public void restoreStats(int goals, int yellowCards, int appearances) {
+        this.goals       = goals;
+        this.yellowCards = yellowCards;
+        this.appearances = appearances;
+    }
+
+    /** Restores the season-start snapshot from a save file. */
+    public void restoreInitialOverall(int val) {
+        this.initialOverall = val;
+    }
+
 
     //Snapshots the current overall at game start
     public void snapshotInitialOverall() {

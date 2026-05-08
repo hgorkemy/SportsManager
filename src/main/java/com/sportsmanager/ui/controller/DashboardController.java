@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 
 import java.util.List;
 
@@ -133,14 +134,30 @@ public class DashboardController {
 
     @FXML
     private void onSave() {
-        try {
-            String fileName = GameSession.getInstance().getSaveName();
-            if (fileName == null || fileName.isBlank()) fileName = "quicksave";
-            GameSaveManager.save(fileName);
-            showInfo("Game Saved", "Save file: " + fileName + ".json");
-        } catch (Exception e) {
-            showError("Save Failed", e.getMessage());
+        GameSession session = GameSession.getInstance();
+
+        // Pre-fill with the existing save name (or a sensible default)
+        String currentName = session.getSaveName();
+        if (currentName == null || currentName.isBlank()) {
+            currentName = session.getUserTeam().getName() + " Save";
         }
+
+        TextInputDialog dialog = new TextInputDialog(currentName);
+        dialog.setTitle("Save Game");
+        dialog.setHeaderText("Choose a name for your save file");
+        dialog.setContentText("Save name:");
+
+        dialog.showAndWait().ifPresent(name -> {
+            name = name.strip();
+            if (name.isBlank()) return;
+            try {
+                GameSaveManager.save(name);
+                session.setSaveName(name);          // remember it for next quick-save
+                showInfo("Game Saved", "Saved as: " + name + ".json");
+            } catch (Exception e) {
+                showError("Save Failed", e.getMessage());
+            }
+        });
     }
 
     @FXML private void onMainMenu() {

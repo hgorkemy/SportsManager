@@ -3,13 +3,16 @@ package com.sportsmanager.ui.controller;
 import com.sportsmanager.SportsManagerApp;
 import com.sportsmanager.util.GameSaveManager;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
- * Shows existing save files and lets the user load one.
+ * Shows existing save files and lets the user load or delete them.
  *
  * Implemented by: Halil Görkem Yiğit
  */
@@ -20,11 +23,16 @@ public class SavesController {
 
     @FXML
     public void initialize() {
+        refreshList();
+    }
+
+    private void refreshList() {
         List<String> saves = GameSaveManager.listSaves();
         savesList.getItems().setAll(saves);
         if (saves.isEmpty()) {
-            lblStatus.setText("No save files found.");
-            lblStatus.setStyle("-fx-text-fill: #94a3b8;");
+            setStatus("No save files found.", false);
+        } else {
+            lblStatus.setText("");
         }
     }
 
@@ -32,19 +40,51 @@ public class SavesController {
     private void onLoad() {
         String selected = savesList.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            lblStatus.setText("Please select a save file first.");
+            setStatus("Please select a save file first.", true);
             return;
         }
         try {
             GameSaveManager.load(selected);
             SportsManagerApp.navigateTo("DashboardView");
         } catch (Exception e) {
-            lblStatus.setText("Load failed: " + e.getMessage());
+            setStatus("Load failed: " + e.getMessage(), true);
+        }
+    }
+
+    @FXML
+    private void onDelete() {
+        String selected = savesList.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            setStatus("Please select a save file to delete.", true);
+            return;
+        }
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Delete Save");
+        confirm.setHeaderText("Delete \"" + selected + "\"?");
+        confirm.setContentText("This cannot be undone.");
+
+        Optional<ButtonType> result = confirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                GameSaveManager.delete(selected);
+                refreshList();
+                setStatus("Deleted: " + selected, false);
+            } catch (Exception e) {
+                setStatus("Delete failed: " + e.getMessage(), true);
+            }
         }
     }
 
     @FXML
     private void onBack() {
         SportsManagerApp.navigateTo("SportSelectionView");
+    }
+
+    private void setStatus(String msg, boolean error) {
+        lblStatus.setText(msg);
+        lblStatus.setStyle(error
+                ? "-fx-text-fill: #f87171; -fx-font-size: 13px;"
+                : "-fx-text-fill: #4ade80; -fx-font-size: 13px;");
     }
 }
