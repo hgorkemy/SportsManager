@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.geometry.Insets?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
@@ -22,20 +23,34 @@
          -fx-font-weight: bold;"/>
         
         <HBox alignment="CENTER" spacing="32">
-            <Label fx:id="homeTeamLabel" text="Home" 
-                   style="-fx-font-size: 24px; 
-                   -fx-font-weight: bold; 
-                   -fx-text-fill: #f8fafc;" prefWidth="250" alignment="CENTER_RIGHT"/>
-            
-            <Label fx:id="scoreLabel" text="0 - 0" 
+
+            <!-- Home: logo solda, isim sağda -->
+            <HBox alignment="CENTER_RIGHT" spacing="12" prefWidth="250">
+                <ImageView fx:id="homeLogoView"
+                           fitWidth="52" fitHeight="52"
+                           preserveRatio="true" smooth="true"/>
+                <Label fx:id="homeTeamLabel" text="Home"
+                       style="-fx-font-size: 22px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #f8fafc;"/>
+            </HBox>
+
+            <Label fx:id="scoreLabel" text="0 - 0"
                    style="-fx-font-size: 48px;
-                   -fx-font-weight: bold; 
-                   -fx-text-fill: #fbbf24;"/>
-            
-            <Label fx:id="awayTeamLabel" text="Away" 
-                   style="-fx-font-size: 24px; 
-                   -fx-font-weight: bold; 
-                   -fx-text-fill: #f8fafc;" prefWidth="250" alignment="CENTER_LEFT"/>
+                          -fx-font-weight: bold;
+                          -fx-text-fill: #fbbf24;"/>
+
+            <!-- Away: isim solda, logo sağda -->
+            <HBox alignment="CENTER_LEFT" spacing="12" prefWidth="250">
+                <Label fx:id="awayTeamLabel" text="Away"
+                       style="-fx-font-size: 22px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #f8fafc;"/>
+                <ImageView fx:id="awayLogoView"
+                           fitWidth="52" fitHeight="52"
+                           preserveRatio="true" smooth="true"/>
+            </HBox>
+
         </HBox>
 
         <Label fx:id="periodLabel" text="Half 0 of 0" 
@@ -69,7 +84,8 @@
         <Label text="MATCH EVENTS" style="-fx-text-fill: #64748b; 
         -fx-font-size: 11px; 
         -fx-font-weight: bold;"/>
-        <ListView fx:id="eventLog" styleClass="list-view" VBox.vgrow="ALWAYS"/>
+        <ListView fx:id="eventLog" styleClass="list-view" VBox.vgrow="ALWAYS"
+                  style="-fx-background-color: #111827; -fx-background: #111827;"/>
     </VBox>
 
 </VBox>

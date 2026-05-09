@@ -40,6 +40,7 @@ public class SquadController {
     @FXML private VBox  attributeRows;
     @FXML private Label lblGoals;
     @FXML private Label lblYellowCards;
+    @FXML private Label lblRedCards;
     @FXML private Label lblAppearances;
     @FXML private Label lblInjury;
 
@@ -70,8 +71,11 @@ public class SquadController {
                 new SimpleObjectProperty<>(d.getValue().getAppearances()));
         colStatus.setCellValueFactory(d -> {
             Player p = d.getValue();
-            return new SimpleStringProperty(
-                    p.isInjured() ? "Injured (" + p.getInjuredGamesRemaining() + "g)" : "Fit");
+            if (p.isSuspended())
+                return new SimpleStringProperty("🟥 Suspended (" + p.getSuspendedGamesRemaining() + "g)");
+            if (p.isInjured())
+                return new SimpleStringProperty("🤕 Injured (" + p.getInjuredGamesRemaining() + "g)");
+            return new SimpleStringProperty("Fit");
         });
 
         squadTable.setItems(allPlayers);
@@ -118,6 +122,7 @@ public class SquadController {
             attributeRows.getChildren().clear();
             lblGoals.setText("");
             lblYellowCards.setText("");
+            lblRedCards.setText("");
             lblAppearances.setText("");
             lblInjury.setText("");
             return;
@@ -142,10 +147,14 @@ public class SquadController {
 
         lblGoals.setText("Goals:         " + player.getGoals());
         lblYellowCards.setText("Yellow Cards:  " + player.getYellowCards());
+        lblRedCards.setText("Red Cards:     " + player.getRedCards());
         lblAppearances.setText("Appearances:   " + player.getAppearances());
-        lblInjury.setText(player.isInjured()
-                ? "INJURED — out for " + player.getInjuredGamesRemaining() + " game(s)"
-                : "");
+        if (player.isSuspended())
+            lblInjury.setText("🟥 SUSPENDED — banned for " + player.getSuspendedGamesRemaining() + " game(s)");
+        else if (player.isInjured())
+            lblInjury.setText("INJURED — out for " + player.getInjuredGamesRemaining() + " game(s)");
+        else
+            lblInjury.setText("");
     }
 
     private String capitalize(String s) {

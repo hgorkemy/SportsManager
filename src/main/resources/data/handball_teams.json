@@ -1,33 +1,2244 @@
 {
   "teams": [
-    "THW Kiel", "Barcelona", "Paris SG", "Aalborg BK", "Veszprém HC",
-    "Montpellier HB", "SL Benfica", "Nantes HB", "Wisła Płock",
-    "Sporting CP", "Flensburg-H.", "Magdeburg", "Portimonense SC",
-    "Skjern HB", "GOG Gudme", "Frisch Auf Göppingen", "Rhein-Neckar Löwen",
-    "Chambéry SF", "Dinamo Bucharest", "RK Celje"
-  ],
-  "firstNames": [
-    "Mikkel", "Sander", "Nikola", "Dika", "Domagoj",
-    "Casper", "Lasse", "Patrick", "Ludovic", "Timothey",
-    "Jure", "Blaz", "Omar", "Aron", "Harald",
-    "Kevin", "Tobias", "Magnus", "Filip", "Petar",
-    "Rasmus", "Simon", "Andreas", "Mathias", "Jonas",
-    "Elias", "Felix", "Lukas", "Jan", "Erik"
-  ],
-  "lastNames": [
-    "Hansen", "Sagosen", "Karabatic", "Mem", "Duvnjak",
-    "Christophersen", "Svan", "Wiencek", "Fabregas", "N'Guessan",
-    "Dolenec", "Blagotinsek", "Magnusson", "Palmarsson", "Reinkind",
-    "Firnhaber", "Berggren", "Gullerud", "Nenadic", "Cindric",
-    "Lauge Schmidt", "Gidsel", "Landin", "Lindberg", "Toft Hansen",
-    "Jorgensen", "Weinhold", "Dissinger", "Golla", "Knorr"
-  ],
-  "coachFirstNames": [
-    "Alfred", "Carlos", "Xavier", "Dagur", "Talant",
-    "Filip", "Roberto", "Petr", "Marcus", "Ljubomir"
-  ],
-  "coachLastNames": [
-    "Gislason", "Ortega", "Pascual", "Sigurdsson", "Dujshebaev",
-    "Jicha", "Parrondo", "Stepan", "Baur", "Vranjes"
+    {
+      "name": "KAYA OĞUZ HC",
+      "tier": 1,
+      "coaches": [
+        {
+          "firstName": "Kaya",
+          "lastName": "Oğuz",
+          "age": 50,
+          "experience": 16,
+          "specialty": "Attack"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Alan",
+          "lastName": "Turing",
+          "age": 28,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Donald",
+          "lastName": "Knuth",
+          "age": 26,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Linus",
+          "lastName": "Torvalds",
+          "age": 31,
+          "position": "WING"
+        },
+        {
+          "firstName": "Dennis",
+          "lastName": "Ritchie",
+          "age": 29,
+          "position": "WING"
+        },
+        {
+          "firstName": "Tim",
+          "lastName": "Berners-Lee",
+          "age": 27,
+          "position": "WING"
+        },
+        {
+          "firstName": "Grace",
+          "lastName": "Hopper",
+          "age": 25,
+          "position": "WING"
+        },
+        {
+          "firstName": "Claude",
+          "lastName": "Shannon",
+          "age": 24,
+          "position": "BACK"
+        },
+        {
+          "firstName": "John",
+          "lastName": "von Neumann",
+          "age": 30,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Edsger",
+          "lastName": "Dijkstra",
+          "age": 26,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Ada",
+          "lastName": "Lovelace",
+          "age": 23,
+          "position": "BACK"
+        },
+        {
+          "firstName": "John",
+          "lastName": "McCarthy",
+          "age": 28,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Geoffrey",
+          "lastName": "Hinton",
+          "age": 32,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Vint",
+          "lastName": "Cerf",
+          "age": 27,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Bjarne",
+          "lastName": "Stroustrup",
+          "age": 25,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Guido",
+          "lastName": "van Rossum",
+          "age": 29,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Ken",
+          "lastName": "Thompson",
+          "age": 24,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/kaya_oguz_handball.png"
+    },
+    {
+      "name": "FC Barcelona",
+      "tier": 1,
+      "coaches": [
+        {
+          "firstName": "Carlos",
+          "lastName": "Ortega",
+          "age": 52,
+          "experience": 18,
+          "specialty": "Attack"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "John",
+          "lastName": "von Neumann",
+          "age": 25,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Claude",
+          "lastName": "Shannon",
+          "age": 28,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Alonzo",
+          "lastName": "Church",
+          "age": 23,
+          "position": "WING"
+        },
+        {
+          "firstName": "Kurt",
+          "lastName": "Gödel",
+          "age": 27,
+          "position": "WING"
+        },
+        {
+          "firstName": "Norbert",
+          "lastName": "Wiener",
+          "age": 29,
+          "position": "WING"
+        },
+        {
+          "firstName": "Ada",
+          "lastName": "Lovelace",
+          "age": 24,
+          "position": "WING"
+        },
+        {
+          "firstName": "Charles",
+          "lastName": "Babbage",
+          "age": 26,
+          "position": "BACK"
+        },
+        {
+          "firstName": "George",
+          "lastName": "Boole",
+          "age": 31,
+          "position": "BACK"
+        },
+        {
+          "firstName": "David",
+          "lastName": "Hilbert",
+          "age": 22,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Alan",
+          "lastName": "Turing Jr.",
+          "age": 30,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Dennis",
+          "lastName": "Ritchie",
+          "age": 33,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Brian",
+          "lastName": "Kernighan",
+          "age": 27,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Bjarne",
+          "lastName": "Stroustrup",
+          "age": 25,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "James",
+          "lastName": "Gosling",
+          "age": 32,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Guido",
+          "lastName": "van Rossum",
+          "age": 26,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Yukihiro",
+          "lastName": "Matsumoto",
+          "age": 28,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_15.png"
+    },
+    {
+      "name": "THW Kiel",
+      "tier": 1,
+      "coaches": [
+        {
+          "firstName": "Filip",
+          "lastName": "Jicha",
+          "age": 47,
+          "experience": 12,
+          "specialty": "Defense"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Anders",
+          "lastName": "Hejlsberg",
+          "age": 26,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Rasmus",
+          "lastName": "Lerdorf",
+          "age": 29,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Larry",
+          "lastName": "Wall",
+          "age": 24,
+          "position": "WING"
+        },
+        {
+          "firstName": "John",
+          "lastName": "Backus",
+          "age": 28,
+          "position": "WING"
+        },
+        {
+          "firstName": "Grace",
+          "lastName": "Hopper Jr.",
+          "age": 30,
+          "position": "WING"
+        },
+        {
+          "firstName": "Niklaus",
+          "lastName": "Wirth",
+          "age": 25,
+          "position": "WING"
+        },
+        {
+          "firstName": "Edsger",
+          "lastName": "W. Dijkstra",
+          "age": 27,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Tony",
+          "lastName": "Hoare",
+          "age": 32,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Robin",
+          "lastName": "Milner",
+          "age": 23,
+          "position": "BACK"
+        },
+        {
+          "firstName": "John",
+          "lastName": "McCarthy Jr.",
+          "age": 31,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Seymour",
+          "lastName": "Papert",
+          "age": 34,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Bertrand",
+          "lastName": "Meyer",
+          "age": 28,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Martin",
+          "lastName": "Odersky",
+          "age": 26,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Linus",
+          "lastName": "B. Torvalds",
+          "age": 33,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Richard",
+          "lastName": "Stallman",
+          "age": 27,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Bill",
+          "lastName": "Joy",
+          "age": 29,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_14.png"
+    },
+    {
+      "name": "SG Flensburg-Handewitt",
+      "tier": 2,
+      "coaches": [
+        {
+          "firstName": "Nicolej",
+          "lastName": "Krickau",
+          "age": 44,
+          "experience": 10,
+          "specialty": "Attack"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Andrew",
+          "lastName": "Tanenbaum",
+          "age": 24,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Fred",
+          "lastName": "Brooks",
+          "age": 27,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Butler",
+          "lastName": "Lampson",
+          "age": 22,
+          "position": "WING"
+        },
+        {
+          "firstName": "Gordon",
+          "lastName": "Bell",
+          "age": 26,
+          "position": "WING"
+        },
+        {
+          "firstName": "David",
+          "lastName": "Patterson",
+          "age": 28,
+          "position": "WING"
+        },
+        {
+          "firstName": "John",
+          "lastName": "Hennessy",
+          "age": 23,
+          "position": "WING"
+        },
+        {
+          "firstName": "Maurice",
+          "lastName": "Wilkes",
+          "age": 25,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Geoffrey",
+          "lastName": "E. Hinton",
+          "age": 30,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Yann",
+          "lastName": "LeCun",
+          "age": 21,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Yoshua",
+          "lastName": "Bengio",
+          "age": 29,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Marvin",
+          "lastName": "Minsky",
+          "age": 32,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Herbert",
+          "lastName": "Simon",
+          "age": 26,
+          "position": "BACK"
+        },
+        {
+          "firstName": "John",
+          "lastName": "Holland",
+          "age": 24,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Judea",
+          "lastName": "Pearl",
+          "age": 31,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Stuart",
+          "lastName": "Russell",
+          "age": 25,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Peter",
+          "lastName": "Norvig",
+          "age": 27,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_05.png"
+    },
+    {
+      "name": "Paris Saint-Germain",
+      "tier": 1,
+      "coaches": [
+        {
+          "firstName": "Raúl",
+          "lastName": "González",
+          "age": 49,
+          "experience": 14,
+          "specialty": "Goalkeeping"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Andrew",
+          "lastName": "Ng",
+          "age": 25,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Fei-Fei",
+          "lastName": "Li",
+          "age": 28,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Demis",
+          "lastName": "Hassabis",
+          "age": 23,
+          "position": "WING"
+        },
+        {
+          "firstName": "Ian",
+          "lastName": "Goodfellow",
+          "age": 27,
+          "position": "WING"
+        },
+        {
+          "firstName": "Ilya",
+          "lastName": "Sutskever",
+          "age": 29,
+          "position": "WING"
+        },
+        {
+          "firstName": "Jürgen",
+          "lastName": "Schmidhuber",
+          "age": 24,
+          "position": "WING"
+        },
+        {
+          "firstName": "Vladimir",
+          "lastName": "Vapnik",
+          "age": 26,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Leslie",
+          "lastName": "Valiant",
+          "age": 31,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Michael",
+          "lastName": "Jordan",
+          "age": 22,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Bernhard",
+          "lastName": "Schölkopf",
+          "age": 30,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Yejin",
+          "lastName": "Choi",
+          "age": 33,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Donald",
+          "lastName": "E. Knuth",
+          "age": 27,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Robert",
+          "lastName": "Tarjan",
+          "age": 25,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Michael",
+          "lastName": "Rabin",
+          "age": 32,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Dana",
+          "lastName": "Scott",
+          "age": 26,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Richard",
+          "lastName": "Karp",
+          "age": 28,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_10.png"
+    },
+    {
+      "name": "Veszprém KSE",
+      "tier": 1,
+      "coaches": [
+        {
+          "firstName": "Momir",
+          "lastName": "Ilić",
+          "age": 55,
+          "experience": 20,
+          "specialty": "Fitness"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Stephen",
+          "lastName": "Cook",
+          "age": 26,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Christos",
+          "lastName": "Papadimitriou",
+          "age": 29,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Avi",
+          "lastName": "Wigderson",
+          "age": 24,
+          "position": "WING"
+        },
+        {
+          "firstName": "Shafi",
+          "lastName": "Goldwasser",
+          "age": 28,
+          "position": "WING"
+        },
+        {
+          "firstName": "Silvio",
+          "lastName": "Micali",
+          "age": 30,
+          "position": "WING"
+        },
+        {
+          "firstName": "Manuel",
+          "lastName": "Blum",
+          "age": 25,
+          "position": "WING"
+        },
+        {
+          "firstName": "Leonard",
+          "lastName": "Adleman",
+          "age": 27,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Ronald",
+          "lastName": "Rivest",
+          "age": 32,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Adi",
+          "lastName": "Shamir",
+          "age": 23,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Whitfield",
+          "lastName": "Diffie",
+          "age": 31,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Martin",
+          "lastName": "Hellman",
+          "age": 34,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Ralph",
+          "lastName": "Merkle",
+          "age": 28,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Peter",
+          "lastName": "Shor",
+          "age": 26,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Lov",
+          "lastName": "Grover",
+          "age": 33,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Scott",
+          "lastName": "Aaronson",
+          "age": 27,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Edgar F.",
+          "lastName": "Codd",
+          "age": 29,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_06.png"
+    },
+    {
+      "name": "Montpellier HB",
+      "tier": 2,
+      "coaches": [
+        {
+          "firstName": "Patrice",
+          "lastName": "Canayer",
+          "age": 61,
+          "experience": 22,
+          "specialty": "Defense"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Michael",
+          "lastName": "Stonebraker",
+          "age": 24,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Jim",
+          "lastName": "Gray",
+          "age": 27,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "C.J.",
+          "lastName": "Date",
+          "age": 22,
+          "position": "WING"
+        },
+        {
+          "firstName": "David",
+          "lastName": "DeWitt",
+          "age": 26,
+          "position": "WING"
+        },
+        {
+          "firstName": "Hector",
+          "lastName": "Garcia-Molina",
+          "age": 28,
+          "position": "WING"
+        },
+        {
+          "firstName": "Jeffrey",
+          "lastName": "Ullman",
+          "age": 23,
+          "position": "WING"
+        },
+        {
+          "firstName": "Raghu",
+          "lastName": "Ramakrishnan",
+          "age": 25,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Joseph",
+          "lastName": "Hellerstein",
+          "age": 30,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Moshe",
+          "lastName": "Vardi",
+          "age": 21,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Vint",
+          "lastName": "E. Cerf",
+          "age": 29,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Bob",
+          "lastName": "Kahn",
+          "age": 32,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Tim",
+          "lastName": "Berners-Lee Jr.",
+          "age": 26,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Marc",
+          "lastName": "Andreessen",
+          "age": 24,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Jon",
+          "lastName": "Postel",
+          "age": 31,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "David",
+          "lastName": "Clark",
+          "age": 25,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Leonard",
+          "lastName": "Kleinrock",
+          "age": 27,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_16.png"
+    },
+    {
+      "name": "Füchse Berlin",
+      "tier": 2,
+      "coaches": [
+        {
+          "firstName": "Jaron",
+          "lastName": "Siewert",
+          "age": 41,
+          "experience": 8,
+          "specialty": "Attack"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Paul",
+          "lastName": "Baran",
+          "age": 25,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Donald",
+          "lastName": "Davies",
+          "age": 28,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Larry",
+          "lastName": "Roberts",
+          "age": 23,
+          "position": "WING"
+        },
+        {
+          "firstName": "Ivan",
+          "lastName": "Sutherland",
+          "age": 27,
+          "position": "WING"
+        },
+        {
+          "firstName": "Jim",
+          "lastName": "Clark",
+          "age": 29,
+          "position": "WING"
+        },
+        {
+          "firstName": "Ed",
+          "lastName": "Catmull",
+          "age": 24,
+          "position": "WING"
+        },
+        {
+          "firstName": "Pat",
+          "lastName": "Hanrahan",
+          "age": 26,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Alvy Ray",
+          "lastName": "Smith",
+          "age": 31,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Turner",
+          "lastName": "Whitted",
+          "age": 22,
+          "position": "BACK"
+        },
+        {
+          "firstName": "James",
+          "lastName": "Blinn",
+          "age": 30,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Bui Tuong",
+          "lastName": "Phong",
+          "age": 33,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Henri",
+          "lastName": "Gouraud",
+          "age": 27,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Lance",
+          "lastName": "Williams",
+          "age": 25,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Douglas",
+          "lastName": "Engelbart",
+          "age": 32,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Alan",
+          "lastName": "Kay",
+          "age": 26,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Ben",
+          "lastName": "Shneiderman",
+          "age": 28,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_18.png"
+    },
+    {
+      "name": "SC Magdeburg",
+      "tier": 1,
+      "coaches": [
+        {
+          "firstName": "Bennet",
+          "lastName": "Wiegert",
+          "age": 42,
+          "experience": 9,
+          "specialty": "Fitness"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Don",
+          "lastName": "Norman",
+          "age": 26,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Jef",
+          "lastName": "Raskin",
+          "age": 29,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Bill",
+          "lastName": "Buxton",
+          "age": 24,
+          "position": "WING"
+        },
+        {
+          "firstName": "Stu",
+          "lastName": "Card",
+          "age": 28,
+          "position": "WING"
+        },
+        {
+          "firstName": "George",
+          "lastName": "Fitzmaurice",
+          "age": 30,
+          "position": "WING"
+        },
+        {
+          "firstName": "Andy",
+          "lastName": "van Dam",
+          "age": 25,
+          "position": "WING"
+        },
+        {
+          "firstName": "Ted",
+          "lastName": "Nelson",
+          "age": 27,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Bruce",
+          "lastName": "Schneier",
+          "age": 32,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Clifford",
+          "lastName": "Cocks",
+          "age": 23,
+          "position": "BACK"
+        },
+        {
+          "firstName": "James",
+          "lastName": "Ellis",
+          "age": 31,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Phil",
+          "lastName": "Zimmermann",
+          "age": 34,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Ross",
+          "lastName": "Anderson",
+          "age": 28,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Dan",
+          "lastName": "Boneh",
+          "age": 26,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Taher",
+          "lastName": "Elgamal",
+          "age": 33,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Neal",
+          "lastName": "Koblitz",
+          "age": 27,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Victor",
+          "lastName": "Miller",
+          "age": 29,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_07.png"
+    },
+    {
+      "name": "Sporting CP",
+      "tier": 2,
+      "coaches": [
+        {
+          "firstName": "Hugo",
+          "lastName": "Canela",
+          "age": 48,
+          "experience": 13,
+          "specialty": "Defense"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Mihir",
+          "lastName": "Bellare",
+          "age": 24,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Alfred",
+          "lastName": "Aho",
+          "age": 27,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Ravi",
+          "lastName": "Sethi",
+          "age": 22,
+          "position": "WING"
+        },
+        {
+          "firstName": "Monica",
+          "lastName": "Lam",
+          "age": 26,
+          "position": "WING"
+        },
+        {
+          "firstName": "Noam",
+          "lastName": "Chomsky",
+          "age": 28,
+          "position": "WING"
+        },
+        {
+          "firstName": "Stephen",
+          "lastName": "Kleene",
+          "age": 23,
+          "position": "WING"
+        },
+        {
+          "firstName": "Michael",
+          "lastName": "Scott",
+          "age": 25,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Andrew",
+          "lastName": "Appel",
+          "age": 30,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Zhong",
+          "lastName": "Shao",
+          "age": 21,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Xavier",
+          "lastName": "Leroy",
+          "age": 29,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Simon Peyton",
+          "lastName": "Jones",
+          "age": 32,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Barry",
+          "lastName": "Boehm",
+          "age": 26,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Gerald",
+          "lastName": "Weinberg",
+          "age": 24,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Tom",
+          "lastName": "DeMarco",
+          "age": 31,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Ed",
+          "lastName": "Yourdon",
+          "age": 25,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Kent",
+          "lastName": "Beck",
+          "age": 27,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_13.png"
+    },
+    {
+      "name": "Dinamo Bucharest",
+      "tier": 3,
+      "coaches": [
+        {
+          "firstName": "Xavi",
+          "lastName": "Pascual",
+          "age": 53,
+          "experience": 17,
+          "specialty": "Attack"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Martin",
+          "lastName": "Fowler",
+          "age": 25,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Grady",
+          "lastName": "Booch",
+          "age": 28,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Ivar",
+          "lastName": "Jacobson",
+          "age": 23,
+          "position": "WING"
+        },
+        {
+          "firstName": "James",
+          "lastName": "Rumbaugh",
+          "age": 27,
+          "position": "WING"
+        },
+        {
+          "firstName": "Robert C.",
+          "lastName": "Martin",
+          "age": 29,
+          "position": "WING"
+        },
+        {
+          "firstName": "Gordon",
+          "lastName": "Moore",
+          "age": 24,
+          "position": "WING"
+        },
+        {
+          "firstName": "Robert",
+          "lastName": "Noyce",
+          "age": 26,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Jack",
+          "lastName": "Kilby",
+          "age": 31,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Federico",
+          "lastName": "Faggin",
+          "age": 22,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Ted",
+          "lastName": "Hoff",
+          "age": 30,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Seymour",
+          "lastName": "Cray",
+          "age": 33,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Gene",
+          "lastName": "Amdahl",
+          "age": 27,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Carver",
+          "lastName": "Mead",
+          "age": 25,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Lynn",
+          "lastName": "Conway",
+          "age": 32,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Chuck",
+          "lastName": "Thacker",
+          "age": 26,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Leslie",
+          "lastName": "Lamport",
+          "age": 28,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_17.png"
+    },
+    {
+      "name": "Vardar Skopje",
+      "tier": 2,
+      "coaches": [
+        {
+          "firstName": "Veselin",
+          "lastName": "Vujović",
+          "age": 60,
+          "experience": 21,
+          "specialty": "Goalkeeping"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Barbara",
+          "lastName": "Liskov",
+          "age": 26,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Nancy",
+          "lastName": "Lynch",
+          "age": 29,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Michael",
+          "lastName": "Fischer",
+          "age": 24,
+          "position": "WING"
+        },
+        {
+          "firstName": "Hal",
+          "lastName": "Abelson",
+          "age": 28,
+          "position": "WING"
+        },
+        {
+          "firstName": "Gerald Jay",
+          "lastName": "Sussman",
+          "age": 30,
+          "position": "WING"
+        },
+        {
+          "firstName": "Guy",
+          "lastName": "Steele",
+          "age": 25,
+          "position": "WING"
+        },
+        {
+          "firstName": "Philip",
+          "lastName": "Wadler",
+          "age": 27,
+          "position": "BACK"
+        },
+        {
+          "firstName": "John",
+          "lastName": "Hughes",
+          "age": 32,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Simon",
+          "lastName": "Marlow",
+          "age": 23,
+          "position": "BACK"
+        },
+        {
+          "firstName": "David",
+          "lastName": "Deutsch",
+          "age": 31,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Charles",
+          "lastName": "Bennett",
+          "age": 34,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Gilles",
+          "lastName": "Brassard",
+          "age": 28,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Peter",
+          "lastName": "Shor Jr.",
+          "age": 26,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Michael",
+          "lastName": "Nielsen",
+          "age": 33,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Isaac",
+          "lastName": "Chuang",
+          "age": 27,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "John",
+          "lastName": "Preskill",
+          "age": 29,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_11.png"
+    },
+    {
+      "name": "Motor Zaporozhye",
+      "tier": 3,
+      "coaches": [
+        {
+          "firstName": "Volodymyr",
+          "lastName": "Maksymov",
+          "age": 56,
+          "experience": 16,
+          "specialty": "Fitness"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Seth",
+          "lastName": "Lloyd",
+          "age": 24,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Dorit",
+          "lastName": "Aharonov",
+          "age": 27,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Umesh",
+          "lastName": "Vazirani",
+          "age": 22,
+          "position": "WING"
+        },
+        {
+          "firstName": "Tom",
+          "lastName": "Mitchell",
+          "age": 26,
+          "position": "WING"
+        },
+        {
+          "firstName": "Leon",
+          "lastName": "Bottou",
+          "age": 28,
+          "position": "WING"
+        },
+        {
+          "firstName": "Zoubin",
+          "lastName": "Ghahramani",
+          "age": 23,
+          "position": "WING"
+        },
+        {
+          "firstName": "Max",
+          "lastName": "Welling",
+          "age": 25,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Nir",
+          "lastName": "Friedman",
+          "age": 30,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Daphne",
+          "lastName": "Koller",
+          "age": 21,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Sam",
+          "lastName": "Roweis",
+          "age": 29,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Lawrence",
+          "lastName": "Saul",
+          "age": 32,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Pieter",
+          "lastName": "Abbeel",
+          "age": 26,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Finale",
+          "lastName": "Doshi-Velez",
+          "age": 24,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "David",
+          "lastName": "Haussler",
+          "age": 31,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Michael",
+          "lastName": "Waterman",
+          "age": 25,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Gene",
+          "lastName": "Myers",
+          "age": 27,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_02.png"
+    },
+    {
+      "name": "Telekom Veszprém",
+      "tier": 3,
+      "coaches": [
+        {
+          "firstName": "David",
+          "lastName": "Davis",
+          "age": 45,
+          "experience": 11,
+          "specialty": "Defense"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Pavel",
+          "lastName": "Pevzner",
+          "age": 25,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Serafim",
+          "lastName": "Batzoglou",
+          "age": 28,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Eran",
+          "lastName": "Segal",
+          "age": 23,
+          "position": "WING"
+        },
+        {
+          "firstName": "Bonnie",
+          "lastName": "Berger",
+          "age": 27,
+          "position": "WING"
+        },
+        {
+          "firstName": "Ron",
+          "lastName": "Shamir",
+          "age": 29,
+          "position": "WING"
+        },
+        {
+          "firstName": "Lior",
+          "lastName": "Pachter",
+          "age": 24,
+          "position": "WING"
+        },
+        {
+          "firstName": "Steven",
+          "lastName": "Salzberg",
+          "age": 26,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Rodney",
+          "lastName": "Brooks",
+          "age": 31,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Sebastian",
+          "lastName": "Thrun",
+          "age": 22,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Russ",
+          "lastName": "Tedrake",
+          "age": 30,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Marc",
+          "lastName": "Raibert",
+          "age": 33,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Oussama",
+          "lastName": "Khatib",
+          "age": 27,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Bruno",
+          "lastName": "Siciliano",
+          "age": 25,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Matthew",
+          "lastName": "Mason",
+          "age": 32,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Michael",
+          "lastName": "Erdmann",
+          "age": 26,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Howie",
+          "lastName": "Choset",
+          "age": 28,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_12.png"
+    },
+    {
+      "name": "Pick Szeged",
+      "tier": 2,
+      "coaches": [
+        {
+          "firstName": "Juan Carlos",
+          "lastName": "Pastor",
+          "age": 58,
+          "experience": 19,
+          "specialty": "Attack"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Daniela",
+          "lastName": "Rus",
+          "age": 26,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Christopher",
+          "lastName": "Manning",
+          "age": 29,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Dan",
+          "lastName": "Jurafsky",
+          "age": 24,
+          "position": "WING"
+        },
+        {
+          "firstName": "Noah",
+          "lastName": "Smith",
+          "age": 28,
+          "position": "WING"
+        },
+        {
+          "firstName": "Michael",
+          "lastName": "Collins",
+          "age": 30,
+          "position": "WING"
+        },
+        {
+          "firstName": "Jason",
+          "lastName": "Eisner",
+          "age": 25,
+          "position": "WING"
+        },
+        {
+          "firstName": "Rada",
+          "lastName": "Mihalcea",
+          "age": 27,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Lillian",
+          "lastName": "Lee",
+          "age": 32,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Regina",
+          "lastName": "Barzilay",
+          "age": 23,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Ellen",
+          "lastName": "Riloff",
+          "age": 31,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Mirella",
+          "lastName": "Lapata",
+          "age": 34,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Gordon",
+          "lastName": "Plotkin",
+          "age": 28,
+          "position": "BACK"
+        },
+        {
+          "firstName": "John",
+          "lastName": "Reynolds",
+          "age": 26,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Luca",
+          "lastName": "Cardelli",
+          "age": 33,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Pierce",
+          "lastName": "Benjamin",
+          "age": 27,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Matthias",
+          "lastName": "Felleisen",
+          "age": 29,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_03.png"
+    },
+    {
+      "name": "Aalborg Håndbold",
+      "tier": 2,
+      "coaches": [
+        {
+          "firstName": "Stefan",
+          "lastName": "Madsen",
+          "age": 43,
+          "experience": 9,
+          "specialty": "Fitness"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Olivier",
+          "lastName": "Danvy",
+          "age": 24,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Amr",
+          "lastName": "Sabry",
+          "age": 27,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Robert",
+          "lastName": "Harper",
+          "age": 22,
+          "position": "WING"
+        },
+        {
+          "firstName": "Frank",
+          "lastName": "Pfenning",
+          "age": 26,
+          "position": "WING"
+        },
+        {
+          "firstName": "Rakesh",
+          "lastName": "Agrawal",
+          "age": 28,
+          "position": "WING"
+        },
+        {
+          "firstName": "Ramakrishnan",
+          "lastName": "Srikant",
+          "age": 23,
+          "position": "WING"
+        },
+        {
+          "firstName": "Jiawei",
+          "lastName": "Han",
+          "age": 25,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Micheline",
+          "lastName": "Kamber",
+          "age": 30,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Usama",
+          "lastName": "Fayyad",
+          "age": 21,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Gregory",
+          "lastName": "Piatetsky",
+          "age": 29,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Pedro",
+          "lastName": "Domingos",
+          "age": 32,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Foster",
+          "lastName": "Provost",
+          "age": 26,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Tom",
+          "lastName": "Fawcett",
+          "age": 24,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Padhraic",
+          "lastName": "Smyth",
+          "age": 31,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "David",
+          "lastName": "Marr",
+          "age": 25,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Tomaso",
+          "lastName": "Poggio",
+          "age": 27,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_19.png"
+    },
+    {
+      "name": "Rhein-Neckar Löwen",
+      "tier": 3,
+      "coaches": [
+        {
+          "firstName": "Sebastian",
+          "lastName": "Hinze",
+          "age": 40,
+          "experience": 7,
+          "specialty": "Goalkeeping"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Takeo",
+          "lastName": "Kanade",
+          "age": 25,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Jitendra",
+          "lastName": "Malik",
+          "age": 28,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Pietro",
+          "lastName": "Perona",
+          "age": 23,
+          "position": "WING"
+        },
+        {
+          "firstName": "David",
+          "lastName": "Lowe",
+          "age": 27,
+          "position": "WING"
+        },
+        {
+          "firstName": "Cordelia",
+          "lastName": "Schmid",
+          "age": 29,
+          "position": "WING"
+        },
+        {
+          "firstName": "Bill",
+          "lastName": "Freeman",
+          "age": 24,
+          "position": "WING"
+        },
+        {
+          "firstName": "Antonio",
+          "lastName": "Torralba",
+          "age": 26,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Alexei",
+          "lastName": "Efros",
+          "age": 31,
+          "position": "BACK"
+        },
+        {
+          "firstName": "George",
+          "lastName": "Dyson",
+          "age": 22,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Martin",
+          "lastName": "Davis",
+          "age": 30,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Stephen",
+          "lastName": "Wolfram",
+          "age": 33,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Gregory",
+          "lastName": "Chaitin",
+          "age": 27,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Ray",
+          "lastName": "Solomonoff",
+          "age": 25,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Andrey",
+          "lastName": "Kolmogorov",
+          "age": 32,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Per",
+          "lastName": "Martin-Löf",
+          "age": 26,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Errett",
+          "lastName": "Bishop",
+          "age": 28,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_08.png"
+    },
+    {
+      "name": "Industria Kielce",
+      "tier": 2,
+      "coaches": [
+        {
+          "firstName": "Talant",
+          "lastName": "Dujshebaev",
+          "age": 59,
+          "experience": 20,
+          "specialty": "Defense"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Paul",
+          "lastName": "Halmos",
+          "age": 26,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Solomon",
+          "lastName": "Feferman",
+          "age": 29,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Noam",
+          "lastName": "Nisan",
+          "age": 24,
+          "position": "WING"
+        },
+        {
+          "firstName": "Tim",
+          "lastName": "Roughgarden",
+          "age": 28,
+          "position": "WING"
+        },
+        {
+          "firstName": "Vijay",
+          "lastName": "Vazirani",
+          "age": 30,
+          "position": "WING"
+        },
+        {
+          "firstName": "Costis",
+          "lastName": "Daskalakis",
+          "age": 25,
+          "position": "WING"
+        },
+        {
+          "firstName": "Ariel",
+          "lastName": "Rubinstein",
+          "age": 27,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Yoav",
+          "lastName": "Shoham",
+          "age": 32,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Michael",
+          "lastName": "Kearns",
+          "age": 23,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Avrim",
+          "lastName": "Blum",
+          "age": 31,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Guy",
+          "lastName": "Blelloch",
+          "age": 34,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Charles",
+          "lastName": "Leiserson",
+          "age": 28,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Tom",
+          "lastName": "Leighton",
+          "age": 26,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Bruce",
+          "lastName": "Maggs",
+          "age": 33,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Satish",
+          "lastName": "Rao",
+          "age": 27,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Phillip",
+          "lastName": "Gibbons",
+          "age": 29,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_09.png"
+    },
+    {
+      "name": "HBC Nantes",
+      "tier": 3,
+      "coaches": [
+        {
+          "firstName": "Dominique",
+          "lastName": "Mahé",
+          "age": 54,
+          "experience": 15,
+          "specialty": "Attack"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "John",
+          "lastName": "Gilbert",
+          "age": 24,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Gary",
+          "lastName": "Miller",
+          "age": 27,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Richard",
+          "lastName": "Cole",
+          "age": 22,
+          "position": "WING"
+        },
+        {
+          "firstName": "Uzi",
+          "lastName": "Vishkin",
+          "age": 26,
+          "position": "WING"
+        },
+        {
+          "firstName": "Edmund",
+          "lastName": "Clarke",
+          "age": 28,
+          "position": "WING"
+        },
+        {
+          "firstName": "Allen",
+          "lastName": "Emerson",
+          "age": 23,
+          "position": "WING"
+        },
+        {
+          "firstName": "Joseph",
+          "lastName": "Sifakis",
+          "age": 25,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Amir",
+          "lastName": "Pnueli",
+          "age": 30,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Robert",
+          "lastName": "Floyd",
+          "age": 21,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Rustan",
+          "lastName": "Leino",
+          "age": 29,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Greg",
+          "lastName": "Morrisett",
+          "age": 32,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Xavier",
+          "lastName": "Rival",
+          "age": 26,
+          "position": "BACK"
+        },
+        {
+          "firstName": "David",
+          "lastName": "Harel",
+          "age": 24,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Clifford",
+          "lastName": "Neuman",
+          "age": 31,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Gene",
+          "lastName": "Tsudik",
+          "age": 25,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Angelos",
+          "lastName": "Keromytis",
+          "age": 27,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_01.png"
+    },
+    {
+      "name": "Elverum Handball",
+      "tier": 3,
+      "coaches": [
+        {
+          "firstName": "Christian",
+          "lastName": "Berge",
+          "age": 46,
+          "experience": 12,
+          "specialty": "Fitness"
+        }
+      ],
+      "players": [
+        {
+          "firstName": "Stefan",
+          "lastName": "Savage",
+          "age": 25,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Vern",
+          "lastName": "Paxson",
+          "age": 28,
+          "position": "GOALKEEPER"
+        },
+        {
+          "firstName": "Nick",
+          "lastName": "Feamster",
+          "age": 23,
+          "position": "WING"
+        },
+        {
+          "firstName": "Jennifer",
+          "lastName": "Rexford",
+          "age": 27,
+          "position": "WING"
+        },
+        {
+          "firstName": "Hari",
+          "lastName": "Balakrishnan",
+          "age": 29,
+          "position": "WING"
+        },
+        {
+          "firstName": "Ion",
+          "lastName": "Stoica",
+          "age": 24,
+          "position": "WING"
+        },
+        {
+          "firstName": "Scott",
+          "lastName": "Shenker",
+          "age": 26,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Jon",
+          "lastName": "Kleinberg",
+          "age": 31,
+          "position": "BACK"
+        },
+        {
+          "firstName": "David",
+          "lastName": "Easley",
+          "age": 22,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Lada",
+          "lastName": "Adamic",
+          "age": 30,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Bernardo",
+          "lastName": "Huberman",
+          "age": 33,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Duncan",
+          "lastName": "Watts",
+          "age": 27,
+          "position": "BACK"
+        },
+        {
+          "firstName": "Albert-László",
+          "lastName": "Barabási",
+          "age": 25,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Mark",
+          "lastName": "Newman",
+          "age": 32,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Santo",
+          "lastName": "Fortunato",
+          "age": 26,
+          "position": "PIVOT"
+        },
+        {
+          "firstName": "Jennifer",
+          "lastName": "Chayes",
+          "age": 28,
+          "position": "PIVOT"
+        }
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_04.png"
+    }
   ]
 }

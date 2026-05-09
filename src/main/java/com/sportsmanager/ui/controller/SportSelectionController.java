@@ -5,10 +5,12 @@ import com.sportsmanager.core.model.GameSession;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.HBox;
@@ -152,7 +154,148 @@ public class SportSelectionController {
             rightClickLabel.setOpacity(onLeft ? 0.0 : 1.0);
         });
 
-        rootPane.getChildren().addAll(container, dividerLine, appTitle, overlay);
+        // ── Help button — top-right corner ───────────────────────────────────
+        Button helpBtn = new Button("?");
+        helpBtn.setStyle(
+            "-fx-background-color: rgba(255,255,255,0.12);" +
+            "-fx-text-fill: #e2e8f0;" +
+            "-fx-font-size: 22px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-background-radius: 50%;" +
+            "-fx-min-width: 48px; -fx-min-height: 48px;" +
+            "-fx-max-width: 48px; -fx-max-height: 48px;" +
+            "-fx-cursor: hand;");
+        helpBtn.setOnMouseEntered(e -> helpBtn.setStyle(helpBtn.getStyle()
+            .replace("rgba(255,255,255,0.12)", "rgba(255,255,255,0.25)")));
+        helpBtn.setOnMouseExited(e -> helpBtn.setStyle(helpBtn.getStyle()
+            .replace("rgba(255,255,255,0.25)", "rgba(255,255,255,0.12)")));
+        StackPane.setAlignment(helpBtn, Pos.TOP_RIGHT);
+        StackPane.setMargin(helpBtn, new Insets(16, 16, 0, 0));
+
+        // ── Help overlay ──────────────────────────────────────────────────────
+        StackPane helpOverlay = buildHelpOverlay();
+        helpBtn.setOnAction(e -> {
+            if (!helpOverlay.isVisible()) {
+                helpOverlay.setOpacity(0);
+                helpOverlay.setVisible(true);
+                FadeTransition ft = new FadeTransition(javafx.util.Duration.millis(200), helpOverlay);
+                ft.setFromValue(0); ft.setToValue(1); ft.play();
+            }
+        });
+
+        rootPane.getChildren().addAll(container, dividerLine, appTitle, overlay, helpOverlay, helpBtn);
+    }
+
+    // ── Help overlay builder ──────────────────────────────────────────────────
+
+    private StackPane buildHelpOverlay() {
+        StackPane pane = new StackPane();
+        pane.setVisible(false);
+        pane.setStyle("-fx-background-color: rgba(0,0,0,0.78);");
+        pane.prefWidthProperty().bind(rootPane.widthProperty());
+        pane.prefHeightProperty().bind(rootPane.heightProperty());
+
+        // Card
+        VBox card = new VBox(20);
+        card.setAlignment(Pos.TOP_CENTER);
+        card.setMaxWidth(620);
+        card.setMaxHeight(500);
+        card.setStyle(
+            "-fx-background-color: #0f172a;" +
+            "-fx-background-radius: 18;" +
+            "-fx-border-color: #334155;" +
+            "-fx-border-radius: 18;" +
+            "-fx-border-width: 1.5;" +
+            "-fx-padding: 32 36;");
+
+        Label title = new Label("How to Play");
+        title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;");
+
+        // Two-column guide
+        HBox cols = new HBox(24);
+        cols.setAlignment(Pos.TOP_CENTER);
+        cols.getChildren().addAll(
+            buildSportGuide("FOOTBALL", "#4ade80", "#052e16",
+                new String[]{
+                    "11 players per side",
+                    "2 x 45-minute halves",
+                    "Score more goals to win",
+                    "Yellow card = warning",
+                    "Red card = sent off (10 men)",
+                    "  2nd yellow = automatic red",
+                    "Injured → sub before 2nd half",
+                    "Penalty kicks (5% per half)",
+                    "",
+                    "MANAGE YOUR CLUB",
+                    "• Pick your lineup & formation",
+                    "• Change tactics at half-time",
+                    "• Train players to boost stats",
+                    "• Survive the full league season"
+                }),
+            buildSportGuide("HANDBALL", "#fb923c", "#431407",
+                new String[]{
+                    "7 players per side (6 + GK)",
+                    "2 x 30-minute halves",
+                    "Score more goals to win",
+                    "Yellow card = warning only",
+                    "2-min suspension = temp off",
+                    "  Player returns after 2 mins",
+                    "Injured → sub before 2nd half",
+                    "7-metre throws (penalty equiv.)",
+                    "",
+                    "MANAGE YOUR CLUB",
+                    "• Pick your lineup (GK mandatory)",
+                    "• Change tactics at half-time",
+                    "• Train players to boost stats",
+                    "• Survive the full league season"
+                })
+        );
+
+        ScrollPane scroll = new ScrollPane(cols);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        VBox.setVgrow(scroll, Priority.ALWAYS);
+
+        Button closeBtn = new Button("Close");
+        closeBtn.setStyle(
+            "-fx-background-color: #1e293b; -fx-text-fill: #94a3b8;" +
+            "-fx-font-size: 13px; -fx-background-radius: 8;" +
+            "-fx-padding: 8 24; -fx-cursor: hand;");
+        closeBtn.setOnAction(e -> pane.setVisible(false));
+
+        card.getChildren().addAll(title, scroll, closeBtn);
+        pane.getChildren().add(card);
+        return pane;
+    }
+
+    private VBox buildSportGuide(String header, String accent, String headerBg, String[] lines) {
+        VBox box = new VBox(8);
+        box.setPrefWidth(250);
+        box.setStyle(
+            "-fx-background-color: " + headerBg + "80;" +
+            "-fx-background-radius: 12;" +
+            "-fx-border-color: " + accent + "55;" +
+            "-fx-border-radius: 12;" +
+            "-fx-padding: 18 16;");
+
+        Label hdr = new Label(header);
+        hdr.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: " + accent + ";");
+        box.getChildren().add(hdr);
+
+        Label sep = new Label("─────────────────");
+        sep.setStyle("-fx-text-fill: #334155; -fx-font-size: 10px;");
+        box.getChildren().add(sep);
+
+        for (String line : lines) {
+            Label lbl = new Label(line);
+            lbl.setWrapText(true);
+            lbl.setStyle(line.isEmpty()
+                ? "-fx-font-size: 6px;"
+                : "-fx-font-size: 12.5px; -fx-text-fill: #cbd5e1;");
+            box.getChildren().add(lbl);
+        }
+        return box;
     }
 
     // ── Animation ─────────────────────────────────────────────────────────────

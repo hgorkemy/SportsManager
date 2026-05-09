@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.geometry.Insets?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
@@ -25,8 +26,11 @@
         <VBox spacing="6" prefWidth="260"
               style="-fx-padding: 18; -fx-background-color: #1e293b; -fx-background-radius: 10; -fx-border-color: #334155; -fx-border-radius: 10;">
             <Label text="YOUR CLUB" style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
-            <Label fx:id="lblTeamName" text="—"
-                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;"/>
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <ImageView fx:id="imgClubLogo" fitWidth="48" fitHeight="48" preserveRatio="true" smooth="true"/>
+                <Label fx:id="lblTeamName" text="—"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;"/>
+            </HBox>
             <Label fx:id="lblPosition" text="Position: —"
                    style="-fx-text-fill: #22c55e; -fx-font-size: 14px; -fx-font-weight: bold;"/>
         </VBox>
@@ -43,8 +47,12 @@
         <VBox spacing="6" prefWidth="360"
               style="-fx-padding: 18; -fx-background-color: #1e293b; -fx-background-radius: 10; -fx-border-color: #334155; -fx-border-radius: 10;">
             <Label text="NEXT MATCH" style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
-            <Label fx:id="lblNextMatch" text="—"
-                   style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;"/>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <ImageView fx:id="imgHomeTeamLogo" fitWidth="32" fitHeight="32" preserveRatio="true" smooth="true"/>
+                <Label fx:id="lblNextMatch" text="—"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;"/>
+                <ImageView fx:id="imgAwayTeamLogo" fitWidth="32" fitHeight="32" preserveRatio="true" smooth="true"/>
+            </HBox>
             <Label fx:id="lblMatchDetail" text=""
                    style="-fx-text-fill: #94a3b8; -fx-font-size: 13px;"/>
         </VBox>

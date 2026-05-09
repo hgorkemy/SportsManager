@@ -1,33 +1,265 @@
 {
   "teams": [
-    "Galatasaray", "Fenerbahce", "Besiktas", "Trabzonspor",
-    "Basaksehir", "Sivasspor", "Alanyaspor", "Antalyaspor",
-    "Kasimpasa", "Konyaspor", "Gaziantep FK", "Hatayspor",
-    "Rizespor", "Pendikspor", "Kayserispor", "Ankaragücü",
-    "Samsunspor", "Fatih Karagümrük", "Istanbulspor", "Adana Demirspor"
+    "Galatasaray", "Fenerbahçe", "Beşiktaş", "Trabzonspor",
+    "Göztepe", "Bayern Munich", "Borussia Dortmund", "Bayer Leverkusen",
+    "FC Barcelona", "Real Madrid", "Atletico Madrid", "Juventus",
+    "Inter Milan", "AC Milan", "Napoli", "Manchester United",
+    "Manchester City", "Liverpool", "Arsenal", "PSG"
   ],
-  "firstNames": [
-    "Carlos", "Marco", "Lucas", "Pedro", "Joao",
-    "Luis", "Antonio", "Roberto", "Sergio", "Diego",
-    "Ahmet", "Mehmet", "Mustafa", "Ibrahim", "Hasan",
-    "Ali", "Kemal", "Burak", "Arda", "Emre",
-    "James", "Thomas", "Oliver", "Harry", "George",
-    "Noah", "Liam", "Mason", "Jack", "Charlie"
-  ],
-  "lastNames": [
-    "Silva", "Santos", "Costa", "Ferreira", "Oliveira",
-    "Souza", "Lima", "Pereira", "Alves", "Carvalho",
-    "Yilmaz", "Kaya", "Demir", "Sahin", "Celik",
-    "Arslan", "Aydin", "Dogan", "Polat", "Cetin",
-    "Smith", "Jones", "Brown", "Taylor", "Davies",
-    "Wilson", "Evans", "Thomas", "Roberts", "Lewis"
+  "logos": [
+    "/images/logos/galatasaray.png",
+    "/images/logos/fenerbahce.png",
+    "/images/logos/besiktas.png",
+    "/images/logos/trabzonspor.png",
+    "/images/logos/goztepe.png",
+    "/images/logos/bayern_munich.png",
+    "/images/logos/borussia_dortmund.png",
+    "/images/logos/bayer_leverkusen.png",
+    "/images/logos/barcelona.png",
+    "/images/logos/real_madrid.png",
+    "/images/logos/atletico_madrid.png",
+    "/images/logos/juventus.png",
+    "/images/logos/inter_milan.png",
+    "/images/logos/ac_milan.png",
+    "/images/logos/napoli.png",
+    "/images/logos/manchester_united.png",
+    "/images/logos/manchester_city.png",
+    "/images/logos/liverpool.png",
+    "/images/logos/arsenal.png",
+    "/images/logos/psg.png"
   ],
   "coachFirstNames": [
-    "Jose", "Pep", "Carlo", "Jurgen", "Diego",
-    "Fatih", "Aykut", "Okan", "Abdullah", "Erik"
+    "Okan",      "Domenico", "Sergen",  "Fatih",   "Stanimir",
+    "Vincent",   "Niko",     "Xabi",    "Hansi",   "Carlo",
+    "Diego",     "Thiago",   "Simone",  "Sérgio",  "Antonio",
+    "Rúben",     "Pep",      "Arne",    "Mikel",   "Luis"
   ],
   "coachLastNames": [
-    "Mourinho", "Guardiola", "Ancelotti", "Klopp", "Simeone",
-    "Terim", "Kocaman", "Buruk", "Avci", "ten Hag"
+    "Buruk",     "Tedesco",   "Yalçın",  "Tekke",    "Stoilov",
+    "Kompany",   "Kovač",     "Alonso",  "Flick",    "Ancelotti",
+    "Simeone",   "Motta",     "Inzaghi", "Conceição","Conte",
+    "Amorim",    "Guardiola", "Slot",    "Arteta",   "Enrique"
+  ],
+  "squads": [
+    {
+      "team": "Galatasaray",
+      "gkFirst":  ["Fernando",  "Günay"],
+      "gkLast":   ["Muslera",   "Güvenç"],
+      "defFirst": ["Victor",    "Kaan",       "Davinson",  "Patrick",     "Kazımcan",  "Metehan",   "Can"],
+      "defLast":  ["Nelsson",   "Ayhan",      "Sánchez",   "van Aanholt", "Karataş",   "Baltacı",   "Keleş"],
+      "midFirst": ["Lucas",     "Yunus",      "Kerem",     "Hakim",       "Sérgio",    "Emre"],
+      "midLast":  ["Torreira",  "Akgün",      "Aktürkoğlu","Ziyech",      "Oliveira",  "Mor"],
+      "fwdFirst": ["Victor",    "Mauro",      "Barış",     "Michy",       "Dries"],
+      "fwdLast":  ["Osimhen",   "Icardi",     "Yılmaz",    "Batshuayi",   "Mertens"]
+    },
+    {
+      "team": "Fenerbahçe",
+      "gkFirst":  ["Dominik",    "İrfan Can"],
+      "gkLast":   ["Livaković",  "Eğribayat"],
+      "defFirst": ["Jayden",     "Ferdi",      "Rodrigo",   "Alexander",   "Bright",    "Çağlar",    "Mert"],
+      "defLast":  ["Oosterwolde","Kadıoğlu",   "Becão",     "Djiku",       "Osayi-Samuel","Söyüncü", "Müldür"],
+      "midFirst": ["Sofyan",     "İsmail",     "Fred",      "Sebastian",   "İrfan Can", "Lincoln"],
+      "midLast":  ["Amrabat",    "Yüksek",     "Santos",    "Szymański",   "Kahveci",   "Henrique"],
+      "fwdFirst": ["Youssef",    "Cengiz",     "Dusan",     "Cenk",        "Oguz"],
+      "fwdLast":  ["En-Nesyri",  "Ünder",      "Tadić",     "Tosun",       "Aydın"]
+    },
+    {
+      "team": "Beşiktaş",
+      "gkFirst":  ["Mert",    "Ersin"],
+      "gkLast":   ["Günok",   "Destanoğlu"],
+      "defFirst": ["Romain",  "Tayyip",    "João",      "Jackson",   "Emrehan",   "Samet",     "Umut"],
+      "defLast":  ["Saïss",   "Sanuç",     "Mário",     "Porozo",    "Gedikli",   "Akaydin",   "Meraş"],
+      "midFirst": ["Gedson",  "Can",       "Milot",     "Alex",      "Salih",     "Amir"],
+      "midLast":  ["Fernandes","Bozdoğan", "Rashica",   "Oxlade-Chamberlain","Uçan","Hadziahmetovic"],
+      "fwdFirst": ["Ciro",    "Semih",     "Rafa",      "Rachid",    "João"],
+      "fwdLast":  ["Immobile","Kılıçsoy",  "Silva",     "Ghezzal",   "Pedro"]
+    },
+    {
+      "team": "Trabzonspor",
+      "gkFirst":  ["Uğurcan", "Stefanos"],
+      "gkLast":   ["Çakır",   "Kapino"],
+      "defFirst": ["Marc",    "Vitor",     "Berat",     "Tiago",     "Ahmetcan",  "Hüseyin",   "Batuhan"],
+      "defLast":  ["Bartra",  "Hugo",      "Özdemir",   "Çukur",     "Kaplan",    "Türkmen",   "Kör"],
+      "midFirst": ["Dorukhan","Okay",      "Abdülkadir","Enis",      "Edin",      "Mahmoud"],
+      "midLast":  ["Toköz",   "Yokuşlu",   "Ömür",      "Bardhi",    "Visca",     "Trezeguet"],
+      "fwdFirst": ["Maxi",    "Djaniny",   "Paul",      "Andreas",   "Yusuf"],
+      "fwdLast":  ["Gómez",   "Semedo",    "Onuachu",   "Cornelius", "Sarı"]
+    },
+    {
+      "team": "Göztepe",
+      "gkFirst":  ["Ömer",    "Fatih"],
+      "gkLast":   ["Yıldız",  "Öztürk"],
+      "defFirst": ["Frédéric","Manolis",   "Efecan",    "Hüseyin",   "Aleksandar","Mert",      "Furkan"],
+      "defLast":  ["Guilbert","Saliakas",  "Karaca",    "Aşan",      "Filipović", "Çelik",     "Soyalp"],
+      "midFirst": ["Hélder",  "Gökhan",    "Dzon",      "Mustafa",   "Tarık",     "Caner"],
+      "midLast":  ["Lopes",   "Töre",      "Delarge",   "Eskihellaç","Çamdal",    "Öztürk"],
+      "fwdFirst": ["Anderson","Moryké",    "Sory",      "Yusuf",     "Kevin"],
+      "fwdLast":  ["Luís",    "Fofana",    "Kaba",      "Erdoğan",   "Zohi"]
+    },
+    {
+      "team": "Bayern Munich",
+      "gkFirst":  ["Manuel",   "Sven"],
+      "gkLast":   ["Neuer",    "Ulreich"],
+      "defFirst": ["Min-jae",  "Dayot",     "Matthijs",  "Alphonso",  "Noussair",  "Sacha",     "Adam"],
+      "defLast":  ["Kim",      "Upamecano", "de Ligt",   "Davies",    "Mazraoui",  "Boey",      "Aznou"],
+      "midFirst": ["Joshua",   "León",      "Konrad",    "Jamal",     "Thomas",    "Aleksandar"],
+      "midLast":  ["Kimmich",  "Goretzka",  "Laimer",    "Musiala",   "Müller",    "Pavlović"],
+      "fwdFirst": ["Harry",    "Leroy",     "Serge",     "Kingsley",  "Michael"],
+      "fwdLast":  ["Kane",     "Sané",      "Gnabry",    "Coman",     "Olise"]
+    },
+    {
+      "team": "Borussia Dortmund",
+      "gkFirst":  ["Gregor",   "Alexander"],
+      "gkLast":   ["Kobel",    "Meyer"],
+      "defFirst": ["Niklas",   "Waldemar",  "Julian",    "Ian",       "Tom",       "Ramy",      "Kjell"],
+      "defLast":  ["Süle",     "Anton",     "Ryerson",   "Maatsen",   "Rothe",     "Bensebaini","Wätjen"],
+      "midFirst": ["Emre",     "Marcel",    "Felix",     "Pascal",    "Julien",    "Giovanni"],
+      "midLast":  ["Can",      "Sabitzer",  "Nmecha",    "Groß",      "Duranville","Reyna"],
+      "fwdFirst": ["Donyell",  "Karim",     "Jamie",     "Maximilian","Yan"],
+      "fwdLast":  ["Malen",    "Adeyemi",   "Gittens",   "Beier",     "Couto"]
+    },
+    {
+      "team": "Bayer Leverkusen",
+      "gkFirst":  ["Lukáš",    "Matěj"],
+      "gkLast":   ["Hrádecký", "Kovář"],
+      "defFirst": ["Jonathan", "Edmond",    "Piero",     "Odilon",    "Alejandro", "Josip",     "Noah"],
+      "defLast":  ["Tah",      "Tapsoba",   "Hincapié",  "Kossounou", "Grimaldo",  "Stanisić",  "Mbamba"],
+      "midFirst": ["Granit",   "Exequiel",  "Jonas",     "Robert",    "Amine",     "Tom"],
+      "midLast":  ["Xhaka",    "Palacios",  "Hofmann",   "Andrich",   "Adli",      "Bischof"],
+      "fwdFirst": ["Victor",   "Patrik",    "Florian",   "Jeremie",   "Adam"],
+      "fwdLast":  ["Boniface", "Schick",    "Wirtz",     "Frimpong",  "Hložek"]
+    },
+    {
+      "team": "FC Barcelona",
+      "gkFirst":  ["Marc",     "Iñaki"],
+      "gkLast":   ["ter Stegen","Peña"],
+      "defFirst": ["Jules",    "Ronald",    "Pau",       "Alejandro", "Iñigo",     "Eric",      "Héctor"],
+      "defLast":  ["Koundé",   "Araújo",    "Cubarsí",   "Balde",     "Martínez",  "García",    "Fort"],
+      "midFirst": ["Pedri",    "Frenkie",   "Gavi",      "Dani",      "Fermín",    "Marc"],
+      "midLast":  ["González", "de Jong",   "Páez",      "Olmo",      "López",     "Casadó"],
+      "fwdFirst": ["Lamine",   "Robert",    "Raphinha",  "Ferran",    "Ansu"],
+      "fwdLast":  ["Yamal",    "Lewandowski","Belloli",  "Torres",    "Fati"]
+    },
+    {
+      "team": "Real Madrid",
+      "gkFirst":  ["Thibaut",  "Andriy"],
+      "gkLast":   ["Courtois", "Lunin"],
+      "defFirst": ["Dani",     "Éder",      "Antonio",   "Ferland",   "Lucas",     "Raúl",      "Fran"],
+      "defLast":  ["Carvajal", "Militão",   "Rüdiger",   "Mendy",     "Vázquez",   "Asencio",   "García"],
+      "midFirst": ["Luka",     "Aurélien",  "Federico",  "Eduardo",   "Jude",      "Dani"],
+      "midLast":  ["Modrić",   "Tchouaméni","Valverde",  "Camavinga", "Bellingham","Ceballos"],
+      "fwdFirst": ["Kylian",   "Vinicius",  "Rodrygo",   "Arda",      "Brahim"],
+      "fwdLast":  ["Mbappé",   "Júnior",    "Goes",      "Güler",     "Díaz"]
+    },
+    {
+      "team": "Atletico Madrid",
+      "gkFirst":  ["Jan",       "Juan"],
+      "gkLast":   ["Oblak",     "Musso"],
+      "defFirst": ["José María","Axel",      "Stefan",    "Nahuel",    "Reinildo",  "Robin",     "Javi"],
+      "defLast":  ["Giménez",   "Witsel",    "Savić",     "Molina",    "Mandava",   "Le Normand","Galán"],
+      "midFirst": ["Rodrigo",   "Marcos",    "Pablo",     "Thomas",    "Ángel",     "Giuliano"],
+      "midLast":  ["De Paul",   "Llorente",  "Barrios",   "Lemar",     "Correa",    "Simeone"],
+      "fwdFirst": ["Antoine",   "Julián",    "Álvaro",    "Rodrigo",   "Samuel"],
+      "fwdLast":  ["Griezmann", "Álvarez",   "Morata",    "Riquelme",  "Lino"]
+    },
+    {
+      "team": "Juventus",
+      "gkFirst":  ["Michele",   "Mattia"],
+      "gkLast":   ["Di Gregorio","Perin"],
+      "defFirst": ["Federico",  "Pierre",    "Juan",      "Nicolò",    "Andrea",    "Gleison",   "Danilo"],
+      "defLast":  ["Gatti",     "Kalulu",    "Cabal",     "Savona",    "Cambiaso",  "Bremer",    "Luiz"],
+      "midFirst": ["Manuel",    "Khéphren",  "Douglas",   "Weston",    "Nicolás",   "Teun"],
+      "midLast":  ["Locatelli", "Thuram",    "Luiz",      "McKennie",  "González",  "Koopmeiners"],
+      "fwdFirst": ["Dušan",     "Francisco", "Timothy",   "Kenan",     "Randal"],
+      "fwdLast":  ["Vlahović",  "Conceição", "Weah",      "Yıldız",    "Kolo Muani"]
+    },
+    {
+      "team": "Inter Milan",
+      "gkFirst":  ["Yann",      "Josep"],
+      "gkLast":   ["Sommer",    "Martínez"],
+      "defFirst": ["Yann",      "Benjamin",  "Stefan",    "Alessandro","Federico",  "Carlos",    "Matteo"],
+      "defLast":  ["Bisseck",   "Pavard",    "de Vrij",   "Bastoni",   "Dimarco",   "Augusto",   "Darmian"],
+      "midFirst": ["Nicolò",    "Hakan",     "Henrikh",   "Kristjan",  "Davide",    "Piotr"],
+      "midLast":  ["Barella",   "Çalhanoğlu","Mkhitaryan","Asllani",   "Frattesi",  "Zieliński"],
+      "fwdFirst": ["Lautaro",   "Marcus",    "Mehdi",     "Marko",     "Alexis"],
+      "fwdLast":  ["Martínez",  "Thuram",    "Taremi",    "Arnautović","Sánchez"]
+    },
+    {
+      "team": "AC Milan",
+      "gkFirst":  ["Mike",      "Marco"],
+      "gkLast":   ["Maignan",   "Sportiello"],
+      "defFirst": ["Theo",      "Malick",    "Fikayo",    "Davide",    "Strahinja", "Emerson",   "Alessandro"],
+      "defLast":  ["Hernández", "Thiaw",     "Tomori",    "Calabria",  "Pavlović",  "Royal",     "Florenzi"],
+      "midFirst": ["Tijjani",   "Ruben",     "Sandro",    "Yunus",     "Ismaël",    "Filippo"],
+      "midLast":  ["Reijnders", "Loftus-Cheek","Tonali",  "Musah",     "Bennacer",  "Terracciano"],
+      "fwdFirst": ["Rafael",    "Álvaro",    "Christian", "Samuel",    "Tammy"],
+      "fwdLast":  ["Leão",      "Morata",    "Pulisic",   "Chukwueze", "Abraham"]
+    },
+    {
+      "team": "Napoli",
+      "gkFirst":  ["Alex",      "Elia"],
+      "gkLast":   ["Meret",     "Caprile"],
+      "defFirst": ["Alessandro","Giovanni",  "Amir",      "Mathías",   "Leonardo",  "Pasquale",  "Juan"],
+      "defLast":  ["Buongiorno","Di Lorenzo","Rrahmani",  "Olivera",   "Spinazzola","Mazzocchi", "Jesus"],
+      "midFirst": ["Stanislav", "Scott",     "Billy",     "Giacomo",   "Gianluca",  "Hamed"],
+      "midLast":  ["Lobotka",   "McTominay", "Gilmour",   "Raspadori", "Gaetano",   "Traorè"],
+      "fwdFirst": ["Romelu",    "David",     "Matteo",    "Cyril",     "Jesper"],
+      "fwdLast":  ["Lukaku",    "Neres",     "Politano",  "Ngonge",    "Lindstrøm"]
+    },
+    {
+      "team": "Manchester United",
+      "gkFirst":  ["André",     "Altay"],
+      "gkLast":   ["Onana",     "Bayındır"],
+      "defFirst": ["Noussair",  "Lisandro",  "Harry",     "Luke",      "Diogo",     "Victor",    "Jonny"],
+      "defLast":  ["Mazraoui",  "Martínez",  "Maguire",   "Shaw",      "Dalot",     "Lindelöf",  "Evans"],
+      "midFirst": ["Bruno",     "Kobbie",    "Mason",     "Manuel",    "Christian", "Toby"],
+      "midLast":  ["Fernandes", "Mainoo",    "Mount",     "Ugarte",    "Eriksen",   "Collyer"],
+      "fwdFirst": ["Rasmus",    "Alejandro", "Amad",      "Joshua",    "Marcus"],
+      "fwdLast":  ["Højlund",   "Garnacho",  "Diallo",    "Zirkzee",   "Rashford"]
+    },
+    {
+      "team": "Manchester City",
+      "gkFirst":  ["Ederson",   "Stefan"],
+      "gkLast":   ["Moraes",    "Ortega"],
+      "defFirst": ["Rúben",     "Josko",     "Manuel",    "Kyle",      "Rico",      "Josh",      "Jahmai"],
+      "defLast":  ["Dias",      "Gvardiol",  "Akanji",    "Walker",    "Lewis",     "Wilson-Esbrand","Simpson-Pusey"],
+      "midFirst": ["Kevin",     "Phil",      "Bernardo",  "İlkay",     "Matheus",   "Rodri"],
+      "midLast":  ["De Bruyne", "Foden",     "Silva",     "Gündoğan",  "Nunes",     "Hernández"],
+      "fwdFirst": ["Erling",    "Jack",      "Jeremy",    "Savinho",   "Omar"],
+      "fwdLast":  ["Haaland",   "Grealish",  "Doku",      "Moreira",   "Marmoush"]
+    },
+    {
+      "team": "Liverpool",
+      "gkFirst":  ["Alisson",   "Vitezslav"],
+      "gkLast":   ["Becker",    "Jaros"],
+      "defFirst": ["Trent",     "Virgil",    "Ibrahima",  "Andrew",    "Conor",     "Joe",       "Kostas"],
+      "defLast":  ["Alexander-Arnold","van Dijk","Konaté","Robertson", "Bradley",   "Gomez",     "Tsimikas"],
+      "midFirst": ["Alexis",    "Dominik",   "Ryan",      "Curtis",    "Harvey",    "Wataru"],
+      "midLast":  ["Mac Allister","Szoboszlai","Gravenberch","Jones",  "Elliott",   "Endo"],
+      "fwdFirst": ["Mohamed",   "Luis",      "Darwin",    "Cody",      "Diogo"],
+      "fwdLast":  ["Salah",     "Díaz",      "Núñez",     "Gakpo",     "Jota"]
+    },
+    {
+      "team": "Arsenal",
+      "gkFirst":  ["David",     "Karl"],
+      "gkLast":   ["Raya",      "Hein"],
+      "defFirst": ["William",   "Gabriel",   "Ben",       "Oleksandr", "Jurriën",   "Takehiro",  "Jakub"],
+      "defLast":  ["Saliba",    "Magalhães", "White",     "Zinchenko", "Timber",    "Tomiyasu",  "Kiwior"],
+      "midFirst": ["Declan",    "Martin",    "Thomas",    "Mikel",     "Fabio",     "Myles"],
+      "midLast":  ["Rice",      "Ødegaard",  "Partey",    "Merino",    "Vieira",    "Lewis-Skelly"],
+      "fwdFirst": ["Bukayo",    "Gabriel",   "Kai",       "Gabriel",   "Leandro"],
+      "fwdLast":  ["Saka",      "Martinelli","Havertz",   "Jesus",     "Trossard"]
+    },
+    {
+      "team": "PSG",
+      "gkFirst":  ["Gianluigi", "Matvey"],
+      "gkLast":   ["Donnarumma","Safonov"],
+      "defFirst": ["Marquinhos","Lucas",     "Willian",   "Achraf",    "Nuno",      "Milan",     "Presnel"],
+      "defLast":  ["Corrêa",    "Hernández", "Pacho",     "Hakimi",    "Mendes",    "Škriniar",  "Kimpembe"],
+      "midFirst": ["Vitinha",   "Fabián",    "João",      "Warren",    "Lee",       "Gabriel"],
+      "midLast":  ["Ferreira",  "Ruiz",      "Neves",     "Zaïre-Emery","Kang-in",  "Moscardo"],
+      "fwdFirst": ["Ousmane",   "Gonçalo",   "Khvicha",   "Bradley",   "Marco"],
+      "fwdLast":  ["Dembélé",   "Ramos",     "Kvaratskhelia","Barcola","Asensio"]
+    }
   ]
 }
