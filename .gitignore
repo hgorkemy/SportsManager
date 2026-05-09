@@ -16,3 +16,7 @@ target/
 
 # Claude Code
 .claude/
+
+# Installer output
+installer-output/
+installer-output-exe/
