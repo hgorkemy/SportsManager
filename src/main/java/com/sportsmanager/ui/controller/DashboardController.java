@@ -2,6 +2,7 @@ package com.sportsmanager.ui.controller;
 
 import com.sportsmanager.SportsManagerApp;
 import com.sportsmanager.core.model.GameSession;
+import com.sportsmanager.util.TeamLogoHelper;
 import com.sportsmanager.core.model.League;
 import com.sportsmanager.core.model.Team;
 import com.sportsmanager.league.Fixture;
@@ -14,11 +15,16 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.ImageView;
 
 import java.util.List;
 
 
 public class DashboardController {
+
+    @FXML private ImageView imgClubLogo;
+    @FXML private ImageView imgHomeTeamLogo;
+    @FXML private ImageView imgAwayTeamLogo;
 
     @FXML private Label lblSeason;
     @FXML private Label lblSportName;
@@ -51,6 +57,10 @@ public class DashboardController {
         lblSportName.setText("[" + session.getSelectedSportName() + "]");
         lblTeamName.setText(userTeam.getName());
 
+        // Club logo
+        var clubLogo = TeamLogoHelper.load(userTeam, 48);
+        if (clubLogo != null) imgClubLogo.setImage(clubLogo);
+
         // Current week
         MatchDay current = league.getCurrentMatchDay();
         lblWeek.setText(current != null ? "Week " + current.getWeekNumber() : "—");
@@ -73,6 +83,12 @@ public class DashboardController {
                 lblNextMatch.setText(fixture.getHome().getName() + " vs " + fixture.getAway().getName());
                 String venue = fixture.getHome().equals(userTeam) ? "Home" : "Away";
                 lblMatchDetail.setText(venue + " — Week " + current.getWeekNumber());
+
+                // Next match logos
+                var homeLogo = TeamLogoHelper.load(fixture.getHome(), 32);
+                var awayLogo = TeamLogoHelper.load(fixture.getAway(), 32);
+                if (homeLogo != null) imgHomeTeamLogo.setImage(homeLogo);
+                if (awayLogo != null) imgAwayTeamLogo.setImage(awayLogo);
             } else {
                 lblNextMatch.setText("Bye week — no fixture");
                 lblMatchDetail.setText("");

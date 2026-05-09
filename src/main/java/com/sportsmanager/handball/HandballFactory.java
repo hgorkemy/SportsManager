@@ -1,12 +1,16 @@
 package com.sportsmanager.handball;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.sportsmanager.core.engine.MatchEngine;
 import com.sportsmanager.core.factory.SportFactory;
 import com.sportsmanager.core.model.League;
 import com.sportsmanager.core.model.Sport;
 import com.sportsmanager.core.model.Team;
-import com.sportsmanager.util.TeamDataLoader;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,9 +20,36 @@ public class HandballFactory implements SportFactory {
 
     private static final String DATA_PATH = "/data/handball_teams.json";
 
-    private static final String[] COACH_SPECIALTIES = {
-        "Attack", "Defense", "Goalkeeping", "Fitness"
-    };
+    // ── Gson DTOs ────────────────────────────────────────────────────────────
+
+    private static class RosterData {
+        List<TeamEntry> teams;
+    }
+
+    private static class TeamEntry {
+        String name;
+        String logoPath;
+        int tier = 2;
+        List<CoachEntry>  coaches;
+        List<PlayerEntry> players;
+    }
+
+    private static class PlayerEntry {
+        String firstName;
+        String lastName;
+        int    age;
+        String position;   // "GOALKEEPER" | "WING" | "BACK" | "PIVOT"
+    }
+
+    private static class CoachEntry {
+        String firstName;
+        String lastName;
+        int    age;
+        int    experience;
+        String specialty;
+    }
+
+    // ── SportFactory ─────────────────────────────────────────────────────────
 
     @Override
     public Sport createSport() {
@@ -27,60 +58,45 @@ public class HandballFactory implements SportFactory {
 
     @Override
     public List<Team> generateTeams(int count) {
-        List<String> teamNames  = TeamDataLoader.loadField(DATA_PATH, "teams");
-        List<String> firstNames = TeamDataLoader.loadField(DATA_PATH, "firstNames");
-        List<String> lastNames  = TeamDataLoader.loadField(DATA_PATH, "lastNames");
-        List<String> coachFirst = TeamDataLoader.loadField(DATA_PATH, "coachFirstNames");
-        List<String> coachLast  = TeamDataLoader.loadField(DATA_PATH, "coachLastNames");
-
+        RosterData data = loadRosterData();
         List<Team> teams = new ArrayList<>();
         Random rng = new Random();
 
-        int limit = Math.min(count, teamNames.size());
+        int limit = Math.min(count, data.teams.size());
         for (int i = 0; i < limit; i++) {
-            HandballTeam team = new HandballTeam(teamNames.get(i), null);
+            TeamEntry entry = data.teams.get(i);
+            HandballTeam team = new HandballTeam(entry.name, entry.logoPath);
 
-            // Squad: 2 GK, 4 WING, 6 BACK, 4 PIVOT = 16 players
-            addPlayers(team, HandballPosition.GOALKEEPER, 2, firstNames, lastNames, rng);
-            addPlayers(team, HandballPosition.WING,       4, firstNames, lastNames, rng);
-            addPlayers(team, HandballPosition.BACK,       6, firstNames, lastNames, rng);
-            addPlayers(team, HandballPosition.PIVOT,      4, firstNames, lastNames, rng);
+            // Players
+            for (PlayerEntry pe : entry.players) {
+                HandballPosition pos = parsePosition(pe.position);
+                int base = baseStatForTier(entry.tier, rng);
+                team.addPlayer(new HandballPlayer(
+                        pe.firstName, pe.lastName, pe.age, pos,
+                        clamp(base + rng.nextInt(20) - 10),  // throwing
+                        clamp(base + rng.nextInt(20) - 10),  // speed
+                        clamp(base + rng.nextInt(20) - 10),  // agility
+                        clamp(base + rng.nextInt(20) - 10),  // jumping
+                        clamp(base + rng.nextInt(20) - 10),  // defending
+                        clamp(base + rng.nextInt(20) - 10)   // stamina
+                ));
+            }
 
             // Default tactic
             team.setCurrentTactic(HandballTactic.balanced());
 
-            // One coach
-            String cf = coachFirst.get(rng.nextInt(coachFirst.size()));
-            String cl = coachLast.get(rng.nextInt(coachLast.size()));
-            String sp = COACH_SPECIALTIES[rng.nextInt(COACH_SPECIALTIES.length)];
-            team.addCoach(new HandballCoach(cf, cl, 38 + rng.nextInt(20), 5 + rng.nextInt(20), sp));
+            // Coach(es) — loaded from JSON, one per team
+            if (entry.coaches != null) {
+                for (CoachEntry ce : entry.coaches) {
+                    team.addCoach(new HandballCoach(
+                            ce.firstName, ce.lastName, ce.age, ce.experience, ce.specialty));
+                }
+            }
 
             teams.add(team);
         }
         return teams;
     }
-
-    private void addPlayers(HandballTeam team, HandballPosition position,
-                            int count, List<String> firstNames,
-                            List<String> lastNames, Random rng) {
-        for (int i = 0; i < count; i++) {
-            String first = firstNames.get(rng.nextInt(firstNames.size()));
-            String last  = lastNames.get(rng.nextInt(lastNames.size()));
-            int age  = 18 + rng.nextInt(18);
-            int base = 50 + rng.nextInt(25);
-            team.addPlayer(new HandballPlayer(
-                first, last, age, position,
-                clamp(base + rng.nextInt(20) - 10),  // throwing
-                clamp(base + rng.nextInt(20) - 10),  // speed
-                clamp(base + rng.nextInt(20) - 10),  // agility
-                clamp(base + rng.nextInt(20) - 10),  // jumping
-                clamp(base + rng.nextInt(20) - 10),  // defending
-                clamp(base + rng.nextInt(20) - 10)   // stamina
-            ));
-        }
-    }
-
-    private int clamp(int v) { return Math.max(40, Math.min(90, v)); }
 
     @Override
     public League createLeague(List<Team> teams) {
@@ -93,4 +109,42 @@ public class HandballFactory implements SportFactory {
     public MatchEngine createMatchEngine() {
         return new HandballMatchEngine();
     }
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
+    private RosterData loadRosterData() {
+        InputStream is = getClass().getResourceAsStream(DATA_PATH);
+        if (is == null) throw new RuntimeException("Cannot find " + DATA_PATH);
+        try (InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8)) {
+            return new Gson().fromJson(reader, RosterData.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse " + DATA_PATH, e);
+        }
+    }
+
+    /**
+     * Tier-based stat base:
+     *   tier 1 → elite  (65–84)
+     *   tier 2 → strong (57–76)
+     *   tier 3 → mid    (50–69)
+     */
+    private int baseStatForTier(int tier, Random rng) {
+        return switch (tier) {
+            case 1  -> 65 + rng.nextInt(20);
+            case 3  -> 50 + rng.nextInt(20);
+            default -> 57 + rng.nextInt(20);  // tier 2 (default)
+        };
+    }
+
+    private HandballPosition parsePosition(String code) {
+        if (code == null) return HandballPosition.BACK;
+        return switch (code.toUpperCase()) {
+            case "GOALKEEPER" -> HandballPosition.GOALKEEPER;
+            case "WING"       -> HandballPosition.WING;
+            case "PIVOT"      -> HandballPosition.PIVOT;
+            default           -> HandballPosition.BACK;
+        };
+    }
+
+    private int clamp(int v) { return Math.max(40, Math.min(90, v)); }
 }

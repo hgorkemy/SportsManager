@@ -194,11 +194,10 @@ public class HandballMatchEngine implements MatchEngine {
                 .build());
     }
 
-    // 20% chance of yellow card per period; 2nd yellow = automatic red card (disqualification)
+    // 20% chance of yellow card per period (warning only — no automatic consequence)
     private void maybeAddYellowCard(Team team, int startMin) {
         if (random.nextDouble() >= YELLOW_CARD_CHANCE) return;
 
-        // Only active players (not already off the pitch)
         List<Player> pool = new ArrayList<>(
                 team.getLineup().isEmpty() ? team.getSquad() : team.getLineup());
         pool.removeIf(p -> p.isInjured() || p.isSuspended());
@@ -207,34 +206,13 @@ public class HandballMatchEngine implements MatchEngine {
         Player carded = pool.get(random.nextInt(pool.size()));
         carded.recordYellowCard();
         int minute = startMin + random.nextInt(PERIOD_MINUTES);
-        int yellowCount = yellowsThisMatch.merge(carded, 1, Integer::sum);
-
-        if (yellowCount >= 2) {
-            // Second yellow → disqualification (red card equivalent in handball)
-            lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.YELLOW_CARD, minute)
-                    .team(team).player(carded)
-                    .description(carded.getFullName() + " receives a second yellow card!")
-                    .build());
-            carded.suspend(2);
-            lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.RED_CARD, minute)
-                    .team(team).player(carded)
-                    .description(carded.getFullName() + " is disqualified! "
-                            + team.getName() + " down to 6 players (2nd yellow)")
-                    .build());
-        } else {
-            lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.YELLOW_CARD, minute)
-                    .team(team).player(carded)
-                    .description(carded.getFullName() + " receives a yellow card")
-                    .build());
-        }
+        lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.YELLOW_CARD, minute)
+                .team(team).player(carded)
+                .description(carded.getFullName() + " receives a yellow card (warning)")
+                .build());
     }
 
-    // 2-minute suspension, common in handball 
-
-
-    //to-do: 3 suspensions lead to RED CARD!
-
-
+    // 2-minute suspension — the primary handball discipline tool
     private void maybeAddSuspension(Team team, int startMin) {
         if (random.nextDouble() >= SUSPENSION_CHANCE) return;
         Player suspended = getRandomPlayer(team);
@@ -247,21 +225,21 @@ public class HandballMatchEngine implements MatchEngine {
                 .build());
     }
 
-    // 3% chance of disqualification (red card) per period — suspended 1 game
+    // 3% chance of disqualification per period — uses SUSPENSION icon (no red card in handball)
     private void maybeAddDisqualification(Team team, int startMin) {
         if (random.nextDouble() >= DISQUALIFICATION_CHANCE) return;
         List<Player> eligible = new ArrayList<>(
                 team.getLineup().isEmpty() ? team.getSquad() : team.getLineup());
         eligible.removeIf(p -> p.isInjured() || p.isSuspended());
         if (eligible.isEmpty()) return;
-        Player carded = eligible.get(random.nextInt(eligible.size()));
-        carded.suspend(2); // 1 remaining after this week's advance = banned next match too
+        Player disqualified = eligible.get(random.nextInt(eligible.size()));
+        disqualified.suspend(2);
         int minute = startMin + random.nextInt(PERIOD_MINUTES);
-        lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.RED_CARD, minute)
+        lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.SUSPENSION, minute)
                 .team(team)
-                .player(carded)
-                .description(carded.getFullName() + " is disqualified! "
-                        + team.getName() + " down to 6 players")
+                .player(disqualified)
+                .description(disqualified.getFullName() + " is disqualified! "
+                        + team.getName() + " plays with fewer players")
                 .build());
     }
 
