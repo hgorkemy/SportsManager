@@ -21,6 +21,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -61,11 +62,11 @@ public class MatchController {
     private static final double ICON_SIZE = 18;
     private static final Image GOAL_ICON         = loadIcon("ball.png");
     private static final Image YELLOW_ICON       = loadIcon("yellow-card.png");
-    private static final Image RED_CARD_ICON     = loadIcon("suspension.png");
+    private static final Image RED_CARD_ICON     = loadIcon("red.png");
     private static final Image INJURY_ICON       = loadIcon("band-aid.png");
     private static final Image SUSPENSION_ICON   = loadIcon("suspension.png");
     private static final Image THROW_ICON        = loadIcon("throw.png");
-    private static final Image PENALTY_ICON      = loadIcon("throw.png");   // spot kick
+    private static final Image PENALTY_ICON      = loadIcon("penalty-kick.png");
 
     private static Image loadIcon(String name) {
         var url = MatchController.class.getResource("/com/sportsmanager/ui/icons/" + name);
@@ -199,7 +200,7 @@ public class MatchController {
 
                 Image icon = iconFor(item);
                 if (icon != null) {
-                    desc.setGraphic(makeIconView(icon));
+                    desc.setGraphic(makeIconView(icon, needsBrighten(item.getType())));
                     desc.setGraphicTextGap(8);
                     // Icon faces the centre: home (left side) → icon right, away (right side) → icon left
                     desc.setContentDisplay(isHome ? ContentDisplay.RIGHT : ContentDisplay.LEFT);
@@ -320,15 +321,22 @@ public class MatchController {
         }
     }
 
-    private ImageView makeIconView(Image img) {
+    /** Colored icons keep their original hue; black/mono icons are brightened to near-white. */
+    private ImageView makeIconView(Image img, boolean brighten) {
         ImageView iv = new ImageView(img);
         iv.setFitWidth(ICON_SIZE);
         iv.setFitHeight(ICON_SIZE);
         iv.setPreserveRatio(true);
         iv.setSmooth(true);
+        if (brighten) {
+            ColorAdjust adjust = new ColorAdjust();
+            adjust.setBrightness(0.75);
+            iv.setEffect(adjust);
+        }
         return iv;
     }
 
+    /** Returns the icon for the event, and whether it is a black/mono icon needing brightening. */
     private Image iconFor(MatchEvent e) {
         return switch (e.getType()) {
             case GOAL              -> GOAL_ICON;
@@ -339,6 +347,14 @@ public class MatchController {
             case SEVEN_METRE_THROW -> THROW_ICON;
             case PENALTY           -> PENALTY_ICON;
             default                -> null;
+        };
+    }
+
+    /** Black/mono icons that need brightness boost to be visible on dark background. */
+    private boolean needsBrighten(MatchEvent.EventType type) {
+        return switch (type) {
+            case GOAL, SUSPENSION, SEVEN_METRE_THROW, SEVEN_METRE_SAVED, PENALTY -> true;
+            default -> false;  // YELLOW_CARD, RED_CARD, INJURY are already colored
         };
     }
 

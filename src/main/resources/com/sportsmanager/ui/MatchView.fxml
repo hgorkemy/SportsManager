@@ -84,7 +84,8 @@
         <Label text="MATCH EVENTS" style="-fx-text-fill: #64748b; 
         -fx-font-size: 11px; 
         -fx-font-weight: bold;"/>
-        <ListView fx:id="eventLog" styleClass="list-view" VBox.vgrow="ALWAYS"/>
+        <ListView fx:id="eventLog" styleClass="list-view" VBox.vgrow="ALWAYS"
+                  style="-fx-background-color: #111827; -fx-background: #111827;"/>
     </VBox>
 
 </VBox>

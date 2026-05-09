@@ -109,7 +109,8 @@
           "age": 24,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/kaya_oguz_handball.png"
     },
     {
       "name": "FC Barcelona",
@@ -220,7 +221,8 @@
           "age": 28,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_15.png"
     },
     {
       "name": "THW Kiel",
@@ -331,7 +333,8 @@
           "age": 29,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_14.png"
     },
     {
       "name": "SG Flensburg-Handewitt",
@@ -442,7 +445,8 @@
           "age": 27,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_05.png"
     },
     {
       "name": "Paris Saint-Germain",
@@ -553,7 +557,8 @@
           "age": 28,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_10.png"
     },
     {
       "name": "Veszprém KSE",
@@ -664,7 +669,8 @@
           "age": 29,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_06.png"
     },
     {
       "name": "Montpellier HB",
@@ -775,7 +781,8 @@
           "age": 27,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_16.png"
     },
     {
       "name": "Füchse Berlin",
@@ -886,7 +893,8 @@
           "age": 28,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_18.png"
     },
     {
       "name": "SC Magdeburg",
@@ -997,7 +1005,8 @@
           "age": 29,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_07.png"
     },
     {
       "name": "Sporting CP",
@@ -1108,7 +1117,8 @@
           "age": 27,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_13.png"
     },
     {
       "name": "Dinamo Bucharest",
@@ -1219,7 +1229,8 @@
           "age": 28,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_17.png"
     },
     {
       "name": "Vardar Skopje",
@@ -1330,7 +1341,8 @@
           "age": 29,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_11.png"
     },
     {
       "name": "Motor Zaporozhye",
@@ -1441,7 +1453,8 @@
           "age": 27,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_02.png"
     },
     {
       "name": "Telekom Veszprém",
@@ -1552,7 +1565,8 @@
           "age": 28,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_12.png"
     },
     {
       "name": "Pick Szeged",
@@ -1663,7 +1677,8 @@
           "age": 29,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_03.png"
     },
     {
       "name": "Aalborg Håndbold",
@@ -1774,7 +1789,8 @@
           "age": 27,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_19.png"
     },
     {
       "name": "Rhein-Neckar Löwen",
@@ -1885,7 +1901,8 @@
           "age": 28,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_08.png"
     },
     {
       "name": "Industria Kielce",
@@ -1996,7 +2013,8 @@
           "age": 29,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_09.png"
     },
     {
       "name": "HBC Nantes",
@@ -2107,7 +2125,8 @@
           "age": 27,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_01.png"
     },
     {
       "name": "Elverum Handball",
@@ -2218,7 +2237,8 @@
           "age": 28,
           "position": "PIVOT"
         }
-      ]
+      ],
+      "logoPath": "/images/logos/handball_logos/logo_04.png"
     }
   ]
 }

@@ -46,21 +46,25 @@ public class TeamLogoHelper {
     /**
      * Loads the logo for a team at the given size (square, aspect-ratio preserved).
      * Returns null if no logo is found.
+     *
+     * Priority:
+     *   1. logoPath stored on the team (handball teams set this from JSON)
+     *   2. Explicit name→file map (football teams)
      */
     public static Image load(Team team, double size) {
         if (team == null) return null;
 
-        // 1. Explicit name lookup (most reliable)
-        String file = NAME_TO_FILE.get(team.getName());
-        if (file != null) {
-            var url = TeamLogoHelper.class.getResource(BASE + file + ".png");
-            if (url != null) return new Image(url.toExternalForm(), size, size, true, true);
-        }
-
-        // 2. Fallback: use logoPath stored on the team
+        // 1. Use explicit logoPath if set (handball teams)
         String logoPath = team.getLogoPath();
         if (logoPath != null && !logoPath.isBlank()) {
             var url = TeamLogoHelper.class.getResource(logoPath);
+            if (url != null) return new Image(url.toExternalForm(), size, size, true, true);
+        }
+
+        // 2. Fallback: name→file map (football teams)
+        String file = NAME_TO_FILE.get(team.getName());
+        if (file != null) {
+            var url = TeamLogoHelper.class.getResource(BASE + file + ".png");
             if (url != null) return new Image(url.toExternalForm(), size, size, true, true);
         }
 

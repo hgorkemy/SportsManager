@@ -180,6 +180,7 @@ public class FootballMatchEngine implements MatchEngine {
                     .description(carded.getFullName() + " receives a second yellow card!")
                     .build());
             carded.suspend(2);
+            carded.recordRedCard();
             lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.RED_CARD, minute)
                     .team(team).player(carded)
                     .description(carded.getFullName() + " is sent off! "
@@ -201,7 +202,8 @@ public class FootballMatchEngine implements MatchEngine {
         eligible.removeIf(p -> p.isInjured() || p.isSuspended()); // already out
         if (eligible.isEmpty()) return;
         Player carded = eligible.get(random.nextInt(eligible.size()));
-        carded.suspend(2); // 1 remaining after this week's advance = banned next match too
+        carded.suspend(2);
+        carded.recordRedCard();
         int minute = startMin + random.nextInt(PERIOD_MINUTES);
         lastPeriodEvents.add(new MatchEvent.Builder(MatchEvent.EventType.RED_CARD, minute)
                 .team(team)

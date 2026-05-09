@@ -13,6 +13,7 @@ public abstract class Player extends Person {
 
     private int goals;
     private int yellowCards;
+    private int redCards;
     private int appearances;
 
     private int initialOverall = -1;
@@ -59,10 +60,12 @@ public abstract class Player extends Person {
     //stats
     public void recordGoal()        { goals++; }
     public void recordYellowCard()  { yellowCards++; }
+    public void recordRedCard()     { redCards++; }
     public void recordAppearance()  { appearances++; }
 
     public int getGoals()       { return goals; }
     public int getYellowCards() { return yellowCards; }
+    public int getRedCards()    { return redCards; }
     public int getAppearances() { return appearances; }
 
     /** Restores match statistics from a save file. */

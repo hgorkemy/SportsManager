@@ -28,6 +28,7 @@ public class HandballFactory implements SportFactory {
 
     private static class TeamEntry {
         String name;
+        String logoPath;
         int tier = 2;
         List<CoachEntry>  coaches;
         List<PlayerEntry> players;
@@ -64,7 +65,7 @@ public class HandballFactory implements SportFactory {
         int limit = Math.min(count, data.teams.size());
         for (int i = 0; i < limit; i++) {
             TeamEntry entry = data.teams.get(i);
-            HandballTeam team = new HandballTeam(entry.name, null);
+            HandballTeam team = new HandballTeam(entry.name, entry.logoPath);
 
             // Players
             for (PlayerEntry pe : entry.players) {

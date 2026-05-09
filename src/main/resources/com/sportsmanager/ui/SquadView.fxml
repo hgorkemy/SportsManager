@@ -51,6 +51,7 @@
             <Label text="Season Stats" style="-fx-font-weight: bold; -fx-text-fill: #94a3b8; -fx-font-size: 12px;"/>
             <Label fx:id="lblGoals"       text="" style="-fx-text-fill: #4ade80; -fx-font-weight: bold;"/>
             <Label fx:id="lblYellowCards" text="" style="-fx-text-fill: #facc15;"/>
+            <Label fx:id="lblRedCards"    text="" style="-fx-text-fill: #ef4444; -fx-font-weight: bold;"/>
             <Label fx:id="lblAppearances" text="" style="-fx-text-fill: #e2e8f0;"/>
             <Separator style="-fx-background-color: #334155;"/>
             <Label fx:id="lblInjury" text="" style="-fx-text-fill: #f87171; -fx-font-weight: bold;"/>
