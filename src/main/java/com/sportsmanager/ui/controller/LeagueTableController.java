@@ -4,13 +4,19 @@ import com.sportsmanager.SportsManagerApp;
 import com.sportsmanager.core.model.GameSession;
 import com.sportsmanager.core.model.Team;
 import com.sportsmanager.league.StandingRow;
+import com.sportsmanager.util.TeamLogoHelper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 
 import java.util.List;
 
@@ -46,6 +52,31 @@ public class LeagueTableController {
                 new SimpleObjectProperty<>(standingsTable.getItems().indexOf(d.getValue()) + 1));
         colTeam.setCellValueFactory(d ->
                 new SimpleStringProperty(d.getValue().getTeam().getName()));
+
+        // Logo + team name in the Team column
+        colTeam.setCellFactory(col -> new TableCell<>() {
+            private final ImageView logo  = new ImageView();
+            private final Label     name  = new Label();
+            private final HBox      box   = new HBox(8, logo, name);
+            {
+                logo.setFitWidth(24);
+                logo.setFitHeight(24);
+                logo.setPreserveRatio(true);
+                logo.setSmooth(true);
+                name.setStyle("-fx-text-fill: #1e293b;");
+                box.setAlignment(Pos.CENTER_LEFT);
+            }
+            @Override
+            protected void updateItem(String teamName, boolean empty) {
+                super.updateItem(teamName, empty);
+                if (empty || teamName == null) { setGraphic(null); return; }
+                name.setText(teamName);
+                StandingRow row = getTableRow().getItem();
+                logo.setImage(row != null ? TeamLogoHelper.load(row.getTeam(), 24) : null);
+                setGraphic(box);
+                setText(null);
+            }
+        });
         colPlayed.setCellValueFactory(d ->
                 new SimpleObjectProperty<>(d.getValue().getMatchesPlayed()));
         colWins.setCellValueFactory(d ->

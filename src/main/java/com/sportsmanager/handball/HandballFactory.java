@@ -84,7 +84,7 @@ public class HandballFactory implements SportFactory {
             // Default tactic
             team.setCurrentTactic(HandballTactic.balanced());
 
-            // Coach(es)
+            // Coach(es) — loaded from JSON, one per team
             if (entry.coaches != null) {
                 for (CoachEntry ce : entry.coaches) {
                     team.addCoach(new HandballCoach(
