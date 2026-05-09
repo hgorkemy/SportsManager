@@ -1,6 +1,7 @@
 package com.sportsmanager.ui.controller;
 
 import com.sportsmanager.SportsManagerApp;
+import com.sportsmanager.util.TeamLogoHelper;
 import com.sportsmanager.core.engine.MatchEngine;
 import com.sportsmanager.core.model.GameSession;
 import com.sportsmanager.core.model.League;
@@ -29,6 +30,9 @@ import java.util.List;
 
 // Match simulation UI
 public class MatchController {
+
+    @FXML private ImageView homeLogoView;
+    @FXML private ImageView awayLogoView;
 
     @FXML
     private Label homeTeamLabel;
@@ -68,6 +72,7 @@ public class MatchController {
         return url == null ? null : new Image(url.toExternalForm());
     }
 
+
     @FXML
     public void initialize() {
         GameSession session = GameSession.getInstance();
@@ -95,6 +100,12 @@ public class MatchController {
 
         homeTeamLabel.setText(currentFixture.getHome().getName());
         awayTeamLabel.setText(currentFixture.getAway().getName());
+
+        // Logos
+        Image homeLogo = TeamLogoHelper.load(currentFixture.getHome(), 52);
+        Image awayLogo = TeamLogoHelper.load(currentFixture.getAway(), 52);
+        if (homeLogo != null) homeLogoView.setImage(homeLogo);
+        if (awayLogo != null) awayLogoView.setImage(awayLogo);
 
         if (engine.getFinalResult() == null) {
             scoreLabel.setText("0 - 0");

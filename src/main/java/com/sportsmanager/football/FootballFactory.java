@@ -29,6 +29,7 @@ public class FootballFactory implements SportFactory {
     @Override
     public List<Team> generateTeams(int count) {
         List<String> teamNames  = TeamDataLoader.loadField(DATA_PATH, "teams");
+        List<String> logos      = TeamDataLoader.loadField(DATA_PATH, "logos");
         List<String> firstNames = TeamDataLoader.loadField(DATA_PATH, "firstNames");
         List<String> lastNames  = TeamDataLoader.loadField(DATA_PATH, "lastNames");
         List<String> coachFirst = TeamDataLoader.loadField(DATA_PATH, "coachFirstNames");
@@ -39,7 +40,8 @@ public class FootballFactory implements SportFactory {
 
         int limit = Math.min(count, teamNames.size());
         for (int i = 0; i < limit; i++) {
-            FootballTeam team = new FootballTeam(teamNames.get(i), null);
+            String logoPath = i < logos.size() ? logos.get(i) : null;
+            FootballTeam team = new FootballTeam(teamNames.get(i), logoPath);
 
             // Squad: 2 GK, 5 DEF, 5 MID, 5 FWD = 17 players
             addPlayers(team, FootballPosition.GOALKEEPER, 2, firstNames, lastNames, rng);
