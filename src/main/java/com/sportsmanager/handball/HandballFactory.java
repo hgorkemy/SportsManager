@@ -49,9 +49,9 @@ public class HandballFactory implements SportFactory {
             // Default tactic
             team.setCurrentTactic(HandballTactic.balanced());
 
-            // One coach
-            String cf = coachFirst.get(rng.nextInt(coachFirst.size()));
-            String cl = coachLast.get(rng.nextInt(coachLast.size()));
+            // One coach — real coach matched to team by index
+            String cf = i < coachFirst.size() ? coachFirst.get(i) : coachFirst.get(rng.nextInt(coachFirst.size()));
+            String cl = i < coachLast.size()  ? coachLast.get(i)  : coachLast.get(rng.nextInt(coachLast.size()));
             String sp = COACH_SPECIALTIES[rng.nextInt(COACH_SPECIALTIES.length)];
             team.addCoach(new HandballCoach(cf, cl, 38 + rng.nextInt(20), 5 + rng.nextInt(20), sp));
 

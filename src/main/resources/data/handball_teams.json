@@ -6,6 +6,18 @@
     "Skjern HB", "GOG Gudme", "Frisch Auf Göppingen", "Rhein-Neckar Löwen",
     "Chambéry SF", "Dinamo Bucharest", "RK Celje"
   ],
+  "coachFirstNames": [
+    "Filip",    "Carlos",   "Raúl",     "Stefan",   "Momir",
+    "Philippe", "Paulo",    "Alberto",  "Xavi",     "Magnus",
+    "Nicolej",  "Bennet",   "Marco",    "Lars",     "Nicolej",
+    "Hartmut",  "Sebastian","Denis",    "Zvonimir", "Branko"
+  ],
+  "coachLastNames": [
+    "Jicha",       "Ortega",      "González",   "Madsen",      "Ilić",
+    "Gardent",     "Pereira",     "Entrerríos", "Sabaté",      "Andersson",
+    "Krickau",     "Wiegert",     "Ferreira",   "Walther",     "Jacobsen",
+    "Mayerhoffer", "Hinze",       "Tristant",   "Serdarušić",  "Tamše"
+  ],
   "firstNames": [
     "Mikkel", "Sander", "Nikola", "Dika", "Domagoj",
     "Casper", "Lasse", "Patrick", "Ludovic", "Timothey",
@@ -21,13 +33,5 @@
     "Firnhaber", "Berggren", "Gullerud", "Nenadic", "Cindric",
     "Lauge Schmidt", "Gidsel", "Landin", "Lindberg", "Toft Hansen",
     "Jorgensen", "Weinhold", "Dissinger", "Golla", "Knorr"
-  ],
-  "coachFirstNames": [
-    "Alfred", "Carlos", "Xavier", "Dagur", "Talant",
-    "Filip", "Roberto", "Petr", "Marcus", "Ljubomir"
-  ],
-  "coachLastNames": [
-    "Gislason", "Ortega", "Pascual", "Sigurdsson", "Dujshebaev",
-    "Jicha", "Parrondo", "Stepan", "Baur", "Vranjes"
   ]
 }

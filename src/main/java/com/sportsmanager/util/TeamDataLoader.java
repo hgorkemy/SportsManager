@@ -54,4 +54,27 @@ public class TeamDataLoader {
             throw new RuntimeException("Failed to parse " + resourcePath, e);
         }
     }
+
+    /**
+     * Returns a top-level JSON array field as a raw {@link JsonArray}.
+     * Useful for nested structures (e.g. array-of-objects for per-team squads).
+     */
+    public static JsonArray loadRawArray(String resourcePath, String field) {
+        try (InputStream is = TeamDataLoader.class.getResourceAsStream(resourcePath)) {
+            if (is == null) {
+                throw new RuntimeException("Resource not found on classpath: " + resourcePath);
+            }
+            JsonObject root = GSON.fromJson(
+                    new InputStreamReader(is, StandardCharsets.UTF_8), JsonObject.class);
+            JsonArray array = root.getAsJsonArray(field);
+            if (array == null) {
+                throw new RuntimeException("Field '" + field + "' not found in " + resourcePath);
+            }
+            return array;
+        } catch (RuntimeException re) {
+            throw re;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse " + resourcePath, e);
+        }
+    }
 }
