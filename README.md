@@ -5,7 +5,7 @@
 
 A turn-based sports management game built with Java 21 and JavaFX 21. Manage a football or handball team through a full league season — set tactics, pick your lineup, simulate matches period by period, train your squad, and track standings.
 
-**Course:** CE216 — Object-Oriented Programming  
+**Course:** CE216  
 **Team:** Dining Philosophers
 
 ---
